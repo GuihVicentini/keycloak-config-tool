@@ -1,0 +1,36 @@
+[
+  {
+    "alias": "test-oidc",
+    "displayName": "test provider",
+    "internalId": "bb6e9f37-4d6a-4d7a-911d-584c2e6cac9a",
+    "providerId": "oidc",
+    "enabled": true,
+    "updateProfileFirstLoginMode": "on",
+    "trustEmail": false,
+    "storeToken": false,
+    "addReadTokenRoleOnCreate": false,
+    "authenticateByDefault": false,
+    "linkOnly": false,
+    "firstBrokerLoginFlowAlias": "first broker login",
+    "postBrokerLoginFlowAlias": null,
+    "config": {
+      "validateSignature": "true",
+      "hideOnLoginPage": "false",
+      "tokenUrl": "https://someurl.com/token",
+      "acceptsPromptNoneForwardFromClient": "false",
+      "clientId": "test-client-id",
+      "uiLocales": "false",
+      "jwksUrl": "https://someurl.com/jwks",
+      "backchannelSupported": "false",
+      "useJwksUrl": "true",
+      "loginHint": "false",
+      "pkceEnabled": "false",
+      "clientAuthMethod": "private_key_jwt",
+      "authorizationUrl": "https://someurl.com/auth",
+      "disableUserInfo": "false",
+      "syncMode": "IMPORT",
+      "passMaxAge": "false",
+      "allowedClockSkew": "0"
+    }
+  }
+]

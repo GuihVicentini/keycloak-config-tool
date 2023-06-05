@@ -1,0 +1,411 @@
+[
+  {
+    "id": "7d3c9005-97a9-43c7-bd10-a0347075bb63",
+    "name": "Allowed Client Scopes",
+    "providerId": "allowed-client-templates",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "authenticated",
+    "config": {
+      "allow-default-scopes": [
+        "true"
+      ]
+    }
+  },
+  {
+    "id": "e00b9ce6-5fd8-4d9a-b340-a22ed63c6e6c",
+    "name": "hmac-generated",
+    "providerId": "hmac-generated",
+    "providerType": "org.keycloak.keys.KeyProvider",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": null,
+    "config": {
+      "priority": [
+        "100"
+      ],
+      "algorithm": [
+        "HS256"
+      ]
+    }
+  },
+  {
+    "id": "c5f46eac-c8a9-4d6a-a197-b8d633ddbf6a",
+    "name": "rsa-generated",
+    "providerId": "rsa-generated",
+    "providerType": "org.keycloak.keys.KeyProvider",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": null,
+    "config": {
+      "priority": [
+        "100"
+      ]
+    }
+  },
+  {
+    "id": "fa16da6f-5396-4f83-b7de-81fa34fb1877",
+    "name": "Trusted Hosts",
+    "providerId": "trusted-hosts",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "anonymous",
+    "config": {
+      "host-sending-registration-request-must-match": [
+        "true"
+      ],
+      "client-uris-must-match": [
+        "true"
+      ]
+    }
+  },
+  {
+    "id": "6a541865-9a0a-43d3-ad5f-ccd515e0ed86",
+    "name": "Max Clients Limit",
+    "providerId": "max-clients",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "anonymous",
+    "config": {
+      "max-clients": [
+        "200"
+      ]
+    }
+  },
+  {
+    "id": "7d282e46-aa52-4df1-aa41-30b0f6c0bdb4",
+    "name": "last name",
+    "providerId": "user-attribute-ldap-mapper",
+    "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+    "parentId": "2c134a52-864e-41ee-a01c-c5b09fe4d65b",
+    "subType": null,
+    "config": {
+      "ldap.attribute": [
+        "sn"
+      ],
+      "is.mandatory.in.ldap": [
+        "true"
+      ],
+      "always.read.value.from.ldap": [
+        "true"
+      ],
+      "read.only": [
+        "false"
+      ],
+      "user.model.attribute": [
+        "lastName"
+      ]
+    }
+  },
+  {
+    "id": "6b3710c1-82de-45a3-a02f-7738fce32ca2",
+    "name": "Allowed Protocol Mapper Types",
+    "providerId": "allowed-protocol-mappers",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "authenticated",
+    "config": {
+      "allowed-protocol-mapper-types": [
+        "oidc-usermodel-attribute-mapper",
+        "oidc-address-mapper",
+        "oidc-full-name-mapper",
+        "oidc-sha256-pairwise-sub-mapper",
+        "saml-user-property-mapper",
+        "oidc-usermodel-property-mapper",
+        "saml-user-attribute-mapper",
+        "saml-role-list-mapper"
+      ]
+    }
+  },
+  {
+    "id": "5508c30d-223e-497c-9c02-5d3db8697a28",
+    "name": "first name",
+    "providerId": "user-attribute-ldap-mapper",
+    "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+    "parentId": "2c134a52-864e-41ee-a01c-c5b09fe4d65b",
+    "subType": null,
+    "config": {
+      "ldap.attribute": [
+        "cn"
+      ],
+      "is.mandatory.in.ldap": [
+        "true"
+      ],
+      "read.only": [
+        "false"
+      ],
+      "always.read.value.from.ldap": [
+        "true"
+      ],
+      "user.model.attribute": [
+        "firstName"
+      ]
+    }
+  },
+  {
+    "id": "4d1c3d8d-3214-4d03-9058-01cea9e874b5",
+    "name": "creation date",
+    "providerId": "user-attribute-ldap-mapper",
+    "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+    "parentId": "2c134a52-864e-41ee-a01c-c5b09fe4d65b",
+    "subType": null,
+    "config": {
+      "ldap.attribute": [
+        "createTimestamp"
+      ],
+      "is.mandatory.in.ldap": [
+        "false"
+      ],
+      "always.read.value.from.ldap": [
+        "true"
+      ],
+      "read.only": [
+        "true"
+      ],
+      "user.model.attribute": [
+        "createTimestamp"
+      ]
+    }
+  },
+  {
+    "id": "33d78bb3-c1dc-485c-b986-be607fd1c604",
+    "name": "username",
+    "providerId": "user-attribute-ldap-mapper",
+    "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+    "parentId": "2c134a52-864e-41ee-a01c-c5b09fe4d65b",
+    "subType": null,
+    "config": {
+      "ldap.attribute": [
+        "uid"
+      ],
+      "is.mandatory.in.ldap": [
+        "true"
+      ],
+      "always.read.value.from.ldap": [
+        "false"
+      ],
+      "read.only": [
+        "false"
+      ],
+      "user.model.attribute": [
+        "username"
+      ]
+    }
+  },
+  {
+    "id": "6b0cbb58-1b0e-493e-84a3-dd3aa287cdee",
+    "name": "email",
+    "providerId": "user-attribute-ldap-mapper",
+    "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+    "parentId": "2c134a52-864e-41ee-a01c-c5b09fe4d65b",
+    "subType": null,
+    "config": {
+      "ldap.attribute": [
+        "mail"
+      ],
+      "is.mandatory.in.ldap": [
+        "false"
+      ],
+      "read.only": [
+        "false"
+      ],
+      "always.read.value.from.ldap": [
+        "false"
+      ],
+      "user.model.attribute": [
+        "email"
+      ]
+    }
+  },
+  {
+    "id": "967e429b-0e1c-4392-bc04-b8496de58c8a",
+    "name": "Consent Required",
+    "providerId": "consent-required",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "anonymous",
+    "config": {}
+  },
+  {
+    "id": "fb994f3d-8f84-4296-89cd-623e95acd5ef",
+    "name": "Allowed Client Scopes",
+    "providerId": "allowed-client-templates",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "anonymous",
+    "config": {
+      "allow-default-scopes": [
+        "true"
+      ]
+    }
+  },
+  {
+    "id": "352a9796-12d8-4ef0-8f97-3d5794a0e980",
+    "name": "modify date",
+    "providerId": "user-attribute-ldap-mapper",
+    "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+    "parentId": "2c134a52-864e-41ee-a01c-c5b09fe4d65b",
+    "subType": null,
+    "config": {
+      "ldap.attribute": [
+        "modifyTimestamp"
+      ],
+      "is.mandatory.in.ldap": [
+        "false"
+      ],
+      "always.read.value.from.ldap": [
+        "true"
+      ],
+      "read.only": [
+        "true"
+      ],
+      "user.model.attribute": [
+        "modifyTimestamp"
+      ]
+    }
+  },
+  {
+    "id": "2c134a52-864e-41ee-a01c-c5b09fe4d65b",
+    "name": "test-ldap",
+    "providerId": "ldap",
+    "providerType": "org.keycloak.storage.UserStorageProvider",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": null,
+    "config": {
+      "pagination": [
+        "false"
+      ],
+      "fullSyncPeriod": [
+        "-1"
+      ],
+      "startTls": [
+        "false"
+      ],
+      "connectionPooling": [
+        "false"
+      ],
+      "usersDn": [
+        "ou=Users,ou=Tenant,dc=domain,dc=com"
+      ],
+      "cachePolicy": [
+        "DEFAULT"
+      ],
+      "useKerberosForPasswordAuthentication": [
+        "false"
+      ],
+      "importEnabled": [
+        "true"
+      ],
+      "enabled": [
+        "true"
+      ],
+      "changedSyncPeriod": [
+        "-1"
+      ],
+      "bindDn": [
+        "uid=ServiceUser,ou=ServiceGroup,dc=somedc,dc=com"
+      ],
+      "bindCredential": [
+        "**********"
+      ],
+      "usernameLDAPAttribute": [
+        "uid"
+      ],
+      "vendor": [
+        "other"
+      ],
+      "uuidLDAPAttribute": [
+        "entryUUID"
+      ],
+      "allowKerberosAuthentication": [
+        "false"
+      ],
+      "connectionUrl": [
+        "ldaps://somedirectory.com"
+      ],
+      "syncRegistrations": [
+        "true"
+      ],
+      "authType": [
+        "simple"
+      ],
+      "useTruststoreSpi": [
+        "ldapsOnly"
+      ],
+      "usePasswordModifyExtendedOp": [
+        "false"
+      ],
+      "trustEmail": [
+        "false"
+      ],
+      "userObjectClasses": [
+        "inetOrgPerson, organizationalPerson"
+      ],
+      "rdnLDAPAttribute": [
+        "uid"
+      ],
+      "editMode": [
+        "WRITABLE"
+      ],
+      "validatePasswordPolicy": [
+        "false"
+      ]
+    }
+  },
+  {
+    "id": "6efe8df3-8616-48f8-aa75-c1fc55506765",
+    "name": "rsa-enc-generated",
+    "providerId": "rsa-enc-generated",
+    "providerType": "org.keycloak.keys.KeyProvider",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": null,
+    "config": {
+      "priority": [
+        "100"
+      ],
+      "algorithm": [
+        "RSA-OAEP"
+      ]
+    }
+  },
+  {
+    "id": "7978ec6e-49d8-4438-b7a7-ec745cb8e549",
+    "name": "aes-generated",
+    "providerId": "aes-generated",
+    "providerType": "org.keycloak.keys.KeyProvider",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": null,
+    "config": {
+      "priority": [
+        "100"
+      ]
+    }
+  },
+  {
+    "id": "69e54238-ecf8-4f79-b3a5-ee6618991fe5",
+    "name": "Allowed Protocol Mapper Types",
+    "providerId": "allowed-protocol-mappers",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "anonymous",
+    "config": {
+      "allowed-protocol-mapper-types": [
+        "oidc-full-name-mapper",
+        "saml-user-property-mapper",
+        "saml-user-attribute-mapper",
+        "oidc-address-mapper",
+        "oidc-usermodel-attribute-mapper",
+        "saml-role-list-mapper",
+        "oidc-usermodel-property-mapper",
+        "oidc-sha256-pairwise-sub-mapper"
+      ]
+    }
+  },
+  {
+    "id": "d7820fbe-35e9-4cbc-a749-264dad8480d2",
+    "name": "Full Scope Disabled",
+    "providerId": "scope",
+    "providerType": "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy",
+    "parentId": "8b11c53b-fb43-4e63-85cd-118df6b66386",
+    "subType": "anonymous",
+    "config": {}
+  }
+]

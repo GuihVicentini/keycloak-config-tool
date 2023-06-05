@@ -1,0 +1,37 @@
+package com.guihvicentini.keycloakconfigtool.services.export;
+
+import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
+import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlowConfig;
+import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@Slf4j
+public class AuthenticationFlowExportServiceTest extends AbstractIntegrationTest {
+
+    @Autowired
+    AuthenticationFlowExportService exportService;
+
+    @Test
+    public void getAllFlows() {
+        List<AuthenticationFlowConfig> flows = exportService.getAll(TEST_REALM);
+        log.debug("Flows: {}", JsonMapperUtils.objectToJsonPrettyString(flows));
+
+        Optional<AuthenticationFlowConfig> testFlow = flows.stream().filter(flow -> flow.identifier().equals("test-flow"))
+                .findFirst();
+
+        assertTrue(testFlow.isPresent());
+
+        Optional<AuthenticationFlowConfig> testSubFlow = flows.stream().filter(flow -> flow.identifier().equals("test-sub-flow"))
+                .findFirst();
+
+        assertTrue(testSubFlow.isPresent());
+
+    }
+}

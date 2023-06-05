@@ -1,0 +1,15 @@
+[
+  {
+    "id": "ca7cf067-8ec2-40d6-99fe-93a20c4eef7e",
+    "name": "test-idp-mapper",
+    "identityProviderAlias": "test-oidc",
+    "identityProviderMapper": "oidc-advanced-role-idp-mapper",
+    "config": {
+      "claims": "[{\"key\":\"acr\",\"value\":\"strong\"},{\"key\":\"roles\",\"value\":\"someclaimvalue\"}]",
+      "syncMode": "INHERIT",
+      "are.claim.values.regex": "false",
+      "attributes": "[]",
+      "role": "test-realm-composite-role"
+    }
+  }
+]
