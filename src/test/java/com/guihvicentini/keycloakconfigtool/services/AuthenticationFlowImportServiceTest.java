@@ -1,9 +1,11 @@
 package com.guihvicentini.keycloakconfigtool.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationExecutionExportConfig;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlowConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.AuthenticationFlowExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
@@ -25,13 +27,16 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
     AuthenticationFlowImportService flowImportService;
 
     @Autowired
+    AuthenticationFlowExportService flowExportService;
+
+    @Autowired
     AuthenticationManagementResourceAdapter resourceAdapter;
 
 
 
     @Test
     public void getAllFlows() {
-        var flows = flowImportService.getAllFlows(TEST_REALM);
+        var flows = flowExportService.getAll(TEST_REALM);
         log.info("Flows: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
     }
 
@@ -80,8 +85,10 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
         log.info("expected: {}", JsonMapperUtils.objectToJsonNode(createdSecondFlow));
         log.info("actual: {}", JsonMapperUtils.objectToJsonNode(importedSecondFlow));
 
-        // TODO WTF Objects are equal but still getting error
-        assertEquals(createdFlow, importedSecondFlow);
+        JsonNode expected = JsonMapperUtils.objectToJsonNode(createdSecondFlow);
+        JsonNode actual = JsonMapperUtils.objectToJsonNode(importedSecondFlow);
+//        assertEquals(createdFlow, importedSecondFlow);
+        assertEquals(expected, actual);
     }
 
     @Test

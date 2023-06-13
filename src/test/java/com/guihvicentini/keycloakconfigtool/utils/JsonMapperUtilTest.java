@@ -21,7 +21,7 @@ public class JsonMapperUtilTest {
     @Test
     public void whenClassInstance_throwException() {
         Exception exception = assertThrows(IllegalStateException.class,
-                JsonMapperUtilTest::new);
+                JsonMapperUtils::new);
 
         assertTrue(exception.getMessage().contains("Utility class"));
     }

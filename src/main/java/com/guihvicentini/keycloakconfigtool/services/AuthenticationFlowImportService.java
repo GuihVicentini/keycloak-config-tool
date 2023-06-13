@@ -63,12 +63,12 @@ public class AuthenticationFlowImportService {
         resourceAdapter.updateFlow(realm, flowConfigMapper.mapToRepresentation(flow));
     }
 
-    private void addFlows(String realm, List<AuthenticationFlowConfig> toBeAdded) {
-        List<AuthenticationFlowConfig> topFlows = toBeAdded.stream().filter(AuthenticationFlowConfig::isTopLevel).toList();
-        toBeAdded.removeAll(topFlows);
+    private void addFlows(String realm, List<AuthenticationFlowConfig> flows) {
+        List<AuthenticationFlowConfig> topFlows = flows.stream().filter(AuthenticationFlowConfig::isTopLevel).toList();
+        flows.removeAll(topFlows);
 
         // create top flows and add subflows and executions for each flow
-        topFlows.forEach(flow -> addFlow(realm, flow, toBeAdded));
+        topFlows.forEach(flow -> addFlow(realm, flow, flows));
     }
 
     private void addFlow(String realm, AuthenticationFlowConfig flow, List<AuthenticationFlowConfig> subFlows) {
@@ -87,21 +87,20 @@ public class AuthenticationFlowImportService {
         });
     }
 
-    private void addExecutionFlow(String realm, String alias, AuthenticationExecutionExportConfig execution,
+    private void addExecutionFlow(String realm, String flowAlias, AuthenticationExecutionExportConfig execution,
                                   List<AuthenticationFlowConfig> subFlows) {
         var subFlow = subFlows.stream()
                 .filter(flow -> execution.getFlowAlias().equals(flow.getAlias()))
                 .findFirst()
                 .orElseThrow(() -> new KeycloakAdapterException("Subflow: %s not found", execution.getFlowAlias()));
 
-        resourceAdapter.addExecutionFlow(realm, alias, subFlow);
+        resourceAdapter.addExecutionFlow(realm, flowAlias, subFlow);
 
         // update subFlow execution requirements
-        resourceAdapter.updateExecution(realm, alias, execution);
+        resourceAdapter.updateExecution(realm, flowAlias, execution);
 
         // add executions for subFlow
         addExecutionOrSubFlow(realm, subFlow, subFlows);
-
     }
 
 
