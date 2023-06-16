@@ -16,10 +16,11 @@ import java.util.List;
 
 import static com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest.TEST_REALM;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.core.IsNull.notNullValue;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GroupExportServiceTest {
@@ -41,8 +42,22 @@ public class GroupExportServiceTest {
 
         var groups = groupExportService.getGroupConfigs(TEST_REALM);
 
-        assertThat(groups, isNotNull());
+        verify(adapter, times(1)).getAll(TEST_REALM);
+        verify(mapper, times(2)).mapToConfig((any()));
+        assertThat(groups,  is(notNullValue()));
         assertThat(groups.size(), equalTo(2));
+    }
+
+    @Test
+    public void whenAdapterReturnNulls_emptyListIsReturned() {
+        when(adapter.getAll(TEST_REALM)).thenReturn(null);
+
+        var groups = groupExportService.getGroupConfigs(TEST_REALM);
+
+        verify(adapter, times(1)).getAll(TEST_REALM);
+        verify(mapper, never()).mapToConfig((any()));
+        assertThat(groups,  is(notNullValue()));
+        assertThat(groups.size(), equalTo(0));
     }
 
     private List<GroupRepresentation> getGroupRepresentations() {

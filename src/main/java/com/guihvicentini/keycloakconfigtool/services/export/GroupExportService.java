@@ -24,7 +24,7 @@ public class GroupExportService {
     }
 
     public List<GroupConfig> getGroupConfigs(String realm) {
-        return Optional.of(adapter.getAll(realm))
+        return Optional.ofNullable(adapter.getAll(realm))
                 .orElse(new ArrayList<>())
                 .stream()
                 .map(mapper::mapToConfig)
