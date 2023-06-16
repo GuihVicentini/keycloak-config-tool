@@ -1,7 +1,6 @@
 package com.guihvicentini.keycloakconfigtool.services.export;
 
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
