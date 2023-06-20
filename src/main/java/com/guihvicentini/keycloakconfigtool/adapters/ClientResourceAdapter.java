@@ -16,6 +16,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Adapter to translate requests related to
@@ -38,6 +39,11 @@ public class ClientResourceAdapter {
      */
     public List<ClientRepresentation> getClients(String realm) {
         return getResource(realm).findAll();
+    }
+
+    public List<String> getClientsUuids(String realm) {
+        return getResource(realm).findAll().stream()
+                .map(ClientRepresentation::getId).collect(Collectors.toList());
     }
 
     /**

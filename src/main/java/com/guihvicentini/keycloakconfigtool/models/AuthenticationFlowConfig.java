@@ -3,10 +3,7 @@ package com.guihvicentini.keycloakconfigtool.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -21,7 +18,7 @@ public class AuthenticationFlowConfig implements Config {
 
     @Override
     public void normalize() {
-        authenticationExecutions = authenticationExecutions == null ? Collections.emptyList() : authenticationExecutions;
+        authenticationExecutions = authenticationExecutions == null ? new ArrayList<>() : authenticationExecutions;
         authenticationExecutions.forEach(AuthenticationExecutionExportConfig::normalize);
         authenticationExecutions.sort(Comparator.comparing(AuthenticationExecutionExportConfig::getPriority));
     }

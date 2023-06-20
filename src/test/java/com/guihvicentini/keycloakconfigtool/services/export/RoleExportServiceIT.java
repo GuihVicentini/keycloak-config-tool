@@ -1,4 +1,4 @@
-package com.guihvicentini.keycloakconfigtool.services;
+package com.guihvicentini.keycloakconfigtool.services.export;
 
 
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
@@ -19,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
-public class RoleImportServiceTest extends AbstractIntegrationTest {
+public class RoleExportServiceIT extends AbstractIntegrationTest {
 
     @Autowired
-    private RoleImportService importService;
+    private RoleExportService exportService;
 
     @Test
     @Order(1)
     public void whenGetAllRoles_thenReturnFullRoleInformation() {
-        RolesConfig roles = importService.getRealmAndClientRoles(TEST_REALM);
+        RolesConfig roles = exportService.getRealmAndClientRoles(TEST_REALM);
 
         log.info("Roles: {}", JsonMapperUtils.objectToJsonPrettyString(roles));
 
@@ -48,7 +48,7 @@ public class RoleImportServiceTest extends AbstractIntegrationTest {
                 .filter(role -> role.identifier().equals("test-realm-composite-role")).findFirst();
 
         assertTrue(maybeTestRealmCompositeRole.isPresent());
-        RoleConfig realmCompositeRole = maybeTestClientCompositeRole.get();
+        RoleConfig realmCompositeRole = maybeTestRealmCompositeRole.get();
 
         Set<String> reamComposites = realmCompositeRole.getComposites().getRealm();
         assertFalse(reamComposites.isEmpty());

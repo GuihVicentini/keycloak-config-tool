@@ -25,7 +25,7 @@ public class ComponentExportConfig implements Config {
 
     @Override
     public String identifier() {
-        return name+providerId;
+        return name+providerId+subType;
     }
 
     public void denormalize(){

@@ -121,6 +121,34 @@
     "client": {
       "account": [
         {
+          "name": "delete-account",
+          "description": "${role_delete-account}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "account",
+          "attributes": {}
+        },
+        {
+          "name": "manage-account",
+          "description": "${role_manage-account}",
+          "composite": true,
+          "composites": {
+            "realm": [],
+            "client": {
+              "account": [
+                "manage-account-links"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "account",
+          "attributes": {}
+        },
+        {
           "name": "manage-account-links",
           "description": "${role_manage-account-links}",
           "composite": false,
@@ -149,22 +177,6 @@
           "attributes": {}
         },
         {
-          "name": "manage-account",
-          "description": "${role_manage-account}",
-          "composite": true,
-          "composites": {
-            "realm": [],
-            "client": {
-              "account": [
-                "manage-account-links"
-              ]
-            }
-          },
-          "clientRole": true,
-          "containerId": "account",
-          "attributes": {}
-        },
-        {
           "name": "view-applications",
           "description": "${role_view-applications}",
           "composite": false,
@@ -177,20 +189,8 @@
           "attributes": {}
         },
         {
-          "name": "delete-account",
-          "description": "${role_delete-account}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "account",
-          "attributes": {}
-        },
-        {
-          "name": "view-profile",
-          "description": "${role_view-profile}",
+          "name": "view-consent",
+          "description": "${role_view-consent}",
           "composite": false,
           "composites": {
             "realm": [],
@@ -213,8 +213,8 @@
           "attributes": {}
         },
         {
-          "name": "view-consent",
-          "description": "${role_view-consent}",
+          "name": "view-profile",
+          "description": "${role_view-profile}",
           "composite": false,
           "composites": {
             "realm": [],
