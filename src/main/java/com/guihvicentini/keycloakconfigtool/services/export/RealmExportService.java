@@ -19,17 +19,22 @@ public class RealmExportService {
     private final AuthenticationFlowExportService authenticationFlowExportService;
     private final ClientExportService clientExportService;
 
+    private final RoleExportService roleExportService;
+
     private final RealmConfigMapper mapper;
 
 
     public RealmExportService(RealmResourceAdapter realmResourceAdapter,
                               IdentityProviderExportService identityProviderExportService,
                               AuthenticationFlowExportService authenticationFlowExportService,
-                              ClientExportService clientExportService, RealmConfigMapper mapper) {
+                              ClientExportService clientExportService,
+                              RoleExportService roleExportService,
+                              RealmConfigMapper mapper) {
         this.realmResourceAdapter = realmResourceAdapter;
         this.identityProviderExportService = identityProviderExportService;
         this.authenticationFlowExportService = authenticationFlowExportService;
         this.clientExportService = clientExportService;
+        this.roleExportService = roleExportService;
         this.mapper = mapper;
     }
 
@@ -61,6 +66,7 @@ public class RealmExportService {
         config.setAuthenticationFlows(authenticationFlowExportService.getAll(realm));
         config.setIdentityProviders(identityProviderExportService.getIdps(realm));
         config.setClients(clientExportService.getAllClients(realm));
+        config.setRoles(roleExportService.getRealmAndClientRoles(realm));
 
 
         config.normalize();
