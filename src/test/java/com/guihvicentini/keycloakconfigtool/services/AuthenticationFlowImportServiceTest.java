@@ -40,25 +40,6 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
         log.info("Flows: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
     }
 
-//    @Test
-//    public void getAllFlows_2() {
-//        var flows = resourceAdapter.getFlows(TEST_REALM);
-//        log.info("Flows: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
-//    }
-
-//    @Test
-//    public void getFlowExecutions() {
-//        var flows = resourceAdapter.getAuthenticationExecutions(TEST_REALM, "test-flow");
-//        log.info("FlowsExecutions: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
-//    }
-
-//    @Test
-//    public void getFlowExecutionsConfig() {
-//        var flows = flowImportService.getAllFlowExecutions(TEST_REALM, "test-flow");
-//        log.info("FlowsExecutions: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
-//    }
-
-
     @Test
     @Order(1)
     void testDoImport_FlowExistsInTargetButNotInActual_CreateFlow() {
@@ -110,7 +91,6 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
         log.info("expected: {}", JsonMapperUtils.objectToJsonNode(updatedFlow));
         log.info("actual: {}", JsonMapperUtils.objectToJsonNode(importedFlow));
 
-        // TODO update is not adding/updating/deleting authentication executions
         assertEquals(updatedFlow, importedFlow);
     }
 
