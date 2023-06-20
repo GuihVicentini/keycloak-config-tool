@@ -10,13 +10,15 @@ import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementRes
 import com.guihvicentini.keycloakconfigtool.mappers.RequiredActionsConfigMapper;
 import com.guihvicentini.keycloakconfigtool.models.RequiredActionConfig;
 
-import lombok.AllArgsConstructor;
-
 @Service
-@AllArgsConstructor
 public class RequiredActionExportService {
-    RequiredActionsConfigMapper mapper;
-    AuthenticationManagementResourceAdapter adapter;
+    private final RequiredActionsConfigMapper mapper;
+    private final AuthenticationManagementResourceAdapter adapter;
+
+    public RequiredActionExportService(RequiredActionsConfigMapper mapper, AuthenticationManagementResourceAdapter adapter) {
+        this.mapper = mapper;
+        this.adapter = adapter;
+    }
 
     public List<RequiredActionConfig> getAll(String realm){
         var resources = adapter.getRequiredActions(realm);
