@@ -456,15 +456,38 @@
   },
   "groups": [
     {
-      "id": "4d62862b-0415-43ec-8a1c-fa0f2444adc3",
+      "id": "5815bbf2-e116-4414-993a-e60554f14aff",
       "name": "test-group",
       "path": "/test-group",
-      "attributes": {},
+      "attributes": {
+        "toto": [
+          "toto"
+        ],
+        "test": [
+          "test"
+        ]
+      },
       "realmRoles": [
-        "test-realm-role"
+        "create-realm"
       ],
-      "clientRoles": {},
-      "subGroups": []
+      "clientRoles": {
+        "account": [
+          "delete-account",
+          "manage-account-links",
+          "manage-account"
+        ]
+      },
+      "subGroups": [
+        {
+          "id": "56425049-1a1f-45ad-a711-b6f5fe7638a4",
+          "name": "test-group-child",
+          "path": "/test-group/test-group-child",
+          "attributes": {},
+          "realmRoles": [],
+          "clientRoles": {},
+          "subGroups": []
+        }
+      ]
     }
   ],
   "defaultRole": {
