@@ -8,7 +8,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GroupExportServiceIT extends AbstractIntegrationTest {
 
@@ -19,8 +18,6 @@ public class GroupExportServiceIT extends AbstractIntegrationTest {
     public void getAllGroupConfigs() {
         var groups = groupExportService.getGroupConfigs(TEST_REALM);
 
-        assertEquals("test-group", groups.get(0).getName());
-        assertEquals("/test-group", groups.get(0).getPath());
         assertThat(groups, is(notNullValue()));
         assertThat(groups.size(), equalTo(1));
 
@@ -35,12 +32,23 @@ public class GroupExportServiceIT extends AbstractIntegrationTest {
 
         assertThat(group.getClientRoles().size(), equalTo(1));
         assertThat(group.getClientRoles().get("account").size(), equalTo(3));
-        assertThat(group.getClientRoles().get("account").get(0), equalTo("delete-account"));
-        assertThat(group.getClientRoles().get("account").get(1), equalTo("manage-account-links"));
-        assertThat(group.getClientRoles().get("account").get(2), equalTo("manage-account"));
+        assertThat(group.getClientRoles().get("account").get(0), equalTo("manage-account-links"));
+        assertThat(group.getClientRoles().get("account").get(1), equalTo("manage-account"));
+        assertThat(group.getClientRoles().get("account").get(2), equalTo("delete-account"));
 
         assertThat(group.getSubGroups(), is(notNullValue()));
         assertThat(group.getSubGroups().size(), equalTo(1));
+
+        assertThat(group.getAttributes(), is(notNullValue()));
+        assertThat(group.getAttributes().size(), equalTo(2));
+        assertThat(group.getAttributes().get("toto").get(0), equalTo("toto"));
+        assertThat(group.getAttributes().get("test").get(0), equalTo("test"));
+
+        assertThat(group.getAccess(), is(notNullValue()));
+        assertThat(group.getAccess().size(), equalTo(3));
+        assertThat(group.getAccess().get("view"), equalTo(true));
+        assertThat(group.getAccess().get("manage"), equalTo(true));
+        assertThat(group.getAccess().get("manageMembership"), equalTo(true));
     }
 
 }

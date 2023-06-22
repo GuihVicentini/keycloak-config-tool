@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.resource.GroupResource;
 import org.keycloak.admin.client.resource.GroupsResource;
-import org.keycloak.representations.idm.ClientMappingsRepresentation;
 import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.MappingsRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Adapter to translate requests related to
@@ -47,6 +45,13 @@ public class GroupResourceAdapter {
         return getAll(realm).stream().filter(group -> groupName.equals(group.getName()))
                 .findFirst()
                 .orElseThrow(()-> new KeycloakAdapterException("Group: %s not found", groupName));
+    }
+
+    /**
+     * GET /groups/{id}
+     */
+    public GroupRepresentation getGroupById(String realm, String groupId) {
+        return getGroupResource(realm, groupId).toRepresentation();
     }
 
     /**

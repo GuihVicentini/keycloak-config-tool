@@ -38,11 +38,17 @@ public class GroupExportServiceTest {
         var groupRepresentations = getGroupRepresentations();
 
         when(adapter.getAll(TEST_REALM)).thenReturn(groupRepresentations);
+        when(adapter.getGroupById(anyString(), anyString()))
+                .thenReturn(groupRepresentations.get(0))
+                .thenReturn(groupRepresentations.get(1));
         when(mapper.mapToConfig(any())).thenReturn(new GroupConfig());
 
         var groups = groupExportService.getGroupConfigs(TEST_REALM);
 
         verify(adapter, times(1)).getAll(TEST_REALM);
+        verify(adapter, times(2)).getGroupById(anyString(), anyString());
+        verify(adapter, times(1)).getGroupById(TEST_REALM, "id1");
+        verify(adapter, times(1)).getGroupById(TEST_REALM, "id2");
         verify(mapper, times(2)).mapToConfig((any()));
         assertThat(groups,  is(notNullValue()));
         assertThat(groups.size(), equalTo(2));
@@ -62,9 +68,15 @@ public class GroupExportServiceTest {
 
     private List<GroupRepresentation> getGroupRepresentations() {
         return Arrays.asList(
-                new GroupRepresentation(),
-                new GroupRepresentation()
+                getNewGroupRepresentation("id1"),
+                getNewGroupRepresentation("id2")
         );
+    }
+
+    private GroupRepresentation getNewGroupRepresentation(String id) {
+        var group = new GroupRepresentation();
+        group.setId(id);
+        return group;
     }
 
 }
