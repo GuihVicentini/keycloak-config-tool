@@ -1,9 +1,11 @@
 package com.guihvicentini.keycloakconfigtool.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationExecutionExportConfig;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlowConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.AuthenticationFlowExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
@@ -25,34 +27,18 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
     AuthenticationFlowImportService flowImportService;
 
     @Autowired
+    AuthenticationFlowExportService flowExportService;
+
+    @Autowired
     AuthenticationManagementResourceAdapter resourceAdapter;
 
 
 
     @Test
     public void getAllFlows() {
-        var flows = flowImportService.getAllFlows(TEST_REALM);
+        var flows = flowExportService.getAll(TEST_REALM);
         log.info("Flows: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
     }
-
-    @Test
-    public void getAllFlows_2() {
-        var flows = resourceAdapter.getFlows(TEST_REALM);
-        log.info("Flows: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
-    }
-
-    @Test
-    public void getFlowExecutions() {
-        var flows = resourceAdapter.getAuthenticationExecutions(TEST_REALM, "test-flow");
-        log.info("FlowsExecutions: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
-    }
-
-    @Test
-    public void getFlowExecutionsConfig() {
-        var flows = flowImportService.getAllFlowExecutions(TEST_REALM, "test-flow");
-        log.info("FlowsExecutions: {}", JsonMapperUtils.objectToJsonNode(flows).toPrettyString());
-    }
-
 
     @Test
     @Order(1)
@@ -64,7 +50,7 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
 
         // Assert that the missing flow was created
         AuthenticationFlowConfig createdFlow = targetFlows.get(0);
-        AuthenticationFlowConfig importedFlow = flowImportService.getAllFlows(TEST_REALM).stream()
+        AuthenticationFlowConfig importedFlow = flowExportService.getAll(TEST_REALM).stream()
                 .filter(flow -> flow.getAlias().equals(createdFlow.getAlias()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Created flow not found"));
@@ -72,7 +58,7 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
         assertEquals(createdFlow, importedFlow);
 
         AuthenticationFlowConfig createdSecondFlow = targetFlows.get(1);
-        AuthenticationFlowConfig importedSecondFlow = flowImportService.getAllFlows(TEST_REALM).stream()
+        AuthenticationFlowConfig importedSecondFlow = flowExportService.getAll(TEST_REALM).stream()
                 .filter(flow -> flow.getAlias().equals(createdSecondFlow.getAlias()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Created flow not found"));
@@ -80,8 +66,10 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
         log.info("expected: {}", JsonMapperUtils.objectToJsonNode(createdSecondFlow));
         log.info("actual: {}", JsonMapperUtils.objectToJsonNode(importedSecondFlow));
 
-        // TODO WTF Objects are equal but still getting error
-        assertEquals(createdFlow, importedSecondFlow);
+        JsonNode expected = JsonMapperUtils.objectToJsonNode(createdSecondFlow);
+        JsonNode actual = JsonMapperUtils.objectToJsonNode(importedSecondFlow);
+//        assertEquals(createdFlow, importedSecondFlow);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -95,7 +83,7 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
 
         // Assert that the updated flow was updated
         AuthenticationFlowConfig updatedFlow = targetFlows.get(1);
-        AuthenticationFlowConfig importedFlow = flowImportService.getAllFlows(TEST_REALM).stream()
+        AuthenticationFlowConfig importedFlow = flowExportService.getAll(TEST_REALM).stream()
                 .filter(flow -> flow.getAlias().equals(updatedFlow.getAlias()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Updated flow not found"));
@@ -115,10 +103,9 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
 
         // Assert that the deleted flow was removed
         AuthenticationFlowConfig deletedFlow = actualFlows.get(1);
-        Optional<AuthenticationFlowConfig> importedFlows = flowImportService.getAllFlows(TEST_REALM)
+        Optional<AuthenticationFlowConfig> importedFlows = flowExportService.getAll(TEST_REALM)
                 .stream().filter(flow -> deletedFlow.getAlias().equals(flow.getAlias())).findFirst();
 
-        // TODO update is not adding/updating/deleting authentication executions
         assertTrue(importedFlows.isEmpty());
     }
 
@@ -151,7 +138,7 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
 
     private AuthenticationExecutionExportConfig createExecution(String authenticator) {
         AuthenticationExecutionExportConfig execution = new AuthenticationExecutionExportConfig();
-        execution.setFlowAlias(authenticator);
+        execution.setAuthenticator(authenticator);
         execution.setAuthenticatorFlow(false);
         execution.setRequirement("DISABLED");
         return execution;

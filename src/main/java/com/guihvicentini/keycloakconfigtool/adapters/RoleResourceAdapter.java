@@ -7,9 +7,7 @@ import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -35,24 +33,25 @@ public class RoleResourceAdapter {
      * GET /roles
      */
     public List<RoleRepresentation> getRealmRoles(String realm) {
-        List<RoleRepresentation> realmRoles = getResource(realm).list();
-        realmRoles.forEach(role -> {
-            Optional<RoleRepresentation> mappedRole = searchRealmRole(realm, role.getName());
-            mappedRole.ifPresent(roleRepresentation -> role.setComposites(roleRepresentation.getComposites()));
-        });
-
-        return realmRoles;
+        return getResource(realm).list();
     }
+
     /**
-     * GET /clients/{clientUuid}/roles
+     * GET /roles/{role-name}/composites/realm
      */
-    public Map<String, List<RoleRepresentation>> getClientRoles(String realmName) {
-        return realmResourceAdapter.getResource(realmName).clients().findAll().stream()
-                .collect(Collectors.toMap(
-                        ClientRepresentation::getClientId,
-                        client -> realmResourceAdapter.getResource(realmName).clients()
-                                .get(client.getId()).roles().list()
-                ));
+    public Set<String> getRoleRealmComposites(String realm, String roleName) {
+        return getRoleResource(realm, roleName).getRealmRoleComposites()
+                .stream().map(RoleRepresentation::getName)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * GET /roles/{role-name}/composites/client/{clientUuid}
+     */
+    public List<String> getRoleClientComposites(String realm, String roleName, String clientUuid) {
+        return getRoleResource(realm, roleName).getClientRoleComposites(clientUuid)
+                .stream().map(RoleRepresentation::getName)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -123,6 +122,41 @@ public class RoleResourceAdapter {
 
     // TODO create 2 classes or move this to client resource adapter
     // ----------------- Clients Role Resource ----------------
+
+
+    /**
+     * GET /clients/{clientUuid}/roles
+     */
+    public Map<String, List<RoleRepresentation>> getClientRoles(String realm) {
+        return clientResourceAdapter.getClients(realm).stream()
+                .collect(Collectors.toMap(ClientRepresentation::getClientId, client ->
+                        realmResourceAdapter.getResource(realm).clients().get(client.getId()).roles().list()
+                ));
+    }
+
+
+    /**
+     * GET clients/{clientUuid}/roles/{role-name}/composites/realm
+     */
+    public Set<String> getClientRoleRealmComposites(String realm, String clientUuid ,String roleName) {
+        return getClientRoleResource(realm, clientUuid, roleName).getRealmRoleComposites()
+                .stream().map(RoleRepresentation::getName)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * GET /roles/{role-name}/composites/client/{clientUuid}
+     */
+    public Map<String, List<String>> getClientRoleClientComposites(String realm, String clientUuid, String clientId, String roleName) {
+        var clientIdUuid = clientResourceAdapter.getClientByClientId(realm, clientId).getId();
+        List<String> compositeNames = getClientRoleResource(realm, clientUuid, roleName)
+                .getClientRoleComposites(clientIdUuid)
+                .stream()
+                .map(RoleRepresentation::getName)
+                .collect(Collectors.toList());
+
+        return Collections.singletonMap(clientId, compositeNames);
+    }
 
     /**
      * POST clients/{clientUuid}/roles

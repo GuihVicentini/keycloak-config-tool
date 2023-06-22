@@ -9,8 +9,6 @@ import com.guihvicentini.keycloakconfigtool.models.RolesConfig;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import com.guihvicentini.keycloakconfigtool.utils.MapUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.representations.idm.RoleRepresentation;
-import org.keycloak.representations.idm.RolesRepresentation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -74,10 +72,6 @@ public class RoleImportService {
         resourceAdapter.createClientRole(realm, role.getContainerId(), configMapper.mapToRepresentation(role));
     }
 
-    public Map<String, List<RoleRepresentation>> getClientRoles(String realm) {
-        return resourceAdapter.getClientRoles(realm);
-    }
-
     // ---------------------- REALM ROLES -------------------------------------------
 
     private void importRealmRoles(String realm, List<RoleConfig> actual, List<RoleConfig> target) {
@@ -131,19 +125,6 @@ public class RoleImportService {
         String containerUuid = isClientRole ? clientImportService.getClientUuid(realm, containerId) :
                 realmResourceAdapter.get(realm).getId();
         role.setContainerId(containerUuid);
-    }
-
-    public RolesConfig getRealmAndClientRoles(String realm) {
-        RolesRepresentation representation = new RolesRepresentation();
-        representation.setRealm(getRealmRoles(realm));
-        representation.setClient(getClientRoles(realm));
-        RolesConfig config = configMapper.mapToConfig(representation);
-        config.normalize(realm);
-        return config;
-    }
-
-    public List<RoleRepresentation> getRealmRoles(String realm) {
-        return resourceAdapter.getRealmRoles(realm);
     }
 
 }

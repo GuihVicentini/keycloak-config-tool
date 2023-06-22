@@ -1,5 +1,6 @@
 package com.guihvicentini.keycloakconfigtool.services.export;
 
+import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlowConfig;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
@@ -13,10 +14,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
-public class AuthenticationFlowExportServiceTest extends AbstractIntegrationTest {
+public class AuthenticationFlowExportServiceIT extends AbstractIntegrationTest {
 
     @Autowired
     AuthenticationFlowExportService exportService;
+
+    @Autowired
+    AuthenticationManagementResourceAdapter resourceAdapter;
 
     @Test
     public void getAllFlows() {
@@ -33,5 +37,16 @@ public class AuthenticationFlowExportServiceTest extends AbstractIntegrationTest
 
         assertTrue(testSubFlow.isPresent());
 
+    }
+
+    @Test
+    public void getFlows(){
+        var flows = exportService.getAuthFlows(TEST_REALM);
+        log.info("Flows: {}", JsonMapperUtils.objectToJsonPrettyString(flows));
+
+        flows.forEach(flow -> {
+            var exec = resourceAdapter.getAuthenticationExecutions(TEST_REALM, flow.getAlias());
+            log.info("Subflow: {}", JsonMapperUtils.objectToJsonPrettyString(exec));
+        });
     }
 }
