@@ -3,6 +3,7 @@ package com.guihvicentini.keycloakconfigtool.services;
 
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.GroupConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.GroupExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
@@ -22,10 +23,12 @@ public class GroupImportServiceTest extends AbstractIntegrationTest {
 
     @Autowired
     private GroupImportService groupImportService;
+    @Autowired
+    private GroupExportService groupExportService;
 
     @Test
     public void getAll(){
-        var groups = groupImportService.getAllGroups(TEST_REALM);
+        var groups = groupExportService.getGroupConfigs(TEST_REALM);
         log.info("Groups: {}", JsonMapperUtils.objectToJsonString(groups));
     }
 
@@ -44,7 +47,7 @@ public class GroupImportServiceTest extends AbstractIntegrationTest {
         groupImportService.doImport(TEST_REALM, actualGroups, targetGroups);
 
         // Assert that the new group was created
-        List<GroupConfig> importedGroups = groupImportService.getAllGroups(TEST_REALM);
+        List<GroupConfig> importedGroups = groupExportService.getGroupConfigs(TEST_REALM);
 
         // test realm should have already 1 group + 2 newly created = 3
         assertEquals(3, importedGroups.size());
@@ -82,7 +85,7 @@ public class GroupImportServiceTest extends AbstractIntegrationTest {
         groupImportService.doImport(TEST_REALM, actualGroups, targetGroups);
 
         // Assert that the group was updated
-        List<GroupConfig> importedGroups = groupImportService.getAllGroups(TEST_REALM);
+        List<GroupConfig> importedGroups = groupExportService.getGroupConfigs(TEST_REALM);
 
         assertEquals(3, importedGroups.size());
 
@@ -112,7 +115,7 @@ public class GroupImportServiceTest extends AbstractIntegrationTest {
         groupImportService.doImport(TEST_REALM, actualGroups, targetGroups);
 
         // Assert that the group was deleted
-        List<GroupConfig> importedGroups = groupImportService.getAllGroups(TEST_REALM);
+        List<GroupConfig> importedGroups = groupExportService.getGroupConfigs(TEST_REALM);
 
         assertEquals(2, importedGroups.size());
 

@@ -77,16 +77,4 @@ public class GroupImportService {
     private void addGroup(String realm, GroupConfig group) {
         resourceAdapter.create(realm, configMapper.mapToRepresentation(group));
     }
-
-    // TODO migrate it to an GroupExportService
-    public List<GroupConfig> getAllGroups(String realm) {
-        var groups = resourceAdapter.getAll(realm).stream().map(configMapper::mapToConfig).toList();
-        groups.forEach(group -> {
-            var roleMappings = resourceAdapter.getGroupRoleMappings(realm, group.getName());
-            var realmRoles = roleMappings.getRealmMappings().stream().map(RoleRepresentation::getName).toList();
-//            var clientRoles = roleMappings.getClientMappings().entrySet().stream().map(role -)
-            group.setRealmRoles(realmRoles);
-        });
-        return groups;
-    }
 }

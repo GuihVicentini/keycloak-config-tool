@@ -48,6 +48,13 @@ public class GroupResourceAdapter {
     }
 
     /**
+     * GET /groups/{id}
+     */
+    public GroupRepresentation getGroupById(String realm, String groupId) {
+        return getGroupResource(realm, groupId).toRepresentation();
+    }
+
+    /**
      * POST /groups
      */
     public String create(String realm, GroupRepresentation representation) {
@@ -152,4 +159,5 @@ public class GroupResourceAdapter {
     private GroupsResource getResource(String realm) {
          return realmResourceAdapter.getResource(realm).groups();
     }
+
 }

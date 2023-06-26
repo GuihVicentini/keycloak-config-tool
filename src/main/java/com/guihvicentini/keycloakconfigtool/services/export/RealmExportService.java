@@ -18,6 +18,7 @@ public class RealmExportService {
     private final IdentityProviderExportService identityProviderExportService;
     private final AuthenticationFlowExportService authenticationFlowExportService;
     private final ClientExportService clientExportService;
+    private final GroupExportService groupExportService;
 
     private final RoleExportService roleExportService;
 
@@ -28,6 +29,7 @@ public class RealmExportService {
                               IdentityProviderExportService identityProviderExportService,
                               AuthenticationFlowExportService authenticationFlowExportService,
                               ClientExportService clientExportService,
+                              GroupExportService groupExportService,
                               RoleExportService roleExportService,
                               RealmConfigMapper mapper) {
         this.realmResourceAdapter = realmResourceAdapter;
@@ -35,6 +37,7 @@ public class RealmExportService {
         this.authenticationFlowExportService = authenticationFlowExportService;
         this.clientExportService = clientExportService;
         this.roleExportService = roleExportService;
+        this.groupExportService = groupExportService;
         this.mapper = mapper;
     }
 
@@ -67,6 +70,7 @@ public class RealmExportService {
         config.setIdentityProviders(identityProviderExportService.getIdps(realm));
         config.setClients(clientExportService.getAllClients(realm));
         config.setRoles(roleExportService.getRealmAndClientRoles(realm));
+        config.setGroups(groupExportService.getGroupConfigs(realm));
 
 
         config.normalize();
