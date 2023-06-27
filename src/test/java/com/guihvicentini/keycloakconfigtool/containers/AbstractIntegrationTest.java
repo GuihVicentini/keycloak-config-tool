@@ -28,17 +28,37 @@ public abstract class AbstractIntegrationTest {
     private static final Network network = Network.newNetwork();
 
     static {
+//        KEYCLOAK = new GenericContainer<>(DockerImageName
+//                .parse("quay.io/keycloak/keycloak:20.0.0"))
+//                .withNetwork(network)
+//                .withNetworkAliases("keycloak-test")
+//                .withEnv("KEYCLOAK_ADMIN", "admin")
+//                .withEnv("KEYCLOAK_ADMIN_PASSWORD", "admin")
+//                .withEnv("KEYCLOAK_CONTEXT_PATH", "/")
+//                .withFileSystemBind("src/test/resources/realms/test-realm.json",
+//                        "/opt/keycloak/data/import/test-realm.json", BindMode.READ_ONLY)
+//                .withExposedPorts(8080, 8443)
+//                .withCommand("start-dev --import-realm")
+//                .waitingFor(Wait.forHttp("/").forPort(8080));
+//        KEYCLOAK.start();
+
         KEYCLOAK = new GenericContainer<>(DockerImageName
-                .parse("quay.io/keycloak/keycloak:20.0.0"))
+                .parse("quay.io/keycloak/keycloak:15.0.2"))
                 .withNetwork(network)
                 .withNetworkAliases("keycloak-test")
                 .withEnv("KEYCLOAK_ADMIN", "admin")
                 .withEnv("KEYCLOAK_ADMIN_PASSWORD", "admin")
                 .withEnv("KEYCLOAK_CONTEXT_PATH", "/")
+//                .withEnv("KEYCLOAK_HOME_DIR", "keycloak")
+//                .withEnv("KEYCLOAK_IMPORT", "/opt/keycloak/data/import/test-realm.json")
+//                .withEnv("KEYCLOAK_PROFILE_FEATURE_UPLOAD_SCRIPTS", "enabled")
                 .withFileSystemBind("src/test/resources/realms/test-realm.json",
                         "/opt/keycloak/data/import/test-realm.json", BindMode.READ_ONLY)
-                .withExposedPorts(8080, 8443)
-                .withCommand("start-dev --import-realm")
+                .withExposedPorts(8080, 8080)
+                .withCommand("" +
+                        "-Dkeycloak.import=/opt/keycloak/data/import/test-realm.json " +
+                        "-Dkeycloak.profile.upload_script=enabled " +
+                        "-Dkeycloak.home.dir=keycloak")
                 .waitingFor(Wait.forHttp("/").forPort(8080));
         KEYCLOAK.start();
 

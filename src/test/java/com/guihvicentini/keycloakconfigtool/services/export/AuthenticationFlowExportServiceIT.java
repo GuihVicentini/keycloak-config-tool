@@ -25,7 +25,7 @@ public class AuthenticationFlowExportServiceIT extends AbstractIntegrationTest {
     @Test
     public void getAllFlows() {
         List<AuthenticationFlowConfig> flows = exportService.getAll(TEST_REALM);
-        log.debug("Flows: {}", JsonMapperUtils.objectToJsonPrettyString(flows));
+        log.info("Flows: {}", JsonMapperUtils.objectToJsonPrettyString(flows));
 
         Optional<AuthenticationFlowConfig> testFlow = flows.stream().filter(flow -> flow.identifier().equals("test-flow"))
                 .findFirst();
@@ -48,5 +48,11 @@ public class AuthenticationFlowExportServiceIT extends AbstractIntegrationTest {
             var exec = resourceAdapter.getAuthenticationExecutions(TEST_REALM, flow.getAlias());
             log.info("Subflow: {}", JsonMapperUtils.objectToJsonPrettyString(exec));
         });
+    }
+
+    @Test
+    public void getFlowExecutions() {
+        var executions = exportService.getAllFlowExecutions(TEST_REALM, "test-flow");
+        log.info("Flow Executions: {}", JsonMapperUtils.objectToJsonPrettyString(executions));
     }
 }

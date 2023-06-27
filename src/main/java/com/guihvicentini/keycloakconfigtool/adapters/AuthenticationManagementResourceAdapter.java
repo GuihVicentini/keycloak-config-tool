@@ -7,10 +7,7 @@ import com.guihvicentini.keycloakconfigtool.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.resource.AuthenticationManagementResource;
-import org.keycloak.representations.idm.AuthenticationExecutionInfoRepresentation;
-import org.keycloak.representations.idm.AuthenticationFlowRepresentation;
-import org.keycloak.representations.idm.RequiredActionProviderRepresentation;
-import org.keycloak.representations.idm.RequiredActionProviderSimpleRepresentation;
+import org.keycloak.representations.idm.*;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.WebApplicationException;
@@ -209,6 +206,11 @@ public class AuthenticationManagementResourceAdapter {
     public void removeExecution(String realm, String flowAlias, String executionAlias) {
         AuthenticationExecutionInfoRepresentation execution = getAuthenticationExecutionByName(realm, flowAlias, executionAlias);
         getResource(realm).removeExecution(execution.getId());
+    }
+
+
+    public AuthenticatorConfigRepresentation getExecutionConfig(String realm, String id) {
+        return getResource(realm).getAuthenticatorConfig(id);
     }
 
     /**
