@@ -1,35 +1,29 @@
 package com.guihvicentini.keycloakconfigtool.services;
 
 import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
-import com.guihvicentini.keycloakconfigtool.exceptions.KeycloakAdapterException;
-import com.guihvicentini.keycloakconfigtool.mappers.AuthenticationFlowConfigMapper;
-import com.guihvicentini.keycloakconfigtool.models.AuthenticationExecutionExportConfig;
-import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlowConfig;
-import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
+import com.guihvicentini.keycloakconfigtool.mappers.AuthenticationFlowMapper;
+import com.guihvicentini.keycloakconfigtool.models.*;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.representations.idm.AuthenticationExecutionInfoRepresentation;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class AuthenticationFlowImportService {
 
     private final AuthenticationManagementResourceAdapter resourceAdapter;
-     private final AuthenticationFlowConfigMapper flowConfigMapper;
+
+    private final AuthenticationFlowMapper flowMapper;
 
     public AuthenticationFlowImportService(AuthenticationManagementResourceAdapter resourceAdapter,
-                                           AuthenticationFlowConfigMapper flowConfigMapper) {
+                                           AuthenticationFlowMapper flowMapper) {
         this.resourceAdapter = resourceAdapter;
-        this.flowConfigMapper = flowConfigMapper;
+        this.flowMapper = flowMapper;
     }
 
-
-    public void doImport(String realm, List<AuthenticationFlowConfig> actual, List<AuthenticationFlowConfig> target) {
+    public void doImport(String realm, List<AuthenticationFlow> actual, List<AuthenticationFlow> target) {
 
         if(target.equals(actual)) {
             log.debug(ConfigConstants.UP_TO_DATE_MESSAGE);
@@ -40,97 +34,61 @@ public class AuthenticationFlowImportService {
         var toBeDeleted = ListUtil.getMissingConfigElements(actual, target);
         var toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(target, actual);
 
-        addFlows(realm, toBeAdded);
-        deleteFlows(realm, toBeDeleted);
-        updateFlows(realm, toBeUpdated);
+        addFlows2(realm, toBeAdded);
+        deleteFlows2(realm, toBeDeleted);
+        updateFlows2(realm, toBeUpdated);
 
     }
-    private void deleteFlows(String realm, List<AuthenticationFlowConfig> flows) {
-        flows.stream().filter(AuthenticationFlowConfig::isTopLevel)
-                .forEach(flow -> deleteFlow(realm, flow));
+
+    private void updateFlows2(String realm, List<AuthenticationFlow> flows) {
+        flows.forEach(flow -> updateFlow(realm, flow));
     }
 
-    private void deleteFlow(String realm, AuthenticationFlowConfig flow) {
-        resourceAdapter.deleteFlow(realm, flowConfigMapper.mapToRepresentation(flow));
+    private void updateFlow(String realm, AuthenticationFlow flow) {
+        deleteFlow(realm, flow);
+        addFlow(realm, flow);
     }
 
-    private void updateFlows(String realm, List<AuthenticationFlowConfig> flows) {
-        // re-create flow
-        deleteFlows(realm, flows);
-        addFlows(realm, flows);
+    private void deleteFlows2(String realm, List<AuthenticationFlow> flows) {
+        flows.forEach(flow -> deleteFlow(realm, flow));
     }
 
-    private void updateFlow(String realm, AuthenticationFlowConfig flow) {
-        resourceAdapter.updateFlow(realm, flowConfigMapper.mapToRepresentation(flow));
+    private void deleteFlow(String realm, AuthenticationFlow flow) {
+        resourceAdapter.deleteFlow(realm, flow.getAlias());
     }
 
-    private void addFlows(String realm, List<AuthenticationFlowConfig> flows) {
-        List<AuthenticationFlowConfig> topFlows = flows.stream().filter(AuthenticationFlowConfig::isTopLevel).toList();
-        List<AuthenticationFlowConfig> subFlows = new ArrayList<>(flows);
-        subFlows.removeAll(topFlows);
-
-        // create top flows and add subflows and executions for each flow
-        topFlows.forEach(flow -> addFlow(realm, flow, subFlows));
+    private void addFlows2(String realm, List<AuthenticationFlow> authenticationFlows) {
+        authenticationFlows.forEach(authenticationFlow -> addFlow(realm, authenticationFlow));
     }
 
-    private void addFlow(String realm, AuthenticationFlowConfig flow, List<AuthenticationFlowConfig> subFlows) {
-        resourceAdapter.createFlow(realm, flowConfigMapper.mapToRepresentation(flow));
-        addExecutionOrSubFlow(realm, flow, subFlows);
+    private void addFlow(String realm, AuthenticationFlow authenticationFlow) {
+        resourceAdapter.createFlow(realm, flowMapper.mapToRepresentation(authenticationFlow));
+        addExecutionOrSubFlow(realm, authenticationFlow.getAlias(), authenticationFlow.getSubFlowsAndExecutions());
     }
 
-    private void addExecutionOrSubFlow(String realm, AuthenticationFlowConfig flow, List<AuthenticationFlowConfig> subFlows) {
-        flow.getAuthenticationExecutions().forEach(execution -> {
-            if(execution.isAuthenticatorFlow()) {
-                addExecutionFlow(realm, flow.getAlias(), execution, subFlows);
+    private void addExecutionOrSubFlow(String realm, String alias, List<FlowElement> subFlowsAndExecutions) {
+        subFlowsAndExecutions.forEach(subFlowOrExecution -> {
+            if (subFlowOrExecution.isAuthenticationFlow()) {
+                createSubFlow(realm, alias, subFlowOrExecution);
             } else {
-                addExecution(realm, flow.getAlias(), execution);
+                createExecution(realm, alias, subFlowOrExecution);
             }
         });
     }
 
-    private void addExecutionFlow(String realm, String flowAlias, AuthenticationExecutionExportConfig execution,
-                                  List<AuthenticationFlowConfig> subFlows) {
-        AuthenticationFlowConfig subFlow = subFlows.stream()
-                .filter(flow -> execution.getFlowAlias().equals(flow.getAlias()))
-                .findFirst()
-                .orElseThrow(() -> new KeycloakAdapterException("Subflow: %s not found", execution.getFlowAlias()));
+    private void createExecution(String realm, String alias, FlowElement execution) {
+        AuthenticationExecution authenticationExecution = (AuthenticationExecution) execution;
+        resourceAdapter.addExecution(realm, alias, authenticationExecution);
+        resourceAdapter.updateExecution(realm, alias, authenticationExecution);
 
-        resourceAdapter.addExecutionFlow(realm, flowAlias, subFlow);
+    }
 
-        // update subFlow execution requirements
-        resourceAdapter.updateExecution(realm, flowAlias, execution);
-
+    private void createSubFlow(String realm, String alias, FlowElement subFlow) {
+        AuthenticationSubFlow authenticationSubFlow = (AuthenticationSubFlow) subFlow;
+        resourceAdapter.addExecutionFlow(realm, alias, authenticationSubFlow);
+        resourceAdapter.updateExecution(realm, alias, authenticationSubFlow);
         // add executions for subFlow recursively
-        addExecutionOrSubFlow(realm, subFlow, subFlows);
+        addExecutionOrSubFlow(realm, authenticationSubFlow.getAlias(), authenticationSubFlow.getSubFlowsAndExecutions());
     }
 
-
-    private AuthenticationExecutionInfoRepresentation findSubflowByAlias(String realm, String flowAlias, String subFlowAlias) {
-        return resourceAdapter.getAuthenticationExecutions(realm, flowAlias)
-                .stream().filter(execution -> subFlowAlias.equals(execution.getDisplayName()) || subFlowAlias.equals(execution.getProviderId()))
-                .findFirst()
-                .orElseThrow(() -> new KeycloakAdapterException("Subflow: %s not found", subFlowAlias));
-    }
-
-
-    private void addExecution(String realm, String alias, AuthenticationExecutionExportConfig execution) {
-        resourceAdapter.addExecution(realm, alias, execution);
-        // update execution to correct requirement and other values
-        resourceAdapter.updateExecution(realm, alias, execution);
-    }
-
-
-    private List<AuthenticationFlowConfig> getFlowWithoutSubflows(List<AuthenticationFlowConfig> flows) {
-        return flows.stream().filter(flow -> flow.getAuthenticationExecutions()
-                .stream().noneMatch(AuthenticationExecutionExportConfig::isAuthenticatorFlow))
-                .collect(Collectors.toList());
-    }
-
-    public String getFlowIdByAlias(String realm, String flowAlias) {
-        return resourceAdapter.getFlowIdByAlias(realm, flowAlias);
-    }
-
-    public String getFlowAliasById(String realm, String uuid) {
-        return resourceAdapter.getFlow(realm, uuid).getAlias();
-    }
 }

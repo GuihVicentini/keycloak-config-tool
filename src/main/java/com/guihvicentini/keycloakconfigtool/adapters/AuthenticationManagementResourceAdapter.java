@@ -1,8 +1,7 @@
 package com.guihvicentini.keycloakconfigtool.adapters;
 
 import com.guihvicentini.keycloakconfigtool.exceptions.KeycloakAdapterException;
-import com.guihvicentini.keycloakconfigtool.models.AuthenticationExecutionExportConfig;
-import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlowConfig;
+import com.guihvicentini.keycloakconfigtool.models.*;
 import com.guihvicentini.keycloakconfigtool.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.CreatedResponseUtil;
@@ -137,8 +136,8 @@ public class AuthenticationManagementResourceAdapter {
     /**
      * DELETE /authentication/flows/{id}
      */
-    public void deleteFlow(String realm, AuthenticationFlowRepresentation representation) {
-        String flowId = getFlowIdByAlias(realm, representation.getAlias());
+    public void deleteFlow(String realm, String flowAlias) {
+        String flowId = getFlowIdByAlias(realm, flowAlias);
         getResource(realm).deleteFlow(flowId);
     }
 
@@ -152,9 +151,23 @@ public class AuthenticationManagementResourceAdapter {
     }
 
     /**
+     * GET /executions/{executionId}
+     */
+    public AuthenticationExecutionRepresentation getExecutionById(String realm, String executionId) {
+        return getResource(realm).getExecution(executionId);
+    }
+
+    /**
+     * GET /config/{id}
+     */
+    public AuthenticatorConfigRepresentation getExecutionConfigById(String realm, String configId) {
+        return getResource(realm).getAuthenticatorConfig(configId);
+    }
+
+    /**
      * adaptation to get execution representation based on name GET /flows/{flowAlias}/executions
      */
-    private AuthenticationExecutionInfoRepresentation getAuthenticationExecutionByName(String realm, String flowAlias, String executionAlias) {
+    public AuthenticationExecutionInfoRepresentation getAuthenticationExecutionByName(String realm, String flowAlias, String executionAlias) {
         return getAuthenticationExecutions(realm, flowAlias)
                 // if subflow it should match the display name else it matches the providerId
                 .stream().filter(exec -> executionAlias.equals(exec.getDisplayName()) || executionAlias.equals(exec.getProviderId()))
@@ -165,7 +178,7 @@ public class AuthenticationManagementResourceAdapter {
     /**
      * POST /flows/{flowAlias}/executions/flows
      */
-    public void addExecutionFlow(String realm, String flowAlias, AuthenticationFlowConfig subFlow) {
+    public void addExecutionFlow(String realm, String flowAlias, AuthenticationSubFlow subFlow) {
         Map<String, String> request = new HashMap<>();
         request.put("alias", subFlow.getAlias());
         request.put("type", subFlow.getProviderId());
@@ -176,17 +189,17 @@ public class AuthenticationManagementResourceAdapter {
     /**
      * POST /flows/{flowAlias}/executions/execution
      */
-    public void addExecution(String realm, String flowAlias, AuthenticationExecutionExportConfig config) {
+    public void addExecution(String realm, String flowAlias, AuthenticationExecution config) {
         Map<String, String> request = new HashMap<>();
-        request.put("provider", config.getAuthenticator());
+        request.put("provider", config.getProviderId());
         getResource(realm).addExecution(flowAlias, request);
     }
 
     /**
      * PUT /flows/{flowAlias}/executions
      */
-    public void updateExecution(String realm, String flowAlias, AuthenticationExecutionExportConfig config) {
-        String executionSearch = config.isAuthenticatorFlow() ? config.getFlowAlias() : config.getAuthenticator();
+    public void updateExecution(String realm, String flowAlias, FlowElement config) {
+        String executionSearch = config.getAlias();
         AuthenticationExecutionInfoRepresentation execution = getAuthenticationExecutionByName(realm, flowAlias, executionSearch);
         execution.setRequirement(config.getRequirement());
         updateExecution(realm, flowAlias, execution);

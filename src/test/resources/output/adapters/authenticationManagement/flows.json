@@ -1,0 +1,1448 @@
+[
+    {
+        "alias": "browser",
+        "description": "browser based authentication",
+        "providerId": "basic-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "auth-cookie",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-cookie"
+            },
+            {
+                "providerId": "auth-spnego",
+                "requirement": "DISABLED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-spnego"
+            },
+            {
+                "providerId": "identity-provider-redirector",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "identity-provider-redirector"
+            },
+            {
+                "alias": "forms",
+                "description": "Username, password, otp and other auth forms.",
+                "requirement": "ALTERNATIVE",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "auth-username-password-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-username-password-form"
+                    },
+                    {
+                        "alias": "Browser - Conditional OTP",
+                        "description": "Flow to determine if the OTP is required for the authentication",
+                        "requirement": "CONDITIONAL",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "auth-otp-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-otp-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "auth-username-password-form",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-username-password-form"
+            },
+            {
+                "alias": "Browser - Conditional OTP",
+                "description": "Flow to determine if the OTP is required for the authentication",
+                "requirement": "CONDITIONAL",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "auth-otp-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-otp-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "conditional-user-configured",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "conditional-user-configured"
+            },
+            {
+                "providerId": "auth-otp-form",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-otp-form"
+            }
+        ]
+    },
+    {
+        "alias": "clients",
+        "description": "Base authentication for clients",
+        "providerId": "client-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "client-secret",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "client-secret"
+            },
+            {
+                "providerId": "client-jwt",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "client-jwt"
+            },
+            {
+                "providerId": "client-secret-jwt",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "client-secret-jwt"
+            },
+            {
+                "providerId": "client-x509",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "client-x509"
+            }
+        ]
+    },
+    {
+        "alias": "direct grant",
+        "description": "OpenID Connect Resource Owner Grant",
+        "providerId": "basic-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "direct-grant-validate-username",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "direct-grant-validate-username"
+            },
+            {
+                "providerId": "direct-grant-validate-password",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "direct-grant-validate-password"
+            },
+            {
+                "alias": "Direct Grant - Conditional OTP",
+                "description": "Flow to determine if the OTP is required for the authentication",
+                "requirement": "CONDITIONAL",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "direct-grant-validate-otp",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "direct-grant-validate-otp"
+                    }
+                ]
+            },
+            {
+                "providerId": "conditional-user-configured",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "conditional-user-configured"
+            },
+            {
+                "providerId": "direct-grant-validate-otp",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "direct-grant-validate-otp"
+            }
+        ]
+    },
+    {
+        "alias": "docker auth",
+        "description": "Used by Docker clients to authenticate against the IDP",
+        "providerId": "basic-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "docker-http-basic-authenticator",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "docker-http-basic-authenticator"
+            }
+        ]
+    },
+    {
+        "alias": "first broker login",
+        "description": "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
+        "providerId": "basic-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "idp-review-profile",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": {
+                    "alias": "review profile config",
+                    "config": {
+                        "update.profile.on.first.login": "missing"
+                    }
+                },
+                "alias": "idp-review-profile"
+            },
+            {
+                "alias": "User creation or linking",
+                "description": "Flow for the existing/non-existing user alternatives",
+                "requirement": "REQUIRED",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "idp-create-user-if-unique",
+                        "requirement": "ALTERNATIVE",
+                        "authenticationFlow": false,
+                        "config": {
+                            "alias": "create unique user config",
+                            "config": {
+                                "require.password.update.after.registration": "false"
+                            }
+                        },
+                        "alias": "idp-create-user-if-unique"
+                    },
+                    {
+                        "alias": "Handle Existing Account",
+                        "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
+                        "requirement": "ALTERNATIVE",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "idp-confirm-link",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-confirm-link"
+                            },
+                            {
+                                "alias": "Account verification options",
+                                "description": "Method with which to verity the existing account",
+                                "requirement": "REQUIRED",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "idp-email-verification",
+                                        "requirement": "ALTERNATIVE",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "idp-email-verification"
+                                    },
+                                    {
+                                        "alias": "Verify Existing Account by Re-authentication",
+                                        "description": "Reauthentication of existing account",
+                                        "requirement": "ALTERNATIVE",
+                                        "providerId": "basic-flow",
+                                        "authenticationFlow": true,
+                                        "subFlowsAndExecutions": [
+                                            {
+                                                "providerId": "idp-username-password-form",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "idp-username-password-form"
+                                            },
+                                            {
+                                                "alias": "First broker login - Conditional OTP",
+                                                "description": "Flow to determine if the OTP is required for the authentication",
+                                                "requirement": "CONDITIONAL",
+                                                "providerId": "basic-flow",
+                                                "authenticationFlow": true,
+                                                "subFlowsAndExecutions": [
+                                                    {
+                                                        "providerId": "conditional-user-configured",
+                                                        "requirement": "REQUIRED",
+                                                        "authenticationFlow": false,
+                                                        "config": null,
+                                                        "alias": "conditional-user-configured"
+                                                    },
+                                                    {
+                                                        "providerId": "auth-otp-form",
+                                                        "requirement": "REQUIRED",
+                                                        "authenticationFlow": false,
+                                                        "config": null,
+                                                        "alias": "auth-otp-form"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "providerId": "conditional-user-configured",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "conditional-user-configured"
+                                            },
+                                            {
+                                                "providerId": "auth-otp-form",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "auth-otp-form"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "providerId": "idp-username-password-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "idp-username-password-form"
+                                    },
+                                    {
+                                        "alias": "First broker login - Conditional OTP",
+                                        "description": "Flow to determine if the OTP is required for the authentication",
+                                        "requirement": "CONDITIONAL",
+                                        "providerId": "basic-flow",
+                                        "authenticationFlow": true,
+                                        "subFlowsAndExecutions": [
+                                            {
+                                                "providerId": "conditional-user-configured",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "conditional-user-configured"
+                                            },
+                                            {
+                                                "providerId": "auth-otp-form",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "auth-otp-form"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "idp-email-verification",
+                                "requirement": "ALTERNATIVE",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-email-verification"
+                            },
+                            {
+                                "alias": "Verify Existing Account by Re-authentication",
+                                "description": "Reauthentication of existing account",
+                                "requirement": "ALTERNATIVE",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "idp-username-password-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "idp-username-password-form"
+                                    },
+                                    {
+                                        "alias": "First broker login - Conditional OTP",
+                                        "description": "Flow to determine if the OTP is required for the authentication",
+                                        "requirement": "CONDITIONAL",
+                                        "providerId": "basic-flow",
+                                        "authenticationFlow": true,
+                                        "subFlowsAndExecutions": [
+                                            {
+                                                "providerId": "conditional-user-configured",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "conditional-user-configured"
+                                            },
+                                            {
+                                                "providerId": "auth-otp-form",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "auth-otp-form"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "idp-username-password-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-username-password-form"
+                            },
+                            {
+                                "alias": "First broker login - Conditional OTP",
+                                "description": "Flow to determine if the OTP is required for the authentication",
+                                "requirement": "CONDITIONAL",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "idp-confirm-link",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-confirm-link"
+                    },
+                    {
+                        "alias": "Account verification options",
+                        "description": "Method with which to verity the existing account",
+                        "requirement": "REQUIRED",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "idp-email-verification",
+                                "requirement": "ALTERNATIVE",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-email-verification"
+                            },
+                            {
+                                "alias": "Verify Existing Account by Re-authentication",
+                                "description": "Reauthentication of existing account",
+                                "requirement": "ALTERNATIVE",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "idp-username-password-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "idp-username-password-form"
+                                    },
+                                    {
+                                        "alias": "First broker login - Conditional OTP",
+                                        "description": "Flow to determine if the OTP is required for the authentication",
+                                        "requirement": "CONDITIONAL",
+                                        "providerId": "basic-flow",
+                                        "authenticationFlow": true,
+                                        "subFlowsAndExecutions": [
+                                            {
+                                                "providerId": "conditional-user-configured",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "conditional-user-configured"
+                                            },
+                                            {
+                                                "providerId": "auth-otp-form",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "auth-otp-form"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "idp-username-password-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-username-password-form"
+                            },
+                            {
+                                "alias": "First broker login - Conditional OTP",
+                                "description": "Flow to determine if the OTP is required for the authentication",
+                                "requirement": "CONDITIONAL",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "idp-email-verification",
+                        "requirement": "ALTERNATIVE",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-email-verification"
+                    },
+                    {
+                        "alias": "Verify Existing Account by Re-authentication",
+                        "description": "Reauthentication of existing account",
+                        "requirement": "ALTERNATIVE",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "idp-username-password-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-username-password-form"
+                            },
+                            {
+                                "alias": "First broker login - Conditional OTP",
+                                "description": "Flow to determine if the OTP is required for the authentication",
+                                "requirement": "CONDITIONAL",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "idp-username-password-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-username-password-form"
+                    },
+                    {
+                        "alias": "First broker login - Conditional OTP",
+                        "description": "Flow to determine if the OTP is required for the authentication",
+                        "requirement": "CONDITIONAL",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "auth-otp-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-otp-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "idp-create-user-if-unique",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": {
+                    "alias": "create unique user config",
+                    "config": {
+                        "require.password.update.after.registration": "false"
+                    }
+                },
+                "alias": "idp-create-user-if-unique"
+            },
+            {
+                "alias": "Handle Existing Account",
+                "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
+                "requirement": "ALTERNATIVE",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "idp-confirm-link",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-confirm-link"
+                    },
+                    {
+                        "alias": "Account verification options",
+                        "description": "Method with which to verity the existing account",
+                        "requirement": "REQUIRED",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "idp-email-verification",
+                                "requirement": "ALTERNATIVE",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-email-verification"
+                            },
+                            {
+                                "alias": "Verify Existing Account by Re-authentication",
+                                "description": "Reauthentication of existing account",
+                                "requirement": "ALTERNATIVE",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "idp-username-password-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "idp-username-password-form"
+                                    },
+                                    {
+                                        "alias": "First broker login - Conditional OTP",
+                                        "description": "Flow to determine if the OTP is required for the authentication",
+                                        "requirement": "CONDITIONAL",
+                                        "providerId": "basic-flow",
+                                        "authenticationFlow": true,
+                                        "subFlowsAndExecutions": [
+                                            {
+                                                "providerId": "conditional-user-configured",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "conditional-user-configured"
+                                            },
+                                            {
+                                                "providerId": "auth-otp-form",
+                                                "requirement": "REQUIRED",
+                                                "authenticationFlow": false,
+                                                "config": null,
+                                                "alias": "auth-otp-form"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "idp-username-password-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-username-password-form"
+                            },
+                            {
+                                "alias": "First broker login - Conditional OTP",
+                                "description": "Flow to determine if the OTP is required for the authentication",
+                                "requirement": "CONDITIONAL",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "idp-email-verification",
+                        "requirement": "ALTERNATIVE",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-email-verification"
+                    },
+                    {
+                        "alias": "Verify Existing Account by Re-authentication",
+                        "description": "Reauthentication of existing account",
+                        "requirement": "ALTERNATIVE",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "idp-username-password-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-username-password-form"
+                            },
+                            {
+                                "alias": "First broker login - Conditional OTP",
+                                "description": "Flow to determine if the OTP is required for the authentication",
+                                "requirement": "CONDITIONAL",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "idp-username-password-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-username-password-form"
+                    },
+                    {
+                        "alias": "First broker login - Conditional OTP",
+                        "description": "Flow to determine if the OTP is required for the authentication",
+                        "requirement": "CONDITIONAL",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "auth-otp-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-otp-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "idp-confirm-link",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "idp-confirm-link"
+            },
+            {
+                "alias": "Account verification options",
+                "description": "Method with which to verity the existing account",
+                "requirement": "REQUIRED",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "idp-email-verification",
+                        "requirement": "ALTERNATIVE",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-email-verification"
+                    },
+                    {
+                        "alias": "Verify Existing Account by Re-authentication",
+                        "description": "Reauthentication of existing account",
+                        "requirement": "ALTERNATIVE",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "idp-username-password-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "idp-username-password-form"
+                            },
+                            {
+                                "alias": "First broker login - Conditional OTP",
+                                "description": "Flow to determine if the OTP is required for the authentication",
+                                "requirement": "CONDITIONAL",
+                                "providerId": "basic-flow",
+                                "authenticationFlow": true,
+                                "subFlowsAndExecutions": [
+                                    {
+                                        "providerId": "conditional-user-configured",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "conditional-user-configured"
+                                    },
+                                    {
+                                        "providerId": "auth-otp-form",
+                                        "requirement": "REQUIRED",
+                                        "authenticationFlow": false,
+                                        "config": null,
+                                        "alias": "auth-otp-form"
+                                    }
+                                ]
+                            },
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "idp-username-password-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-username-password-form"
+                    },
+                    {
+                        "alias": "First broker login - Conditional OTP",
+                        "description": "Flow to determine if the OTP is required for the authentication",
+                        "requirement": "CONDITIONAL",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "auth-otp-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-otp-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "idp-email-verification",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "idp-email-verification"
+            },
+            {
+                "alias": "Verify Existing Account by Re-authentication",
+                "description": "Reauthentication of existing account",
+                "requirement": "ALTERNATIVE",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "idp-username-password-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "idp-username-password-form"
+                    },
+                    {
+                        "alias": "First broker login - Conditional OTP",
+                        "description": "Flow to determine if the OTP is required for the authentication",
+                        "requirement": "CONDITIONAL",
+                        "providerId": "basic-flow",
+                        "authenticationFlow": true,
+                        "subFlowsAndExecutions": [
+                            {
+                                "providerId": "conditional-user-configured",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "conditional-user-configured"
+                            },
+                            {
+                                "providerId": "auth-otp-form",
+                                "requirement": "REQUIRED",
+                                "authenticationFlow": false,
+                                "config": null,
+                                "alias": "auth-otp-form"
+                            }
+                        ]
+                    },
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "auth-otp-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-otp-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "idp-username-password-form",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "idp-username-password-form"
+            },
+            {
+                "alias": "First broker login - Conditional OTP",
+                "description": "Flow to determine if the OTP is required for the authentication",
+                "requirement": "CONDITIONAL",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "auth-otp-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-otp-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "conditional-user-configured",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "conditional-user-configured"
+            },
+            {
+                "providerId": "auth-otp-form",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-otp-form"
+            }
+        ]
+    },
+    {
+        "alias": "http challenge",
+        "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
+        "providerId": "basic-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "no-cookie-redirect",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "no-cookie-redirect"
+            },
+            {
+                "alias": "Authentication Options",
+                "description": "Authentication options.",
+                "requirement": "REQUIRED",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "basic-auth",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "basic-auth"
+                    },
+                    {
+                        "providerId": "basic-auth-otp",
+                        "requirement": "DISABLED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "basic-auth-otp"
+                    },
+                    {
+                        "providerId": "auth-spnego",
+                        "requirement": "DISABLED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-spnego"
+                    }
+                ]
+            },
+            {
+                "providerId": "basic-auth",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "basic-auth"
+            },
+            {
+                "providerId": "basic-auth-otp",
+                "requirement": "DISABLED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "basic-auth-otp"
+            },
+            {
+                "providerId": "auth-spnego",
+                "requirement": "DISABLED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-spnego"
+            }
+        ]
+    },
+    {
+        "alias": "registration",
+        "description": "registration flow",
+        "providerId": "basic-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "alias": "registration form",
+                "description": "registration form",
+                "requirement": "REQUIRED",
+                "providerId": "form-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "registration-user-creation",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "registration-user-creation"
+                    },
+                    {
+                        "providerId": "registration-profile-action",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "registration-profile-action"
+                    },
+                    {
+                        "providerId": "registration-password-action",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "registration-password-action"
+                    },
+                    {
+                        "providerId": "registration-recaptcha-action",
+                        "requirement": "DISABLED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "registration-recaptcha-action"
+                    }
+                ]
+            },
+            {
+                "providerId": "registration-user-creation",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "registration-user-creation"
+            },
+            {
+                "providerId": "registration-profile-action",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "registration-profile-action"
+            },
+            {
+                "providerId": "registration-password-action",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "registration-password-action"
+            },
+            {
+                "providerId": "registration-recaptcha-action",
+                "requirement": "DISABLED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "registration-recaptcha-action"
+            }
+        ]
+    },
+    {
+        "alias": "reset credentials",
+        "description": "Reset credentials for a user if they forgot their password or something",
+        "providerId": "basic-flow",
+        "builtIn": true,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "reset-credentials-choose-user",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "reset-credentials-choose-user"
+            },
+            {
+                "providerId": "reset-credential-email",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "reset-credential-email"
+            },
+            {
+                "providerId": "reset-password",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "reset-password"
+            },
+            {
+                "alias": "Reset - Conditional OTP",
+                "description": "Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.",
+                "requirement": "CONDITIONAL",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "conditional-user-configured",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "conditional-user-configured"
+                    },
+                    {
+                        "providerId": "reset-otp",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "reset-otp"
+                    }
+                ]
+            },
+            {
+                "providerId": "conditional-user-configured",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "conditional-user-configured"
+            },
+            {
+                "providerId": "reset-otp",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "reset-otp"
+            }
+        ]
+    },
+    {
+        "alias": "test-flow",
+        "description": "test flow",
+        "providerId": "basic-flow",
+        "builtIn": false,
+        "subFlowsAndExecutions": [
+            {
+                "providerId": "auth-cookie",
+                "requirement": "ALTERNATIVE",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-cookie"
+            },
+            {
+                "alias": "test-sub-flow",
+                "description": "test subflow",
+                "requirement": "ALTERNATIVE",
+                "providerId": "basic-flow",
+                "authenticationFlow": true,
+                "subFlowsAndExecutions": [
+                    {
+                        "providerId": "auth-username-password-form",
+                        "requirement": "REQUIRED",
+                        "authenticationFlow": false,
+                        "config": null,
+                        "alias": "auth-username-password-form"
+                    }
+                ]
+            },
+            {
+                "providerId": "auth-username-password-form",
+                "requirement": "REQUIRED",
+                "authenticationFlow": false,
+                "config": null,
+                "alias": "auth-username-password-form"
+            }
+        ]
+    }
+]

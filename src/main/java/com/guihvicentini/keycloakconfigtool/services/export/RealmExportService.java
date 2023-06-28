@@ -68,7 +68,7 @@ public class RealmExportService {
         RealmRepresentation representation = realmResourceAdapter.get(realm);
         RealmConfig config = mapper.mapToConfig(representation);
 
-        config.setAuthenticationFlows(authenticationFlowExportService.getAll(realm));
+        config.setAuthenticationFlows(authenticationFlowExportService.getAllFlows(realm));
         config.setIdentityProviders(identityProviderExportService.getIdps(realm));
         config.setClients(clientExportService.getAllClients(realm));
         config.setRoles(roleExportService.getRealmAndClientRoles(realm));

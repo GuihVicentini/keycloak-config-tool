@@ -1,17 +1,17 @@
 package com.guihvicentini.keycloakconfigtool.services.export;
 
 import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
-import com.guihvicentini.keycloakconfigtool.mappers.AuthenticationFlowConfigMapper;
-import com.guihvicentini.keycloakconfigtool.models.AuthenticationExecutionExportConfig;
-import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlowConfig;
+import com.guihvicentini.keycloakconfigtool.mappers.AuthenticationFlowMapper;
+import com.guihvicentini.keycloakconfigtool.mappers.AuthenticatorConfigConfigMapper;
+import com.guihvicentini.keycloakconfigtool.models.*;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.AuthenticationExecutionInfoRepresentation;
 import org.keycloak.representations.idm.AuthenticationFlowRepresentation;
+import org.keycloak.representations.idm.AuthenticatorConfigRepresentation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -19,69 +19,80 @@ public class AuthenticationFlowExportService {
 
     private final AuthenticationManagementResourceAdapter resourceAdapter;
 
-    private final AuthenticationFlowConfigMapper authenticationFlowConfigMapper;
+    private final AuthenticationFlowMapper flowMapper;
+
+    private final AuthenticatorConfigConfigMapper configMapper;
 
 
     public AuthenticationFlowExportService(AuthenticationManagementResourceAdapter resourceAdapter,
-                                           AuthenticationFlowConfigMapper authenticationFlowConfigMapper) {
+                                           AuthenticationFlowMapper flowMapper,
+                                           AuthenticatorConfigConfigMapper configMapper) {
         this.resourceAdapter = resourceAdapter;
-        this.authenticationFlowConfigMapper = authenticationFlowConfigMapper;
-    }
-
-    public List<AuthenticationFlowRepresentation> getAuthFlows(String realm) {
-        return resourceAdapter.getFlows(realm);
-    }
-
-    public List<AuthenticationFlowConfig> getAll(String realm) {
-        List<AuthenticationFlowConfig> flows = resourceAdapter.getFlows(realm)
-                .stream()
-                .map(authenticationFlowConfigMapper::mapToConfig)
-                .collect(Collectors.toList());
-
-        List<AuthenticationFlowConfig> subFlows = flows.stream()
-                .flatMap(flow -> findSubFlows(realm, flow.getAlias())).toList();
-
-        flows.addAll(subFlows);
-        return flows;
-    }
-
-    private Stream<AuthenticationFlowConfig> findSubFlows(String realm, String flowAlias) {
-        var subFlowIds = resourceAdapter.getAuthenticationExecutions(realm, flowAlias)
-                .stream()
-                .filter(exec -> exec.getAuthenticationFlow() != null && exec.getAuthenticationFlow())
-                .map(AuthenticationExecutionInfoRepresentation::getFlowId)
-                .toList();
-
-        return subFlowIds.stream()
-                .flatMap(id -> {
-                    var subflow = resourceAdapter.getFlow(realm, id);
-//                    log.info("Subflow: {}", JsonMapperUtils.objectToJsonPrettyString(subflow));
-                    var subflowConfig = authenticationFlowConfigMapper.mapToConfig(subflow);
-                    return Stream.concat(Stream.of(subflowConfig), findSubFlows(realm, subflow.getAlias()));
-                });
+        this.flowMapper = flowMapper;
+        this.configMapper = configMapper;
     }
 
     public String getFlowAliasById(String realm, String uuid) {
         return resourceAdapter.getFlow(realm, uuid).getAlias();
     }
 
-
-    public List<AuthenticationExecutionExportConfig> getAllFlowExecutions(String realm, String flowAlias) {
-        return resourceAdapter.getAuthenticationExecutions(realm, flowAlias)
-                .stream().map(this::mapToConfig).toList();
+    public String getFlowIdByAlias(String realm, String flowAlias) {
+        return resourceAdapter.getFlowIdByAlias(realm, flowAlias);
     }
 
-    private AuthenticationExecutionExportConfig mapToConfig(AuthenticationExecutionInfoRepresentation representation) {
-        AuthenticationExecutionExportConfig config = new AuthenticationExecutionExportConfig();
-        config.setAuthenticatorConfig(representation.getAuthenticationConfig());
-        config.setAuthenticator(representation.getProviderId());
-        if(null == representation.getAuthenticationFlow()) {
-            config.setAuthenticatorFlow(false);
-        } else {
-            config.setAuthenticatorFlow(representation.getAuthenticationFlow());
+    public List<AuthenticationFlow> getAllFlows(String realm) {
+        List<AuthenticationFlowRepresentation> representations = resourceAdapter.getFlows(realm);
+
+        return representations.stream()
+                .filter(AuthenticationFlowRepresentation::isTopLevel)
+                .map(flowMapper::mapToConfig)
+                .peek(f -> f.setSubFlowsAndExecutions(getSubFlowOrExecution(realm, f.getAlias())))
+                .collect(Collectors.toList());
+    }
+
+    private List<FlowElement> getSubFlowOrExecution(String realm, String alias) {
+        List<AuthenticationExecutionInfoRepresentation> executions = resourceAdapter.getAuthenticationExecutions(realm, alias);
+
+        return executions.stream()
+                .map(exec -> {
+                    if (exec.getAuthenticationFlow() != null && exec.getAuthenticationFlow()) {
+                        return createSubFlow(realm, exec);
+                    } else {
+                        return createExecution(realm, exec);
+                    }
+                })
+                .collect(Collectors.toList());
+    }
+
+    private FlowElement createExecution(String realm, AuthenticationExecutionInfoRepresentation exec) {
+        AuthenticationExecution execution = new AuthenticationExecution();
+
+        execution.setProviderId(exec.getProviderId());
+        execution.setAuthenticationFlow(false);
+        execution.setRequirement(exec.getRequirement());
+
+        if(exec.getAuthenticationConfig() != null) {
+            AuthenticatorConfigRepresentation executionConfig = resourceAdapter.getExecutionConfigById(realm, exec.getAuthenticationConfig());
+            AuthenticatorConfigConfig execConfig = configMapper.mapToConfig(executionConfig);
+            execution.setConfig(execConfig);
         }
-        config.setRequirement(representation.getRequirement());
-        config.setFlowAlias(representation.getDisplayName());
-        return config;
+
+        return execution;
     }
+
+    private FlowElement createSubFlow(String realm, AuthenticationExecutionInfoRepresentation exec) {
+        AuthenticationSubFlow authenticationSubFlow = new AuthenticationSubFlow();
+        var subFlowRepresentation = resourceAdapter.getFlow(realm, exec.getFlowId());
+
+        authenticationSubFlow.setAlias(subFlowRepresentation.getAlias());
+        authenticationSubFlow.setDescription(subFlowRepresentation.getDescription());
+        authenticationSubFlow.setProviderId(subFlowRepresentation.getProviderId());
+        authenticationSubFlow.setAuthenticationFlow(true);
+        authenticationSubFlow.setRequirement(exec.getRequirement());
+        authenticationSubFlow.setSubFlowsAndExecutions(getSubFlowOrExecution(realm, authenticationSubFlow.getAlias()));
+
+        return authenticationSubFlow;
+    }
+
+
 }

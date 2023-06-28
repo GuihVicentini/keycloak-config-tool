@@ -138,7 +138,7 @@ public class RealmConfig implements Config {
     private Set<String> supportedLocales;
     private String defaultLocale;
 
-    private List<AuthenticationFlowConfig> authenticationFlows;
+    private List<AuthenticationFlow> authenticationFlows;
     private List<AuthenticatorConfigConfig> authenticatorConfig;
 
     private List<RequiredActionProviderConfig> requiredActions;
@@ -287,8 +287,8 @@ public class RealmConfig implements Config {
 
     private void normalizeAuthenticationFlows() {
         authenticationFlows = authenticationFlows == null ? Collections.emptyList() : authenticationFlows;
-        authenticationFlows.forEach(AuthenticationFlowConfig::normalize);
-        authenticationFlows.sort(Comparator.comparing(AuthenticationFlowConfig::identifier));
+        authenticationFlows.forEach(AuthenticationFlow::normalize);
+        authenticationFlows.sort(Comparator.comparing(AuthenticationFlow::identifier));
     }
 
     private void normalizeComponents() {

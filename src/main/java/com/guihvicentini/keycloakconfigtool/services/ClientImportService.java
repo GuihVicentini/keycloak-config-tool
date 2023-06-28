@@ -5,6 +5,7 @@ import com.guihvicentini.keycloakconfigtool.mappers.ClientConfigMapper;
 import com.guihvicentini.keycloakconfigtool.mappers.ProtocolMapperConfigMapper;
 import com.guihvicentini.keycloakconfigtool.models.ClientConfig;
 import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
+import com.guihvicentini.keycloakconfigtool.services.export.AuthenticationFlowExportService;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.ClientRepresentation;
@@ -23,18 +24,18 @@ public class ClientImportService {
     private final ClientResourceAdapter resourceAdapter;
     private final ClientConfigMapper clientConfigMapper;
     private final ProtocolMapperConfigMapper protocolMapperConfigMapper;
-    private final AuthenticationFlowImportService authenticationFlowImportService;
+    private final AuthenticationFlowExportService authenticationFlowExportService;
 
 
     public ClientImportService(ClientResourceAdapter resourceAdapter,
                                ClientConfigMapper clientConfigMapper,
                                ProtocolMapperConfigMapper protocolMapperConfigMapper,
-                               AuthenticationFlowImportService authenticationFlowImportService) {
+                               AuthenticationFlowExportService authenticationFlowExportService) {
 
         this.resourceAdapter = resourceAdapter;
         this.clientConfigMapper = clientConfigMapper;
         this.protocolMapperConfigMapper = protocolMapperConfigMapper;
-        this.authenticationFlowImportService = authenticationFlowImportService;
+        this.authenticationFlowExportService = authenticationFlowExportService;
     }
 
     public void doImport(String realm, List<ClientConfig> actual, List<ClientConfig> target) {
@@ -183,7 +184,7 @@ public class ClientImportService {
     }
 
     private void replaceFlowAliasWithFlowUuid(String realm, String key, String flowAlias, Map<String, String> authenticationFlowBindingOverrides) {
-        String flowId = authenticationFlowImportService.getFlowIdByAlias(realm, flowAlias);
+        String flowId = authenticationFlowExportService.getFlowIdByAlias(realm, flowAlias);
         authenticationFlowBindingOverrides.put(key, flowId);
     }
 
@@ -193,7 +194,7 @@ public class ClientImportService {
     }
 
     private void replaceFlowUuidWithFlowAlias(String realm, String key, String flowUuid, Map<String, String> authenticationFlowBindingOverrides) {
-        String flowAlias = authenticationFlowImportService.getFlowAliasById(realm, flowUuid);
+        String flowAlias = authenticationFlowExportService.getFlowAliasById(realm, flowUuid);
         authenticationFlowBindingOverrides.put(key, flowAlias);
     }
 
