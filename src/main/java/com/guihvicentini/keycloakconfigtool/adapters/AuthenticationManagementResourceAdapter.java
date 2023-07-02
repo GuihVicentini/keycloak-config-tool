@@ -158,10 +158,38 @@ public class AuthenticationManagementResourceAdapter {
     }
 
     /**
+     * POST /executions/{executionId}/config
+     */
+    public String createNewExecutionConfig(String realm, String executionId ,AuthenticatorConfigRepresentation representation) {
+        try(Response response = getResource(realm).newExecutionConfig(executionId, representation)){
+            return CreatedResponseUtil.getCreatedId(response);
+        } catch (WebApplicationException e) {
+            String errorMessage = ResponseUtil.getErrorMessage(e);
+            throw new KeycloakAdapterException("Failed to create execution config: %s\n error message: %s",
+                    e, representation.getAlias(), errorMessage);
+        }
+    }
+
+    /**
      * GET /config/{id}
      */
     public AuthenticatorConfigRepresentation getExecutionConfigById(String realm, String configId) {
         return getResource(realm).getAuthenticatorConfig(configId);
+    }
+
+    /**
+     * PUT /config/{id}
+     */
+    public void updateExecutionConfig(String realm, String configId,
+                                                                   AuthenticatorConfigRepresentation representation) {
+        getResource(realm).updateAuthenticatorConfig(configId, representation);
+    }
+
+    /**
+     * GET /config/{id}
+     */
+    public void removeExecutionConfigById(String realm, String configId) {
+        getResource(realm).removeAuthenticatorConfig(configId);
     }
 
     /**
@@ -221,10 +249,6 @@ public class AuthenticationManagementResourceAdapter {
         getResource(realm).removeExecution(execution.getId());
     }
 
-
-    public AuthenticatorConfigRepresentation getExecutionConfig(String realm, String id) {
-        return getResource(realm).getAuthenticatorConfig(id);
-    }
 
     /**
      * resource for path /authentication

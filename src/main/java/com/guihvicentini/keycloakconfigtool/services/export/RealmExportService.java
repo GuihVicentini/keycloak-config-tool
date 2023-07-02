@@ -3,6 +3,7 @@ package com.guihvicentini.keycloakconfigtool.services.export;
 import com.guihvicentini.keycloakconfigtool.adapters.RealmResourceAdapter;
 import com.guihvicentini.keycloakconfigtool.exceptions.KeycloakAdapterException;
 import com.guihvicentini.keycloakconfigtool.mappers.RealmConfigMapper;
+import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
 import com.guihvicentini.keycloakconfigtool.models.RealmConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.RealmRepresentation;
@@ -21,6 +22,7 @@ public class RealmExportService {
     private final GroupExportService groupExportService;
     private final RequiredActionExportService requiredActionExportService;
     private final RoleExportService roleExportService;
+    private final ComponentExportService componentExportService;
 
     private final RealmConfigMapper mapper;
 
@@ -32,6 +34,7 @@ public class RealmExportService {
                               GroupExportService groupExportService,
                               RequiredActionExportService requiredActionExportService,
                               RoleExportService roleExportService,
+                              ComponentExportService componentExportService,
                               RealmConfigMapper mapper) {
         this.realmResourceAdapter = realmResourceAdapter;
         this.identityProviderExportService = identityProviderExportService;
@@ -40,6 +43,7 @@ public class RealmExportService {
         this.requiredActionExportService = requiredActionExportService;
         this.roleExportService = roleExportService;
         this.groupExportService = groupExportService;
+        this.componentExportService = componentExportService;
         this.mapper = mapper;
     }
 
@@ -74,6 +78,8 @@ public class RealmExportService {
         config.setRoles(roleExportService.getRealmAndClientRoles(realm));
         config.setRequiredActions(requiredActionExportService.getAll(realm));
         config.setGroups(groupExportService.getGroupConfigs(realm));
+        config.setLdapProviders(componentExportService.getAll(realm, ConfigConstants.USER_STORAGE_PROVIDER_TYPE));
+        config.setKeyProviders(componentExportService.getAll(realm, ConfigConstants.KEY_PROVIDER_TYPE));
 
         config.normalize();
 

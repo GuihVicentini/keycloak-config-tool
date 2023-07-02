@@ -5,6 +5,7 @@ import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationExecution;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlow;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationSubFlow;
+import com.guihvicentini.keycloakconfigtool.models.AuthenticatorConfigConfig;
 import com.guihvicentini.keycloakconfigtool.services.export.AuthenticationFlowExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +13,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -76,6 +74,9 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
                 createFlowConfig("flow2"));
 
         addAuthExecution(targetFlows.get(1), "auth-cookie");
+        addAuthExecution(targetFlows.get(1), "identity-provider-redirector");
+        AuthenticationExecution idpExecution = (AuthenticationExecution) targetFlows.get(1).getSubFlowsAndExecutions().get(1);
+        idpExecution.setConfig(createIdpAuthenticatorConfig("idp"));
         addAuthSubFLow(targetFlows.get(1), "sub-flow");
 
         flowImportService.doImport(TEST_REALM, actualFlows, targetFlows);
@@ -93,19 +94,32 @@ public class AuthenticationFlowImportServiceTest extends AbstractIntegrationTest
         assertEquals(updatedFlow, importedFlow);
     }
 
+    private AuthenticatorConfigConfig createIdpAuthenticatorConfig(String alias) {
+        AuthenticatorConfigConfig authConfig = new AuthenticatorConfigConfig();
+        authConfig.setAlias(alias);
+        authConfig.setConfig(Map.of("defaultProvider","test-oidc"));
+        return authConfig;
+    }
+
     @Test
     void testDoImport_FlowExistsInActualButNotInTarget_DeleteFlow() {
         List<AuthenticationFlow> actualFlows = Arrays.asList(createFlowConfig("flow1"), createFlowConfig("flow2"));
-        List<AuthenticationFlow> targetFlows = Arrays.asList(createFlowConfig("flow1"));
+        List<AuthenticationFlow> targetFlows = new ArrayList<>();
 
         flowImportService.doImport(TEST_REALM, actualFlows, targetFlows);
 
         // Assert that the deleted flow was removed
-        AuthenticationFlow deletedFlow = actualFlows.get(1);
-        Optional<AuthenticationFlow> importedFlows = flowExportService.getAllFlows(TEST_REALM)
-                .stream().filter(flow -> deletedFlow.getAlias().equals(flow.getAlias())).findFirst();
+        AuthenticationFlow deletedFlow1 = actualFlows.get(0);
+        Optional<AuthenticationFlow> importedFlow1 = flowExportService.getAllFlows(TEST_REALM)
+                .stream().filter(flow -> deletedFlow1.getAlias().equals(flow.getAlias())).findFirst();
 
-        assertTrue(importedFlows.isEmpty());
+        assertTrue(importedFlow1.isEmpty());
+
+        AuthenticationFlow deletedFlow2 = actualFlows.get(1);
+        Optional<AuthenticationFlow> importedFlow2 = flowExportService.getAllFlows(TEST_REALM)
+                .stream().filter(flow -> deletedFlow2.getAlias().equals(flow.getAlias())).findFirst();
+
+        assertTrue(importedFlow2.isEmpty());
     }
 
     // Helper method to create an AuthenticationFlowConfig

@@ -95,16 +95,13 @@ public class RealmImportService {
 
     private void update(RealmConfig actualConfig, RealmConfig targetConfig) {
 
-        // revert components naming to match keycloak expected names
-        actualConfig.denormalize();
-        targetConfig.denormalize();
-
         authenticationFlowImportService.doImport(targetConfig.getRealm(), actualConfig.getAuthenticationFlows(),
                 targetConfig.getAuthenticationFlows());
 
         // work with config models and only convert to keycloak representations before making requests to the adapters.
-        componentImportService.doImport(targetConfig.getRealm(), actualConfig.getComponents(),
-                targetConfig.getComponents());
+
+        componentImportService.doImport(targetConfig.getRealm(), targetConfig.getLdapProviders(), actualConfig.getLdapProviders());
+        componentImportService.doImport(targetConfig.getRealm(), targetConfig.getKeyProviders(), actualConfig.getKeyProviders());
 
         identityProviderImportService.doImport(
                 targetConfig.getRealm(),
