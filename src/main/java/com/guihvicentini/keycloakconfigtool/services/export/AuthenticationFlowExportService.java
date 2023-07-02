@@ -45,6 +45,7 @@ public class AuthenticationFlowExportService {
 
         return representations.stream()
                 .filter(AuthenticationFlowRepresentation::isTopLevel)
+                .filter(flow -> !flow.isBuiltIn())
                 .map(flowMapper::mapToConfig)
                 .peek(f -> f.setSubFlowsAndExecutions(getSubFlowOrExecution(realm, f.getAlias())))
                 .collect(Collectors.toList());

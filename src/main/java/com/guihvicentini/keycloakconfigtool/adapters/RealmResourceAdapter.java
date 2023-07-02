@@ -7,10 +7,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.RealmsResource;
+import org.keycloak.representations.idm.ClientScopeRepresentation;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.WebApplicationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Adapter to translate requests related to
@@ -105,6 +108,16 @@ public class RealmResourceAdapter {
     }
 
     /**
+     * GET /realms/{realm}/default-default-client-scopes
+     */
+    public List<String> getDefaultClientScopes(String realm) {
+        return getResource(realm).getDefaultDefaultClientScopes().stream()
+                .map(ClientScopeRepresentation::getName)
+                .collect(Collectors.toList());
+    }
+
+
+    /**
      * adaptation to add default client scope by name
      * PUT /realms/{realm}/default-optional-client-scopes/{clientScopeId}
      */
@@ -130,6 +143,15 @@ public class RealmResourceAdapter {
                 .findFirst()
                 .orElseThrow(() -> new KeycloakAdapterException("Optional ClientScope: %s not found", scopeName))
                 .getId();
+    }
+
+    /**
+     * GET /realms/{realm}/default-optional-client-scopes
+     */
+    public List<String> getOptionalClientScopes(String realm) {
+        return getResource(realm).getDefaultOptionalClientScopes().stream()
+                .map(ClientScopeRepresentation::getName)
+                .collect(Collectors.toList());
     }
 
     /**

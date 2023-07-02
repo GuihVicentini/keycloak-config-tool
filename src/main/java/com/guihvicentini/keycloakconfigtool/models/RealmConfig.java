@@ -130,7 +130,6 @@ public class RealmConfig implements Config {
     private Boolean adminEventsDetailsEnabled;
 
     private List<IdentityProviderConfig> identityProviders;
-    private List<IdentityProviderMapperConfig> identityProviderMappers;
     private List<Component> ldapProviders;
     private List<Component> keyProviders;
 
@@ -139,7 +138,6 @@ public class RealmConfig implements Config {
     private String defaultLocale;
 
     private List<AuthenticationFlow> authenticationFlows;
-//    private List<AuthenticatorConfigConfig> authenticatorConfig;
 
     private List<RequiredActionProviderConfig> requiredActions;
 
@@ -179,10 +177,9 @@ public class RealmConfig implements Config {
         normalizeEnabledEventTypes();
 
         normalizeIdentityProviders();
-        normalizeIdentityProviderMappers();
         normalizeComponents();
         normalizeAuthenticationFlows();
-//        normalizeAuthenticatorConfig();
+//        normalizeAuthenticatorConfig();x
         normalizeRequiredActions();
         normalizeAttributes();
     }
@@ -267,12 +264,6 @@ public class RealmConfig implements Config {
         MapUtil.sortMapByKey(browserSecurityHeaders);
     }
 
-//    private void normalizeAuthenticatorConfig() {
-//        authenticatorConfig = authenticatorConfig == null ? Collections.emptyList() : authenticatorConfig;
-//        authenticatorConfig.forEach(AuthenticatorConfigConfig::normalize);
-//        authenticatorConfig.sort(Comparator.comparing(AuthenticatorConfigConfig::identifier));
-//    }
-
     private void normalizeAuthenticationFlows() {
         authenticationFlows = authenticationFlows == null ? Collections.emptyList() : authenticationFlows;
         authenticationFlows.forEach(AuthenticationFlow::normalize);
@@ -287,12 +278,6 @@ public class RealmConfig implements Config {
         keyProviders = keyProviders == null ? new ArrayList<>() : keyProviders;
         keyProviders.forEach(Component::normalize);
         keyProviders.sort(Comparator.comparing(Component::getName));
-    }
-
-    private void normalizeIdentityProviderMappers() {
-        identityProviderMappers = identityProviderMappers == null ? Collections.emptyList() : identityProviderMappers;
-        identityProviderMappers.forEach(IdentityProviderMapperConfig::normalize);
-        identityProviderMappers.sort(Comparator.comparing(IdentityProviderMapperConfig::identifier));
     }
 
     private void normalizeIdentityProviders() {

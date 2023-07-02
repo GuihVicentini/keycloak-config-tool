@@ -15,7 +15,7 @@ public class IdentityProviderExportServiceTest extends AbstractIntegrationTest {
 
     @Test
     public void getAllIdps() {
-        var idps = exportService.getIdps(TEST_REALM);
+        var idps = exportService.getAll(TEST_REALM);
         log.info("Idps: {}", JsonMapperUtils.objectToJsonPrettyString(idps));
     }
 }

@@ -106,9 +106,7 @@ public class RealmImportService {
         identityProviderImportService.doImport(
                 targetConfig.getRealm(),
                 actualConfig.getIdentityProviders(),
-                targetConfig.getIdentityProviders(),
-                actualConfig.getIdentityProviderMappers(),
-                targetConfig.getIdentityProviderMappers());
+                targetConfig.getIdentityProviders());
 
         requiredActionImportService.doImport(targetConfig.getRealm(),
                 actualConfig.getRequiredActions(),

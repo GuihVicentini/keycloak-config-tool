@@ -35,14 +35,16 @@ public class IdentityProviderImportService {
 
     public void doImport(String realm,
                          List<IdentityProviderConfig> actual,
-                         List<IdentityProviderConfig> target,
-                         List<IdentityProviderMapperConfig> actualMappers,
-                         List<IdentityProviderMapperConfig> targetMappers) {
+                         List<IdentityProviderConfig> target) {
 
         if(target.equals(actual)) {
            log.debug(ConfigConstants.UP_TO_DATE_MESSAGE);
            return;
         }
+        List<IdentityProviderMapperConfig> actualMappers = actual.stream()
+                .flatMap(idp -> idp.getMappers().stream()).collect(Collectors.toList());
+        List<IdentityProviderMapperConfig> targetMappers = target.stream()
+                .flatMap(idp -> idp.getMappers().stream()).collect(Collectors.toList());
 
         importIdentityProviders(realm, actual, target, actualMappers, targetMappers);
     }
@@ -143,17 +145,4 @@ public class IdentityProviderImportService {
         return mappers.stream().filter(mapper -> idpAlias.equals(mapper.getIdentityProviderAlias())).toList();
     }
 
-    public List<IdentityProviderConfig> getAllIdp(String realm) {
-        return resourceAdapter.getAll(realm).stream().map(identityProviderConfigMapper::mapToConfig)
-                .peek(IdentityProviderConfig::normalize)
-                .toList();
-    }
-
-    public List<IdentityProviderMapperConfig> getAllMappers(String realm, List<String> aliases) {
-        return aliases.stream()
-                .flatMap(alias -> resourceAdapter.getMappers(realm, alias).stream())
-                .map(identityProviderMapperConfigMapper::mapToConfig)
-                .peek(IdentityProviderMapperConfig::normalize)
-                .collect(Collectors.toList());
-    }
 }

@@ -28,7 +28,7 @@ public class IdentityProviderExportService {
         this.mapperConfigMapper = mapperConfigMapper;
     }
 
-    public List<IdentityProviderConfig> getIdps(String realm) {
+    public List<IdentityProviderConfig> getAll(String realm) {
         return resourceAdapter.getAll(realm).stream().map(configMapper::mapToConfig)
                 .peek(idp -> idp.setMappers(getIdpMappers(realm, idp.getAlias())))
                 .collect(Collectors.toList());
