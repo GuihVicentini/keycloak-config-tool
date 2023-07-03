@@ -71,7 +71,7 @@ public class ComponentImportService {
                 .map(componentMapper::mapToConfig).collect(Collectors.toList());
 
         List<Component> toBeAdded = ListUtil.getMissingConfigElements(subComponents, actualSubComponentsConfig);
-        List<Component> toDeleted = ListUtil.getMissingConfigElements(subComponents, actualSubComponentsConfig);
+        List<Component> toDeleted = ListUtil.getMissingConfigElements(actualSubComponentsConfig, subComponents);
         List<Component> toUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(subComponents, actualSubComponentsConfig);
 
         addComponents(realm, parentId, toBeAdded);

@@ -1,7 +1,6 @@
 package com.guihvicentini.keycloakconfigtool.services.export;
 
 import com.guihvicentini.keycloakconfigtool.adapters.RealmResourceAdapter;
-import com.guihvicentini.keycloakconfigtool.exceptions.KeycloakAdapterException;
 import com.guihvicentini.keycloakconfigtool.mappers.RealmConfigMapper;
 import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
 import com.guihvicentini.keycloakconfigtool.models.RealmConfig;
@@ -58,18 +57,18 @@ public class RealmExportService {
         return realmConfig;
     }
 
-    private RealmRepresentation getPartialExportRealm(String realm) {
-        RealmRepresentation representation = realmResourceAdapter.exists(realm) ? realmResourceAdapter.getPartialExport(realm) : null;
-
-        if (representation == null) {
-            log.warn("Realm: {} doesn't exist, returning null value instead.", realm);
-            return null;
-        }
-
-        replaceFlowUuidWithFlowAlias(representation);
-
-        return representation;
-    }
+//    private RealmRepresentation getPartialExportRealm(String realm) {
+//        RealmRepresentation representation = realmResourceAdapter.exists(realm) ? realmResourceAdapter.getPartialExport(realm) : null;
+//
+//        if (representation == null) {
+//            log.warn("Realm: {} doesn't exist, returning null value instead.", realm);
+//            return null;
+//        }
+//
+//        replaceFlowUuidWithFlowAlias(representation);
+//
+//        return representation;
+//    }
 
     public RealmConfig getFullRealm(String realm) {
         if (!realmResourceAdapter.exists(realm)) {
@@ -98,18 +97,18 @@ public class RealmExportService {
     }
 
 
-
-    private void replaceFlowUuidWithFlowAlias(RealmRepresentation representation) {
-        representation.getClients().forEach(client -> {
-            client.getAuthenticationFlowBindingOverrides().forEach((key, value) -> {
-                 var flowRepresentation = representation
-                         .getAuthenticationFlows().stream().filter(flow -> flow.getId().equals(value))
-                         .findFirst()
-                         .orElseThrow(() -> new KeycloakAdapterException("Flow not found id: %s", value));
-
-                 client.getAuthenticationFlowBindingOverrides().put(key,flowRepresentation.getAlias());
-            });
-        });
-    }
+//
+//    private void replaceFlowUuidWithFlowAlias(RealmRepresentation representation) {
+//        representation.getClients().forEach(client -> {
+//            client.getAuthenticationFlowBindingOverrides().forEach((key, value) -> {
+//                 var flowRepresentation = representation
+//                         .getAuthenticationFlows().stream().filter(flow -> flow.getId().equals(value))
+//                         .findFirst()
+//                         .orElseThrow(() -> new KeycloakAdapterException("Flow not found id: %s", value));
+//
+//                 client.getAuthenticationFlowBindingOverrides().put(key,flowRepresentation.getAlias());
+//            });
+//        });
+//    }
 
 }

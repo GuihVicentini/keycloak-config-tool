@@ -19,7 +19,7 @@ public class ConfigCommandFacadeTest extends AbstractIntegrationTest {
     private static final String EXPORTED_REAM_JSON = "exported-ream.json";
     private static final String NEW_REALM = "new-realm.json";
 
-    private static final String TEST_REALM_JSON = "test-realm.json";
+    private static final String TEST_REALM_JSON = "updated-test-realm.json";
     private static final String NULL_REALM_JSON = "null-realm.json";
 
     public static final String REALM = "test";

@@ -46,6 +46,13 @@ public class RoleResourceAdapter {
     }
 
     /**
+     * GET /roles/{role-name}/composites/realm
+     */
+    public Set<RoleRepresentation> getRoleRealmCompositesRepresentation(String realm, String roleName) {
+        return getRoleResource(realm, roleName).getRealmRoleComposites();
+    }
+
+    /**
      * GET /roles/{role-name}/composites/client/{clientUuid}
      */
     public List<String> getRoleClientComposites(String realm, String roleName, String clientUuid) {
@@ -105,6 +112,12 @@ public class RoleResourceAdapter {
         getRoleResource(realm, roleName).remove();
     }
 
+    /**
+     * DELETE /roles/{roleName}/composites
+     */
+    public void deleteComposite(String realm, String roleName, List<RoleRepresentation> composites) {
+        getRoleResource(realm, roleName).deleteComposites(composites);
+    }
 
     /**
      * resource for path /roles/{roleName}

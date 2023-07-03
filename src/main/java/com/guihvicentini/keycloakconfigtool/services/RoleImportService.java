@@ -6,6 +6,7 @@ import com.guihvicentini.keycloakconfigtool.mappers.RolesConfigMapper;
 import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
 import com.guihvicentini.keycloakconfigtool.models.RoleConfig;
 import com.guihvicentini.keycloakconfigtool.models.RolesConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.ClientExportService;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import com.guihvicentini.keycloakconfigtool.utils.MapUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +21,17 @@ public class RoleImportService {
 
     private final RoleResourceAdapter resourceAdapter;
     private final RolesConfigMapper configMapper;
-    private final ClientImportService clientImportService;
+    private final ClientExportService clientExportService;
     private final RealmResourceAdapter realmResourceAdapter;
 
-    public RoleImportService(RoleResourceAdapter resourceAdapter, RolesConfigMapper configMapper,
-                             ClientImportService clientImportService, RealmResourceAdapter realmResourceAdapter) {
+    public RoleImportService(RoleResourceAdapter resourceAdapter,
+                             RolesConfigMapper configMapper,
+                             ClientExportService clientExportService,
+                             RealmResourceAdapter realmResourceAdapter) {
+
         this.resourceAdapter = resourceAdapter;
         this.configMapper = configMapper;
-        this.clientImportService = clientImportService;
+        this.clientExportService = clientExportService;
         this.realmResourceAdapter = realmResourceAdapter;
     }
 
@@ -75,9 +79,9 @@ public class RoleImportService {
     // ---------------------- REALM ROLES -------------------------------------------
 
     private void importRealmRoles(String realm, List<RoleConfig> actual, List<RoleConfig> target) {
-        var toBeAdded = ListUtil.getMissingConfigElements(target, actual);
-        var toBeDeleted = ListUtil.getMissingConfigElements(actual, target);
-        var toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(target, actual);
+        List<RoleConfig> toBeAdded = ListUtil.getMissingConfigElements(target, actual);
+        List<RoleConfig> toBeDeleted = ListUtil.getMissingConfigElements(actual, target);
+        List<RoleConfig> toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(target, actual);
 
         addRealmRoles(realm, toBeAdded);
         deleteRealmRoles(realm, toBeDeleted);
@@ -90,6 +94,8 @@ public class RoleImportService {
 
     private void updateRole(String realm, RoleConfig role) {
         resourceAdapter.update(realm, configMapper.mapToRepresentation(role));
+        var actualRealmComposites = resourceAdapter.getRoleRealmCompositesRepresentation(realm, role.getName());
+
     }
 
     private void deleteRealmRoles(String realm, List<RoleConfig> roles) {
@@ -122,7 +128,7 @@ public class RoleImportService {
     }
 
     private void replaceContainerId(String realm, String containerId, RoleConfig role, boolean isClientRole) {
-        String containerUuid = isClientRole ? clientImportService.getClientUuid(realm, containerId) :
+        String containerUuid = isClientRole ? clientExportService.getClientUuid(realm, containerId) :
                 realmResourceAdapter.get(realm).getId();
         role.setContainerId(containerUuid);
     }

@@ -198,16 +198,4 @@ public class ClientImportService {
         authenticationFlowBindingOverrides.put(key, flowAlias);
     }
 
-
-    // TODO migrate this to export service
-    public String getClientUuid(String realm, String clientId) {
-        return resourceAdapter.getClientByClientId(realm, clientId).getId();
-    }
-
-    public List<ClientConfig> getAllClients(String realm) {
-        return resourceAdapter.getClients(realm).stream()
-                .peek(client -> replaceFlowUuidWithFlowAlias(realm, client))
-                .map(clientConfigMapper::mapToConfig)
-                .toList();
-    }
 }

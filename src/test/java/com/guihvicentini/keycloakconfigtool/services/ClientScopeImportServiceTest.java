@@ -3,6 +3,7 @@ package com.guihvicentini.keycloakconfigtool.services;
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.ClientScopeConfig;
 import com.guihvicentini.keycloakconfigtool.models.ProtocolMapperConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.ClientScopeExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
@@ -21,12 +22,15 @@ public class ClientScopeImportServiceTest extends AbstractIntegrationTest {
 
 
     @Autowired
-    private ClientScopeImportService clientScopeImportService;
+    ClientScopeImportService importService;
+
+    @Autowired
+    ClientScopeExportService exportService;
 
     @Test
     @Order(1)
     public void getAllClientScopes(){
-        List<ClientScopeConfig> clientScopes = clientScopeImportService.getAllClientScopes(TEST_REALM);
+        List<ClientScopeConfig> clientScopes = exportService.getAllClientScopes(TEST_REALM);
         log.info("ClientScopes: {}", JsonMapperUtils.objectToJsonPrettyString(clientScopes));
         clientScopes.forEach(scope -> assertNotNull(scope.getProtocolMappers()));
     }
@@ -43,9 +47,9 @@ public class ClientScopeImportServiceTest extends AbstractIntegrationTest {
                 createClientScopeConfig("scope2")
         );
 
-        clientScopeImportService.doImport(TEST_REALM, actualClientScopes, targetClientScopes);
+        importService.doImport(TEST_REALM, actualClientScopes, targetClientScopes);
 
-        List<ClientScopeConfig> importedClientScopes = clientScopeImportService.getAllClientScopes(TEST_REALM);
+        List<ClientScopeConfig> importedClientScopes = exportService.getAllClientScopes(TEST_REALM);
 
         Optional<ClientScopeConfig> createdClientScopeOne = importedClientScopes.stream()
                 .filter(group -> group.getName().equals("scope1"))
@@ -77,9 +81,9 @@ public class ClientScopeImportServiceTest extends AbstractIntegrationTest {
                 createClientScopeConfig("scope2", "mapper2") // Existing client scope
         );
 
-        clientScopeImportService.doImport(TEST_REALM, actualClientScopes, targetClientScopes);
+        importService.doImport(TEST_REALM, actualClientScopes, targetClientScopes);
 
-        List<ClientScopeConfig> importedClientScopes = clientScopeImportService.getAllClientScopes(TEST_REALM);
+        List<ClientScopeConfig> importedClientScopes = exportService.getAllClientScopes(TEST_REALM);
 
         Optional<ClientScopeConfig> updatedClientScope = importedClientScopes.stream()
                 .filter(group -> group.getName().equals("scope1"))
@@ -113,9 +117,9 @@ public class ClientScopeImportServiceTest extends AbstractIntegrationTest {
                 createClientScopeConfig("scope1")
         );
 
-        clientScopeImportService.doImport(TEST_REALM, actualClientScopes, targetClientScopes);
+        importService.doImport(TEST_REALM, actualClientScopes, targetClientScopes);
 
-        List<ClientScopeConfig> importedClientScopes = clientScopeImportService.getAllClientScopes(TEST_REALM);
+        List<ClientScopeConfig> importedClientScopes = exportService.getAllClientScopes(TEST_REALM);
 
         Optional<ClientScopeConfig> deletedClientScope = importedClientScopes.stream()
                 .filter(group -> group.getName().equals("scope2"))

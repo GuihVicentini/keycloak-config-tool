@@ -75,9 +75,4 @@ public class RequiredActionImportService {
         resourceAdapter.createRequiredAction(realm, actionsConfigMapper.mapToRepresentation(action));
     }
 
-    // TODO migrate to export service
-    public List<RequiredActionProviderConfig> getAllRequiredActions(String realm) {
-        return resourceAdapter.getRequiredActions(realm).stream().map(this.actionsConfigMapper::mapToConfig).toList();
-    }
-
 }

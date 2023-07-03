@@ -10,7 +10,7 @@
   "accessTokenLifespan": 300,
   "accessTokenLifespanForImplicitFlow": 900,
   "ssoSessionIdleTimeout": 1800,
-  "ssoSessionMaxLifespan": 500,
+  "ssoSessionMaxLifespan": 36000,
   "ssoSessionIdleTimeoutRememberMe": 0,
   "ssoSessionMaxLifespanRememberMe": 0,
   "offlineSessionIdleTimeout": 2592000,
@@ -47,18 +47,6 @@
   "failureFactor": 30,
   "roles": {
     "realm": [
-      {
-        "name": "create-realm",
-        "description": null,
-        "composite": false,
-        "composites": {
-          "realm": [],
-          "client": {}
-        },
-        "clientRole": false,
-        "containerId": "test",
-        "attributes": {}
-      },
       {
         "name": "default-roles-test",
         "description": "${role_default-roles}",
@@ -97,15 +85,9 @@
         "composite": true,
         "composites": {
           "realm": [
-            "test-realm-role",
-            "create-realm"
+            "test-realm-role"
           ],
-          "client": {
-            "account": [
-              "manage-account",
-              "view-profile"
-            ]
-          }
+          "client": {}
         },
         "clientRole": false,
         "containerId": "test",
@@ -556,41 +538,13 @@
     {
       "name": "test-group",
       "path": "/test-group",
-      "access": {
-        "manage": true,
-        "manageMembership": true,
-        "view": true
-      },
-      "attributes": {
-        "test": [
-          "test"
-        ],
-        "toto": [
-          "toto"
-        ]
-      },
+      "access": {},
+      "attributes": {},
       "realmRoles": [
-        "create-realm"
+        "test-realm-role"
       ],
-      "clientRoles": {
-        "account": [
-          "delete-account",
-          "manage-account"
-        ]
-      },
-      "subGroups": [
-        {
-          "name": "test-group-child",
-          "path": "/test-group/test-group-child",
-          "access": null,
-          "attributes": {},
-          "realmRoles": [
-            "create-realm"
-          ],
-          "clientRoles": {},
-          "subGroups": []
-        }
-      ]
+      "clientRoles": {},
+      "subGroups": []
     }
   ],
   "defaultRole": {
@@ -642,8 +596,27 @@
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
-  "scopeMappings": [],
-  "clientScopeMappings": {},
+  "scopeMappings": [
+    {
+      "client": null,
+      "clientScope": "offline_access",
+      "roles": [
+        "offline_access"
+      ]
+    }
+  ],
+  "clientScopeMappings": {
+    "account": [
+      {
+        "client": "account-console",
+        "clientScope": null,
+        "roles": [
+          "manage-account",
+          "view-groups"
+        ]
+      }
+    ]
+  },
   "clients": [
     {
       "clientId": "account",
@@ -691,11 +664,7 @@
         "offline_access",
         "phone"
       ],
-      "access": {
-        "configure": true,
-        "manage": true,
-        "view": true
-      }
+      "access": {}
     },
     {
       "clientId": "account-console",
@@ -751,11 +720,7 @@
         "offline_access",
         "phone"
       ],
-      "access": {
-        "configure": true,
-        "manage": true,
-        "view": true
-      }
+      "access": {}
     },
     {
       "clientId": "admin-cli",
@@ -801,11 +766,7 @@
         "offline_access",
         "phone"
       ],
-      "access": {
-        "configure": true,
-        "manage": true,
-        "view": true
-      }
+      "access": {}
     },
     {
       "clientId": "broker",
@@ -851,11 +812,7 @@
         "offline_access",
         "phone"
       ],
-      "access": {
-        "configure": true,
-        "manage": true,
-        "view": true
-      }
+      "access": {}
     },
     {
       "clientId": "realm-management",
@@ -901,11 +858,7 @@
         "offline_access",
         "phone"
       ],
-      "access": {
-        "configure": true,
-        "manage": true,
-        "view": true
-      }
+      "access": {}
     },
     {
       "clientId": "security-admin-console",
@@ -970,11 +923,7 @@
         "offline_access",
         "phone"
       ],
-      "access": {
-        "configure": true,
-        "manage": true,
-        "view": true
-      }
+      "access": {}
     },
     {
       "clientId": "test-client",
@@ -989,8 +938,8 @@
       "clientAuthenticatorType": "client-secret",
       "defaultRoles": [],
       "redirectUris": [
-        "/testing",
-        "/other-testing-path"
+        "",
+        "/testing"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -1050,11 +999,7 @@
         "offline_access",
         "phone"
       ],
-      "access": {
-        "configure": true,
-        "manage": true,
-        "view": true
-      }
+      "access": {}
     }
   ],
   "clientScopes": [
@@ -1593,352 +1538,1067 @@
         "uiLocales": "false",
         "useJwksUrl": "true",
         "validateSignature": "true"
+      }
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "name": "test-idp-mapper",
+      "identityProviderAlias": "test-oidc",
+      "identityProviderMapper": "oidc-advanced-role-idp-mapper",
+      "config": {
+        "are.claim.values.regex": "false",
+        "attributes": "[]",
+        "claims": "[{\"key\":\"acr\",\"value\":\"strong\"},{\"key\":\"roles\",\"value\":\"someclaimvalue\"}]",
+        "role": "test-realm-composite-role",
+        "syncMode": "INHERIT"
+      }
+    }
+  ],
+  "components": {
+    "clientRegistrationPolicy": [
+      {
+        "name": "Allowed Client Scopes",
+        "providerId": "allowed-client-templates",
+        "subType": "authenticated",
+        "subComponents": {},
+        "config": {
+          "allow-default-scopes": [
+            "true"
+          ]
+        }
       },
-      "mappers": [
-        {
-          "name": "test-idp-mapper",
-          "identityProviderAlias": "test-oidc",
-          "identityProviderMapper": "oidc-advanced-role-idp-mapper",
-          "config": {
-            "claims": "[{\"key\":\"acr\",\"value\":\"strong\"},{\"key\":\"roles\",\"value\":\"someclaimvalue\"}]",
-            "syncMode": "INHERIT",
-            "are.claim.values.regex": "false",
-            "attributes": "[]",
-            "role": "test-realm-composite-role"
-          }
+      {
+        "name": "Allowed Client Scopes",
+        "providerId": "allowed-client-templates",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {
+          "allow-default-scopes": [
+            "true"
+          ]
         }
-      ]
-    }
-  ],
-  "ldapProviders": [
-    {
-      "name": "test-ldap",
-      "providerId": "ldap",
-      "providerType": "org.keycloak.storage.UserStorageProvider",
-      "subType": null,
-      "subComponents": [
-        {
-          "name": "creation date",
-          "providerId": "user-attribute-ldap-mapper",
-          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
-          "subType": null,
-          "subComponents": [],
-          "config": {
-            "always.read.value.from.ldap": [
-              "true"
-            ],
-            "is.mandatory.in.ldap": [
-              "false"
-            ],
-            "ldap.attribute": [
-              "createTimestamp"
-            ],
-            "read.only": [
-              "true"
-            ],
-            "user.model.attribute": [
-              "createTimestamp"
-            ]
-          }
-        },
-        {
-          "name": "email",
-          "providerId": "user-attribute-ldap-mapper",
-          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
-          "subType": null,
-          "subComponents": [],
-          "config": {
-            "always.read.value.from.ldap": [
-              "false"
-            ],
-            "is.mandatory.in.ldap": [
-              "false"
-            ],
-            "ldap.attribute": [
-              "mail"
-            ],
-            "read.only": [
-              "false"
-            ],
-            "user.model.attribute": [
-              "email"
-            ]
-          }
-        },
-        {
-          "name": "first name",
-          "providerId": "user-attribute-ldap-mapper",
-          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
-          "subType": null,
-          "subComponents": [],
-          "config": {
-            "always.read.value.from.ldap": [
-              "true"
-            ],
-            "is.mandatory.in.ldap": [
-              "true"
-            ],
-            "ldap.attribute": [
-              "cn"
-            ],
-            "read.only": [
-              "false"
-            ],
-            "user.model.attribute": [
-              "firstName"
-            ]
-          }
-        },
-        {
-          "name": "last name",
-          "providerId": "user-attribute-ldap-mapper",
-          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
-          "subType": null,
-          "subComponents": [],
-          "config": {
-            "always.read.value.from.ldap": [
-              "true"
-            ],
-            "is.mandatory.in.ldap": [
-              "true"
-            ],
-            "ldap.attribute": [
-              "sn"
-            ],
-            "read.only": [
-              "false"
-            ],
-            "user.model.attribute": [
-              "lastName"
-            ]
-          }
-        },
-        {
-          "name": "modify date",
-          "providerId": "user-attribute-ldap-mapper",
-          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
-          "subType": null,
-          "subComponents": [],
-          "config": {
-            "always.read.value.from.ldap": [
-              "true"
-            ],
-            "is.mandatory.in.ldap": [
-              "false"
-            ],
-            "ldap.attribute": [
-              "modifyTimestamp"
-            ],
-            "read.only": [
-              "true"
-            ],
-            "user.model.attribute": [
-              "modifyTimestamp"
-            ]
-          }
-        },
-        {
-          "name": "username",
-          "providerId": "user-attribute-ldap-mapper",
-          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
-          "subType": null,
-          "subComponents": [],
-          "config": {
-            "always.read.value.from.ldap": [
-              "false"
-            ],
-            "is.mandatory.in.ldap": [
-              "true"
-            ],
-            "ldap.attribute": [
-              "uid"
-            ],
-            "read.only": [
-              "false"
-            ],
-            "user.model.attribute": [
-              "username"
-            ]
-          }
+      },
+      {
+        "name": "Allowed Protocol Mapper Types",
+        "providerId": "allowed-protocol-mappers",
+        "subType": "authenticated",
+        "subComponents": {},
+        "config": {
+          "allowed-protocol-mapper-types": [
+            "oidc-address-mapper",
+            "oidc-full-name-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper",
+            "saml-user-attribute-mapper",
+            "saml-user-property-mapper"
+          ]
         }
-      ],
-      "config": {
-        "allowKerberosAuthentication": [
-          "false"
-        ],
-        "authType": [
-          "simple"
-        ],
-        "bindDn": [
-          "uid=ServiceUser,ou=ServiceGroup,dc=somedc,dc=com"
-        ],
-        "cachePolicy": [
-          "DEFAULT"
-        ],
-        "changedSyncPeriod": [
-          "-1"
-        ],
-        "connectionPooling": [
-          "false"
-        ],
-        "connectionUrl": [
-          "ldaps://somedirectory.com"
-        ],
-        "editMode": [
-          "WRITABLE"
-        ],
-        "enabled": [
-          "true"
-        ],
-        "fullSyncPeriod": [
-          "-1"
-        ],
-        "importEnabled": [
-          "true"
-        ],
-        "pagination": [
-          "false"
-        ],
-        "rdnLDAPAttribute": [
-          "uid"
-        ],
-        "startTls": [
-          "false"
-        ],
-        "syncRegistrations": [
-          "true"
-        ],
-        "trustEmail": [
-          "false"
-        ],
-        "useKerberosForPasswordAuthentication": [
-          "false"
-        ],
-        "usePasswordModifyExtendedOp": [
-          "false"
-        ],
-        "useTruststoreSpi": [
-          "ldapsOnly"
-        ],
-        "userObjectClasses": [
-          "inetOrgPerson, organizationalPerson"
-        ],
-        "usernameLDAPAttribute": [
-          "uid"
-        ],
-        "usersDn": [
-          "ou=Users,ou=Tenant,dc=domain,dc=com"
-        ],
-        "uuidLDAPAttribute": [
-          "entryUUID"
-        ],
-        "validatePasswordPolicy": [
-          "false"
-        ],
-        "vendor": [
-          "other"
-        ]
+      },
+      {
+        "name": "Allowed Protocol Mapper Types",
+        "providerId": "allowed-protocol-mappers",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {
+          "allowed-protocol-mapper-types": [
+            "oidc-address-mapper",
+            "oidc-full-name-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "oidc-usermodel-property-mapper",
+            "saml-role-list-mapper",
+            "saml-user-attribute-mapper",
+            "saml-user-property-mapper"
+          ]
+        }
+      },
+      {
+        "name": "Consent Required",
+        "providerId": "consent-required",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {}
+      },
+      {
+        "name": "Full Scope Disabled",
+        "providerId": "scope",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {}
+      },
+      {
+        "name": "Max Clients Limit",
+        "providerId": "max-clients",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {
+          "max-clients": [
+            "200"
+          ]
+        }
+      },
+      {
+        "name": "Trusted Hosts",
+        "providerId": "trusted-hosts",
+        "subType": "anonymous",
+        "subComponents": {},
+        "config": {
+          "client-uris-must-match": [
+            "true"
+          ],
+          "host-sending-registration-request-must-match": [
+            "true"
+          ]
+        }
       }
-    }
-  ],
-  "keyProviders": [
-    {
-      "name": "aes-generated",
-      "providerId": "aes-generated",
-      "providerType": "org.keycloak.keys.KeyProvider",
-      "subType": null,
-      "subComponents": [],
-      "config": {
-        "priority": [
-          "100"
-        ]
+    ],
+    "userStorageProvider": [
+      {
+        "name": "test-ldap",
+        "providerId": "ldap",
+        "subType": null,
+        "subComponents": {
+          "lDAPStorageMapper": [
+            {
+              "name": "creation date",
+              "providerId": "user-attribute-ldap-mapper",
+              "subType": null,
+              "subComponents": {},
+              "config": {
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "false"
+                ],
+                "ldap.attribute": [
+                  "createTimestamp"
+                ],
+                "read.only": [
+                  "true"
+                ],
+                "user.model.attribute": [
+                  "createTimestamp"
+                ]
+              }
+            },
+            {
+              "name": "email",
+              "providerId": "user-attribute-ldap-mapper",
+              "subType": null,
+              "subComponents": {},
+              "config": {
+                "always.read.value.from.ldap": [
+                  "false"
+                ],
+                "is.mandatory.in.ldap": [
+                  "false"
+                ],
+                "ldap.attribute": [
+                  "mail"
+                ],
+                "read.only": [
+                  "false"
+                ],
+                "user.model.attribute": [
+                  "email"
+                ]
+              }
+            },
+            {
+              "name": "first name",
+              "providerId": "user-attribute-ldap-mapper",
+              "subType": null,
+              "subComponents": {},
+              "config": {
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "true"
+                ],
+                "ldap.attribute": [
+                  "cn"
+                ],
+                "read.only": [
+                  "false"
+                ],
+                "user.model.attribute": [
+                  "firstName"
+                ]
+              }
+            },
+            {
+              "name": "last name",
+              "providerId": "user-attribute-ldap-mapper",
+              "subType": null,
+              "subComponents": {},
+              "config": {
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "true"
+                ],
+                "ldap.attribute": [
+                  "sn"
+                ],
+                "read.only": [
+                  "false"
+                ],
+                "user.model.attribute": [
+                  "lastName"
+                ]
+              }
+            },
+            {
+              "name": "modify date",
+              "providerId": "user-attribute-ldap-mapper",
+              "subType": null,
+              "subComponents": {},
+              "config": {
+                "always.read.value.from.ldap": [
+                  "true"
+                ],
+                "is.mandatory.in.ldap": [
+                  "false"
+                ],
+                "ldap.attribute": [
+                  "modifyTimestamp"
+                ],
+                "read.only": [
+                  "true"
+                ],
+                "user.model.attribute": [
+                  "modifyTimestamp"
+                ]
+              }
+            },
+            {
+              "name": "username",
+              "providerId": "user-attribute-ldap-mapper",
+              "subType": null,
+              "subComponents": {},
+              "config": {
+                "always.read.value.from.ldap": [
+                  "false"
+                ],
+                "is.mandatory.in.ldap": [
+                  "true"
+                ],
+                "ldap.attribute": [
+                  "uid"
+                ],
+                "read.only": [
+                  "false"
+                ],
+                "user.model.attribute": [
+                  "username"
+                ]
+              }
+            }
+          ]
+        },
+        "config": {
+          "allowKerberosAuthentication": [
+            "false"
+          ],
+          "authType": [
+            "simple"
+          ],
+          "bindDn": [
+            "uid=ServiceUser,ou=ServiceGroup,dc=somedc,dc=com"
+          ],
+          "cachePolicy": [
+            "DEFAULT"
+          ],
+          "changedSyncPeriod": [
+            "-1"
+          ],
+          "connectionPooling": [
+            "false"
+          ],
+          "connectionUrl": [
+            "ldaps://somedirectory.com"
+          ],
+          "editMode": [
+            "WRITABLE"
+          ],
+          "enabled": [
+            "true"
+          ],
+          "fullSyncPeriod": [
+            "-1"
+          ],
+          "importEnabled": [
+            "true"
+          ],
+          "pagination": [
+            "false"
+          ],
+          "rdnLDAPAttribute": [
+            "uid"
+          ],
+          "startTls": [
+            "false"
+          ],
+          "syncRegistrations": [
+            "true"
+          ],
+          "trustEmail": [
+            "false"
+          ],
+          "useKerberosForPasswordAuthentication": [
+            "false"
+          ],
+          "usePasswordModifyExtendedOp": [
+            "false"
+          ],
+          "useTruststoreSpi": [
+            "ldapsOnly"
+          ],
+          "userObjectClasses": [
+            "inetOrgPerson, organizationalPerson"
+          ],
+          "usernameLDAPAttribute": [
+            "uid"
+          ],
+          "usersDn": [
+            "ou=Users,ou=Tenant,dc=domain,dc=com"
+          ],
+          "uuidLDAPAttribute": [
+            "entryUUID"
+          ],
+          "validatePasswordPolicy": [
+            "false"
+          ],
+          "vendor": [
+            "other"
+          ]
+        }
       }
-    },
-    {
-      "name": "hmac-generated",
-      "providerId": "hmac-generated",
-      "providerType": "org.keycloak.keys.KeyProvider",
-      "subType": null,
-      "subComponents": [],
-      "config": {
-        "algorithm": [
-          "HS256"
-        ],
-        "priority": [
-          "100"
-        ]
+    ],
+    "keyProvider": [
+      {
+        "name": "aes-generated",
+        "providerId": "aes-generated",
+        "subType": null,
+        "subComponents": {},
+        "config": {
+          "priority": [
+            "100"
+          ]
+        }
+      },
+      {
+        "name": "hmac-generated",
+        "providerId": "hmac-generated",
+        "subType": null,
+        "subComponents": {},
+        "config": {
+          "algorithm": [
+            "HS256"
+          ],
+          "priority": [
+            "100"
+          ]
+        }
+      },
+      {
+        "name": "rsa-enc-generated",
+        "providerId": "rsa-enc-generated",
+        "subType": null,
+        "subComponents": {},
+        "config": {
+          "algorithm": [
+            "RSA-OAEP"
+          ],
+          "priority": [
+            "100"
+          ]
+        }
+      },
+      {
+        "name": "rsa-generated",
+        "providerId": "rsa-generated",
+        "subType": null,
+        "subComponents": {},
+        "config": {
+          "priority": [
+            "100"
+          ]
+        }
       }
-    },
-    {
-      "name": "rsa-enc-generated",
-      "providerId": "rsa-enc-generated",
-      "providerType": "org.keycloak.keys.KeyProvider",
-      "subType": null,
-      "subComponents": [],
-      "config": {
-        "algorithm": [
-          "RSA-OAEP"
-        ],
-        "priority": [
-          "100"
-        ]
-      }
-    },
-    {
-      "name": "rsa-generated",
-      "providerId": "rsa-generated",
-      "providerType": "org.keycloak.keys.KeyProvider",
-      "subType": null,
-      "subComponents": [],
-      "config": {
-        "priority": [
-          "100"
-        ]
-      }
-    }
-  ],
+    ]
+  },
   "internationalizationEnabled": false,
   "supportedLocales": [],
   "defaultLocale": null,
   "authenticationFlows": [
     {
+      "alias": "Account verification options",
+      "description": "Method with which to verity the existing account",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "idp-email-verification",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "flowAlias": "Verify Existing Account by Re-authentication",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Authentication Options",
+      "description": "Authentication options.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "basic-auth",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "basic-auth-otp",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "auth-spnego",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 30,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Browser - Conditional OTP",
+      "description": "Flow to determine if the OTP is required for the authentication",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "auth-otp-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Direct Grant - Conditional OTP",
+      "description": "Flow to determine if the OTP is required for the authentication",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "direct-grant-validate-otp",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "First broker login - Conditional OTP",
+      "description": "Flow to determine if the OTP is required for the authentication",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "auth-otp-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Handle Existing Account",
+      "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "idp-confirm-link",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": "Account verification options",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Reset - Conditional OTP",
+      "description": "Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "reset-otp",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "User creation or linking",
+      "description": "Flow for the existing/non-existing user alternatives",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": "create unique user config",
+          "authenticator": "idp-create-user-if-unique",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "flowAlias": "Handle Existing Account",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Verify Existing Account by Re-authentication",
+      "description": "Reauthentication of existing account",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "idp-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "flowAlias": "First broker login - Conditional OTP",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "browser",
+      "description": "browser based authentication",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "auth-cookie",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "auth-spnego",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "identity-provider-redirector",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 25,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "flowAlias": "forms",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "clients",
+      "description": "Base authentication for clients",
+      "providerId": "client-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "client-secret",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "client-jwt",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "client-secret-jwt",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "client-x509",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 40,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "direct grant",
+      "description": "OpenID Connect Resource Owner Grant",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "direct-grant-validate-username",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "direct-grant-validate-password",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 30,
+          "flowAlias": "Direct Grant - Conditional OTP",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "docker auth",
+      "description": "Used by Docker clients to authenticate against the IDP",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "docker-http-basic-authenticator",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "first broker login",
+      "description": "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": "review profile config",
+          "authenticator": "idp-review-profile",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": "User creation or linking",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "forms",
+      "description": "Username, password, otp and other auth forms.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "auth-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "flowAlias": "Browser - Conditional OTP",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "http challenge",
+      "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "no-cookie-redirect",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": "Authentication Options",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "registration",
+      "description": "registration flow",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "registration-page-form",
+          "authenticatorFlow": true,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": "registration form",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "registration form",
+      "description": "registration form",
+      "providerId": "form-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "registration-user-creation",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "registration-profile-action",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 40,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "registration-password-action",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 50,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "registration-recaptcha-action",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 60,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "reset credentials",
+      "description": "Reset credentials for a user if they forgot their password or something",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "reset-credentials-choose-user",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "reset-credential-email",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": "reset-password",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 30,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 40,
+          "flowAlias": "Reset - Conditional OTP",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "saml ecp",
+      "description": "SAML ECP Profile Authentication Flow",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "http-basic-authenticator",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
       "alias": "test-flow",
       "description": "test flow",
       "providerId": "basic-flow",
-      "builtIn": false,
       "topLevel": true,
-      "subFlowsAndExecutions": [
+      "builtIn": false,
+      "authenticationExecutions": [
         {
-          "authenticationFlow": false,
-          "providerId": "auth-cookie",
+          "authenticatorConfig": null,
+          "authenticator": "auth-cookie",
+          "authenticatorFlow": false,
           "requirement": "ALTERNATIVE",
-          "config": null,
-          "alias": "auth-cookie"
+          "priority": 0,
+          "flowAlias": null,
+          "userSetupAllowed": false
         },
         {
-          "authenticationFlow": true,
-          "alias": "test-sub-flow",
-          "description": "test subflow",
+          "authenticatorConfig": null,
+          "authenticator": null,
+          "authenticatorFlow": true,
           "requirement": "ALTERNATIVE",
-          "providerId": "basic-flow",
-          "subFlowsAndExecutions": [
-            {
-              "authenticationFlow": false,
-              "providerId": "auth-username-password-form",
-              "requirement": "REQUIRED",
-              "config": null,
-              "alias": "auth-username-password-form"
-            }
-          ]
-        },
-        {
-          "authenticationFlow": false,
-          "providerId": "auth-username-password-form",
-          "requirement": "REQUIRED",
-          "config": null,
-          "alias": "auth-username-password-form"
+          "priority": 1,
+          "flowAlias": "test-sub-flow",
+          "userSetupAllowed": false
         }
       ]
+    },
+    {
+      "alias": "test-sub-flow",
+      "description": "test subflow",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": null,
+          "authenticator": "auth-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 0,
+          "flowAlias": null,
+          "userSetupAllowed": false
+        }
+      ]
+    }
+  ],
+  "authenticatorConfig": [
+    {
+      "alias": "create unique user config",
+      "config": {
+        "require.password.update.after.registration": "false"
+      }
+    },
+    {
+      "alias": "review profile config",
+      "config": {
+        "update.profile.on.first.login": "missing"
+      }
     }
   ],
   "requiredActions": [

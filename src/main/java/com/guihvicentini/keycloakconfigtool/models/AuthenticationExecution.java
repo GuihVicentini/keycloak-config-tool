@@ -9,12 +9,21 @@ import java.util.Objects;
 @Setter
 public class AuthenticationExecution implements FlowElement {
 
+    private String alias;
     private String providerId;
     private String requirement;
     private boolean authenticationFlow;
     private AuthenticatorConfigConfig config;
 
+    @Override
+    public boolean isAuthenticationFlow(){
+        return false;
+    }
 
+    @Override
+    public void setAuthenticationFlow(boolean authenticationFlow) {
+        this.authenticationFlow = false;
+    }
     @Override
     public String getAlias() {
         return providerId;

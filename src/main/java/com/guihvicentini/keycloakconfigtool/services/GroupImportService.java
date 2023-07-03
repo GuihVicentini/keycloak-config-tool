@@ -4,12 +4,15 @@ import com.guihvicentini.keycloakconfigtool.adapters.GroupResourceAdapter;
 import com.guihvicentini.keycloakconfigtool.mappers.GroupConfigMapper;
 import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
 import com.guihvicentini.keycloakconfigtool.models.GroupConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.ClientExportService;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,9 +22,15 @@ public class GroupImportService {
     private final GroupResourceAdapter resourceAdapter;
     private final GroupConfigMapper configMapper;
 
-    public GroupImportService(GroupResourceAdapter resourceAdapter, GroupConfigMapper configMapper) {
+    private final ClientExportService clientExportService;
+
+    public GroupImportService(GroupResourceAdapter resourceAdapter,
+                              GroupConfigMapper configMapper,
+                              ClientExportService clientExportService) {
+
         this.resourceAdapter = resourceAdapter;
         this.configMapper = configMapper;
+        this.clientExportService = clientExportService;
     }
 
 
@@ -34,14 +43,69 @@ public class GroupImportService {
 
         List<GroupConfig> toBeAdded = ListUtil.getMissingConfigElements(target, actual);
         List<GroupConfig> toDeleted = ListUtil.getMissingConfigElements(actual, target);
-        List<GroupConfig> toUpdated = ListUtil.getMissingConfigElements(target, actual);
+        List<GroupConfig> toUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(target, actual);
 
         addGroups(realm, toBeAdded);
         deleteGroups(realm, toDeleted);
         updateGroups(realm, toUpdated);
 
-        target.forEach(group -> updateRealmRoles(realm, group.getName(), group.getRealmRoles()));
 
+        List<GroupConfig> actualSubGroups = actual.stream()
+                .flatMap(groups -> groups.getSubGroups().stream()).collect(Collectors.toList());
+        List<GroupConfig> targetSubGroups = target.stream()
+                .flatMap(groups -> groups.getSubGroups().stream()).collect(Collectors.toList());
+
+        target.forEach(group -> updateRealmRoles(realm, group.getName(), group.getRealmRoles()));
+        target.forEach(group -> updateClientRoles(realm, group.getName(), group.getClientRoles()));
+        target.forEach(group -> importSubGroups(realm, group));
+    }
+
+    private void importSubGroups(String realm, GroupConfig group) {
+        List<GroupRepresentation> subGroupRepresentation = resourceAdapter.getSubGroups(realm, group.getName());
+        List<GroupConfig> actualSubGroups = subGroupRepresentation.stream().map(configMapper::mapToConfig).toList();
+
+        List<GroupConfig> toBeAdded = ListUtil.getMissingConfigElements(group.getSubGroups(), actualSubGroups);
+        List<GroupConfig> toBeDeleted = ListUtil.getMissingConfigElements(actualSubGroups, group.getSubGroups());
+        List<GroupConfig> toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(group.getSubGroups(), actualSubGroups);
+
+        // TODO this only supports one level of subGroups. This has to be extended to support multiple levels of nested subGroups
+        toBeAdded.forEach(subGroup -> addSubGroup(realm, group.getName(), subGroup));
+        toBeDeleted.forEach(subGroup -> deleteSubGroup(realm, getSubGroup(subGroup.getName(), subGroupRepresentation).getId()));
+        toBeUpdated.forEach(subGroup -> updateSubGroup(realm, subGroup, getSubGroup(subGroup.getName(), subGroupRepresentation)));
+    }
+
+    private void addSubGroup(String realm, String parentGroupName, GroupConfig subGroup) {
+        resourceAdapter.createSubGroup(realm,parentGroupName, configMapper.mapToRepresentation(subGroup));
+    }
+
+    private void updateSubGroup(String realm, GroupConfig subGroup, GroupRepresentation representation) {
+        GroupRepresentation updated = configMapper.mapToRepresentation(subGroup);
+        updated.setId(representation.getId());
+        resourceAdapter.updateById(realm, updated);
+    }
+
+    private void deleteSubGroup(String realm, String subGroupId) {
+        resourceAdapter.deleteById(realm, subGroupId);
+    }
+
+    private GroupRepresentation getSubGroup(String name, List<GroupRepresentation> subGroupRepresentation) {
+        return subGroupRepresentation.stream().filter(subGroup -> name.equals(subGroup.getName()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException(String.format("SubGroup: %s does not exist.", name)));
+    }
+
+    private void updateClientRoles(String realm, String groupName, Map<String, List<String>> clientRoles) {
+        clientRoles.keySet().forEach(clientId -> {
+            String clientUuid = clientExportService.getClientUuid(realm, clientId);
+            List<RoleRepresentation> available = resourceAdapter.getAvailableClientRoles(realm, groupName, clientUuid);
+            List<RoleRepresentation> toBeAdded = available.stream()
+                    .filter(role -> clientRoles.get(clientId).contains(role.getName())).toList();
+            List<RoleRepresentation> toBeRemoved = available.stream()
+                    .filter(role -> !clientRoles.get(clientId).contains(role.getName())).toList();
+
+            resourceAdapter.addClientRoles(realm, groupName, clientUuid, toBeAdded);
+            resourceAdapter.deleteClientRoles(realm, groupName, clientUuid, toBeRemoved);
+        });
     }
 
     private void updateRealmRoles(String realm, String groupName, List<String> realmRoles) {
@@ -59,7 +123,7 @@ public class GroupImportService {
     }
 
     private void updateGroup(String realm, GroupConfig group) {
-        resourceAdapter.update(realm, configMapper.mapToRepresentation(group));
+        resourceAdapter.updateByName(realm, configMapper.mapToRepresentation(group));
     }
 
     private void deleteGroups(String realm, List<GroupConfig> groups) {
@@ -67,7 +131,7 @@ public class GroupImportService {
     }
 
     private void deleteGroup(String realm, GroupConfig group) {
-        resourceAdapter.delete(realm, group.getName());
+        resourceAdapter.deleteByName(realm, group.getName());
     }
 
     private void addGroups(String realm, List<GroupConfig> groups) {

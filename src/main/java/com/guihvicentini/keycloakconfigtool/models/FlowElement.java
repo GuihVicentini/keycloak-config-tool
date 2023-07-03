@@ -17,5 +17,6 @@ public interface FlowElement extends Config {
     String getRequirement();
     String getProviderId();
     boolean isAuthenticationFlow();
+    void setAuthenticationFlow(boolean authenticationFlow);
 
 }

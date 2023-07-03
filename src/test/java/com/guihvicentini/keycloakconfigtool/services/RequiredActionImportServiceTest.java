@@ -2,6 +2,7 @@ package com.guihvicentini.keycloakconfigtool.services;
 
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.RequiredActionProviderConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.RequiredActionExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
@@ -22,10 +23,13 @@ public class RequiredActionImportServiceTest extends AbstractIntegrationTest {
     @Autowired
     RequiredActionImportService importService;
 
+    @Autowired
+    RequiredActionExportService exportService;
+
     @Test
     @Order(1)
     public void getAllRequiredActions() {
-        List<RequiredActionProviderConfig> requiredActions = importService.getAllRequiredActions(TEST_REALM);
+        List<RequiredActionProviderConfig> requiredActions = exportService.getAll(TEST_REALM);
         log.info("Required Actions: {}", JsonMapperUtils.objectToJsonPrettyString(requiredActions));
         assertEquals(9, requiredActions.size());
     }
@@ -41,7 +45,7 @@ public class RequiredActionImportServiceTest extends AbstractIntegrationTest {
 
         importService.doImport(TEST_REALM, actual, target);
 
-       Optional<RequiredActionProviderConfig> createdAction = importService.getAllRequiredActions(TEST_REALM)
+       Optional<RequiredActionProviderConfig> createdAction = exportService.getAll(TEST_REALM)
                .stream().filter(action -> requiredActionConfig.identifier().equals(action.identifier())).findFirst();
 
        assertTrue(createdAction.isPresent());
@@ -68,7 +72,7 @@ public class RequiredActionImportServiceTest extends AbstractIntegrationTest {
 
         importService.doImport(TEST_REALM, actual, target);
 
-        Optional<RequiredActionProviderConfig> createdAction = importService.getAllRequiredActions(TEST_REALM)
+        Optional<RequiredActionProviderConfig> createdAction = exportService.getAll(TEST_REALM)
                 .stream().filter(action -> targetActionConfig.identifier().equals(action.identifier())).findFirst();
 
         assertTrue(createdAction.isPresent());
@@ -91,7 +95,7 @@ public class RequiredActionImportServiceTest extends AbstractIntegrationTest {
 
         importService.doImport(TEST_REALM, actual, target);
 
-        Optional<RequiredActionProviderConfig> createdAction = importService.getAllRequiredActions(TEST_REALM)
+        Optional<RequiredActionProviderConfig> createdAction = exportService.getAll(TEST_REALM)
                 .stream().filter(action -> actualActionConfig.identifier().equals(action.identifier())).findFirst();
 
         assertTrue(createdAction.isEmpty());

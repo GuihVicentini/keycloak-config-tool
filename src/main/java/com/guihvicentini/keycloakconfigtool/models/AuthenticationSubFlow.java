@@ -17,6 +17,16 @@ public class AuthenticationSubFlow implements FlowElement {
     private boolean authenticationFlow;
     private List<FlowElement> subFlowsAndExecutions;
 
+    // TODO when deserializing the JSON, the authenticationFlow property is being set to false although in the JSON it is true.
+    @Override
+    public boolean isAuthenticationFlow(){
+        return true;
+    }
+    @Override
+    public void setAuthenticationFlow(boolean authenticationFlow) {
+        this.authenticationFlow = true;
+    }
+
     @Override
     public String identifier() {
         return alias;

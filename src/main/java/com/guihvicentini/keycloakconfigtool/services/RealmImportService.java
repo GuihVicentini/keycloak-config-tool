@@ -100,12 +100,10 @@ public class RealmImportService {
 
         // work with config models and only convert to keycloak representations before making requests to the adapters.
 
-        componentImportService.doImport(targetConfig.getRealm(), targetConfig.getLdapProviders(), actualConfig.getLdapProviders());
-        componentImportService.doImport(targetConfig.getRealm(), targetConfig.getKeyProviders(), actualConfig.getKeyProviders());
+        componentImportService.doImport(targetConfig.getRealm(), actualConfig.getLdapProviders(), targetConfig.getLdapProviders());
+        componentImportService.doImport(targetConfig.getRealm(), actualConfig.getKeyProviders(), targetConfig.getKeyProviders());
 
-        identityProviderImportService.doImport(
-                targetConfig.getRealm(),
-                actualConfig.getIdentityProviders(),
+        identityProviderImportService.doImport(targetConfig.getRealm(), actualConfig.getIdentityProviders(),
                 targetConfig.getIdentityProviders());
 
         requiredActionImportService.doImport(targetConfig.getRealm(),

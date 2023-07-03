@@ -68,6 +68,7 @@ public class AuthenticationFlowExportService {
     private FlowElement createExecution(String realm, AuthenticationExecutionInfoRepresentation exec) {
         AuthenticationExecution execution = new AuthenticationExecution();
 
+        execution.setAlias(exec.getAlias());
         execution.setProviderId(exec.getProviderId());
         execution.setAuthenticationFlow(false);
         execution.setRequirement(exec.getRequirement());
@@ -83,7 +84,7 @@ public class AuthenticationFlowExportService {
 
     private FlowElement createSubFlow(String realm, AuthenticationExecutionInfoRepresentation exec) {
         AuthenticationSubFlow authenticationSubFlow = new AuthenticationSubFlow();
-        var subFlowRepresentation = resourceAdapter.getFlow(realm, exec.getFlowId());
+        AuthenticationFlowRepresentation subFlowRepresentation = resourceAdapter.getFlow(realm, exec.getFlowId());
 
         authenticationSubFlow.setAlias(subFlowRepresentation.getAlias());
         authenticationSubFlow.setDescription(subFlowRepresentation.getDescription());

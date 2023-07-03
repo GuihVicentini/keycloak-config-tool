@@ -31,9 +31,9 @@ public class AuthenticationFlowImportService {
             return;
         }
 
-        var toBeAdded = ListUtil.getMissingConfigElements(target, actual);
-        var toBeDeleted = ListUtil.getMissingConfigElements(actual, target);
-        var toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(target, actual);
+        List<AuthenticationFlow> toBeAdded = ListUtil.getMissingConfigElements(target, actual);
+        List<AuthenticationFlow> toBeDeleted = ListUtil.getMissingConfigElements(actual, target);
+        List<AuthenticationFlow> toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(target, actual);
 
         addFlows(realm, toBeAdded);
         deleteFlows(realm, toBeDeleted);
