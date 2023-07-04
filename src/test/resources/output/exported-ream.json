@@ -1903,10 +1903,10 @@
       "subFlowsAndExecutions": [
         {
           "authenticationFlow": false,
+          "alias": "auth-cookie",
           "providerId": "auth-cookie",
           "requirement": "ALTERNATIVE",
-          "config": null,
-          "alias": "auth-cookie"
+          "config": null
         },
         {
           "authenticationFlow": true,
@@ -1917,19 +1917,19 @@
           "subFlowsAndExecutions": [
             {
               "authenticationFlow": false,
+              "alias": "auth-username-password-form",
               "providerId": "auth-username-password-form",
               "requirement": "REQUIRED",
-              "config": null,
-              "alias": "auth-username-password-form"
+              "config": null
             }
           ]
         },
         {
           "authenticationFlow": false,
+          "alias": "auth-username-password-form",
           "providerId": "auth-username-password-form",
           "requirement": "REQUIRED",
-          "config": null,
-          "alias": "auth-username-password-form"
+          "config": null
         }
       ]
     }

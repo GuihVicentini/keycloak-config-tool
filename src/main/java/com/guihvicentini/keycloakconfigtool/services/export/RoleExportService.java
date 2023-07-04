@@ -9,10 +9,7 @@ import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.RolesRepresentation;
 import org.springframework.stereotype.Service;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,7 +43,7 @@ public class RoleExportService {
 
 
     private Map<String, List<RoleRepresentation>> getClientRoles(String realm) {
-        var clientRoles = resourceAdapter.getClientRoles(realm);
+        var clientRoles = resourceAdapter.getAllClientRoles(realm);
         clientRoles.forEach((clientId, roles) -> {
             roles.forEach(role -> {
                 role.setComposites(new RoleRepresentation.Composites());
@@ -60,7 +57,9 @@ public class RoleExportService {
 
     private void setRealmComposites(String realm, String clientId, RoleRepresentation role) {
         String clientUuid = clientResourceAdapter.getClientByClientId(realm, clientId).getId();
-        role.getComposites().setRealm(resourceAdapter.getClientRoleRealmComposites(realm, clientUuid, role.getName()));
+        role.getComposites().setRealm(resourceAdapter.getClientRoleRealmComposites(realm, clientUuid, role.getName())
+                .stream().map(RoleRepresentation::getName)
+                .collect(Collectors.toSet()));
     }
 
     private void setClientComposites(String realm, String clientId, RoleRepresentation role) {
@@ -72,8 +71,11 @@ public class RoleExportService {
         }
 
         clientResourceAdapter.getClients(realm).forEach(client -> {
-            Map<String, List<String>> composites = resourceAdapter
-                    .getClientRoleClientComposites(realm, clientUuid, client.getClientId(), role.getName());
+            Map<String, List<String>> composites = Collections.singletonMap(client.getClientId(),
+                    resourceAdapter.getClientRoleClientComposites(realm, clientUuid, role.getName(), client.getClientId())
+                            .stream()
+                            .map(RoleRepresentation::getName)
+                            .collect(Collectors.toList()));
 
             composites.forEach((key, value) -> {
                 if(!value.isEmpty()) {
@@ -98,7 +100,9 @@ public class RoleExportService {
     public Map<String, List<String>> getRealmRoleClientComposites(String realm, String roleName) {
         return clientResourceAdapter.getClients(realm).stream()
                 .flatMap(client -> {
-                    List<String> clientCompositesName = resourceAdapter.getRoleClientComposites(realm, roleName, client.getId());
+                    List<String> clientCompositesName = resourceAdapter.getRoleClientComposites(realm, roleName, client.getId())
+                            .stream().map(RoleRepresentation::getName)
+                            .collect(Collectors.toList());
 
                     return clientCompositesName.isEmpty()
                             ? Stream.empty()

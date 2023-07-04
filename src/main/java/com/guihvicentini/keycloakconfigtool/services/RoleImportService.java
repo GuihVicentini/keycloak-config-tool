@@ -8,12 +8,15 @@ import com.guihvicentini.keycloakconfigtool.models.RoleConfig;
 import com.guihvicentini.keycloakconfigtool.models.RolesConfig;
 import com.guihvicentini.keycloakconfigtool.services.export.ClientExportService;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
-import com.guihvicentini.keycloakconfigtool.utils.MapUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -49,36 +52,100 @@ public class RoleImportService {
     // ---------------------- CLIENT ROLES -------------------------------------------
 
     private void importClientRoles(String realm, Map<String, List<RoleConfig>> actual, Map<String, List<RoleConfig>> target) {
-        var toBeAdded = MapUtil.getMissingElements(target, actual);
-        var toBeDeleted = MapUtil.getMissingElements(actual, target);
 
-        addClientRoles(realm, toBeAdded);
+        target.keySet().forEach(clientId -> {
+            String clientUuid = clientExportService.getClientUuid(realm, clientId);
+            if (!actual.containsKey(clientId)) {
+                throw new RuntimeException(String.format(
+                        "Client: %s doesn't exist. To import client roles the client must be first created", clientId));
+            }
+            List<RoleConfig> actualRoles = actual.get(clientId);
+            List<RoleConfig> targetRoles = target.get(clientId);
 
+            var toBeAdded = ListUtil.getMissingConfigElements(targetRoles, actualRoles);
+            var toDeleted = ListUtil.getMissingConfigElements(actualRoles, targetRoles);
+            var toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(targetRoles, actualRoles);
+
+            addClientRoles(realm, clientUuid, toBeAdded);
+            deleteClientRoles(realm, clientUuid, toDeleted);
+            updateClientRoles(realm, clientUuid, toBeUpdated);
+
+        });
     }
 
-    private void addClientRoles(String realm, Map<String, List<RoleConfig>> roles) {
-        roles.values().forEach(clientRoles -> addClientRoles(realm, clientRoles));
+    private void updateClientRoles(String realm, String clientUuid, List<RoleConfig> roles) {
+        roles.forEach(role -> updateClientRole(realm, clientUuid, role));
     }
 
-    private void addClientRoles(String realm, List<RoleConfig> roles) {
-        replaceContainerId(realm, roles, true);
-        List<RoleConfig> compositeRoles = roles.stream().filter(RoleConfig::isComposite).toList();
-        List<RoleConfig> plainRoles = roles.stream().filter(role -> !role.isComposite()).toList();
-
-        // create basic roles first
-        plainRoles.forEach(role -> addClientRole(realm, role));
-
-        // create composite roles
-        compositeRoles.forEach(role -> addClientRole(realm, role));
+    private void updateClientRole(String realm, String clientUuid, RoleConfig role) {
+        resourceAdapter.updateClientRole(realm, clientUuid, configMapper.mapToRepresentation(role));
+        updateClientRoleRealmComposite(realm, clientUuid, role.getName(), role.getComposites().getRealm());
+        updateClientRoleClientComposite(realm, clientUuid, role.getName(), role.getComposites().getClient());
     }
 
-    private void addClientRole(String realm, RoleConfig role) {
-        resourceAdapter.createClientRole(realm, role.getContainerId(), configMapper.mapToRepresentation(role));
+    private void updateClientRoleClientComposite(String realm, String clientUuid, String roleName, Map<String, List<String>> clientComposites) {
+        clientComposites.keySet().forEach(clientId -> {
+
+            String innerClientUuid = clientExportService.getClientUuid(realm, clientId);
+
+            List<RoleRepresentation> actualClientComposites = resourceAdapter
+                    .getClientRoleClientComposites(realm, clientUuid, roleName, clientId);
+
+            List<RoleRepresentation> updatedClientComposites = resourceAdapter.getClientRoles(realm, innerClientUuid).stream()
+                    .filter(composite -> clientComposites.get(clientId).contains(composite.getName())).collect(Collectors.toList());
+
+            updateClientRoleComposites(realm, clientUuid, roleName, actualClientComposites, updatedClientComposites);
+
+        });
+    }
+
+    private void updateClientRoleComposites(String realm, String clientUuid, String roleName,
+                                            List<RoleRepresentation> actualClientComposites,
+                                            List<RoleRepresentation> updatedClientComposites) {
+
+        List<RoleRepresentation> toBeAdded = updatedClientComposites.stream()
+                .filter(newComposite -> actualClientComposites.stream()
+                        .noneMatch(actualComposite -> Objects.equals(actualComposite.getId(), newComposite.getId())))
+                .collect(Collectors.toList());
+
+        List<RoleRepresentation> toBeDeleted = actualClientComposites.stream()
+                .filter(newComposite -> updatedClientComposites.stream()
+                        .noneMatch(actualComposite -> Objects.equals(actualComposite.getId(), newComposite.getId())))
+                .collect(Collectors.toList());
+
+        resourceAdapter.deleteComposites(realm, clientUuid, roleName, toBeDeleted);
+        resourceAdapter.addComposites(realm, clientUuid, roleName, toBeAdded);
+    }
+
+    private void updateClientRoleRealmComposite(String realm, String clientUuid, String roleName, Set<String> composites) {
+        var actualClientRoleRealmComposite = resourceAdapter.getClientRoleRealmComposites(realm, clientUuid, roleName);
+        var updatedClientRoleRealmComposite = resourceAdapter.getClientRoles(realm, clientUuid).stream()
+                .filter(composite -> composites.contains(composite.getName())).collect(Collectors.toList());
+
+        updateClientRoleComposites(realm, clientUuid, roleName, actualClientRoleRealmComposite, updatedClientRoleRealmComposite);
+    }
+
+
+    private void deleteClientRoles(String realm, String clientUuid, List<RoleConfig> roles) {
+        roles.forEach(role -> deleteClientRole(realm, clientUuid, role));
+    }
+
+    private void deleteClientRole(String realm, String clientUuid, RoleConfig role) {
+        resourceAdapter.deleteClientRole(realm, clientUuid, role.getName());
+    }
+
+    private void addClientRoles(String realm, String clientUuid, List<RoleConfig> roles) {
+        roles.forEach(role -> addClientRole(realm, clientUuid, role));
+    }
+
+    private void addClientRole(String realm, String clientUuid, RoleConfig role) {
+        resourceAdapter.createClientRole(realm, clientUuid, configMapper.mapToRepresentation(role));
     }
 
     // ---------------------- REALM ROLES -------------------------------------------
 
     private void importRealmRoles(String realm, List<RoleConfig> actual, List<RoleConfig> target) {
+
         List<RoleConfig> toBeAdded = ListUtil.getMissingConfigElements(target, actual);
         List<RoleConfig> toBeDeleted = ListUtil.getMissingConfigElements(actual, target);
         List<RoleConfig> toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(target, actual);
@@ -94,8 +161,47 @@ public class RoleImportService {
 
     private void updateRole(String realm, RoleConfig role) {
         resourceAdapter.update(realm, configMapper.mapToRepresentation(role));
-        var actualRealmComposites = resourceAdapter.getRoleRealmCompositesRepresentation(realm, role.getName());
+        updateRoleRealmComposites(realm, role.getName(), role.getComposites().getRealm());
+        updateRoleClientComposites(realm, role.getName(), role.getComposites().getClient());
+    }
 
+    private void updateRoleClientComposites(String realm, String roleName, Map<String, List<String>> clientComposites) {
+        clientComposites.keySet().forEach(clientId -> {
+            String clientUuid = clientExportService.getClientUuid(realm, clientId);
+            List<RoleRepresentation> actualClientComposites = resourceAdapter.getRoleClientComposites(realm, roleName, clientUuid);
+            List<RoleRepresentation> updatedClientComposites = resourceAdapter.getClientRoles(realm, clientUuid).stream()
+                    .filter(composite -> clientComposites.get(clientId).contains(composite.getName())).collect(Collectors.toList());
+
+            updateRoleComposite(realm, roleName, actualClientComposites, updatedClientComposites);
+
+        });
+    }
+
+    private void updateRoleRealmComposites(String realm, String roleName, Set<String> realmComposites) {
+        List<RoleRepresentation> actualRealmComposites = resourceAdapter.getRoleRealmCompositesRepresentation(realm, roleName);
+        List<RoleRepresentation> updatedComposites = resourceAdapter.getRealmRoles(realm).stream()
+                .filter(composite -> realmComposites.contains(composite.getName())).toList();
+
+        updateRoleComposite(realm, roleName, actualRealmComposites, updatedComposites);
+    }
+
+
+    private void updateRoleComposite(String realm, String roleName,
+                                     List<RoleRepresentation> actualClientComposites,
+                                     List<RoleRepresentation> updatedClientComposites) {
+
+        List<RoleRepresentation> toBeAdded = updatedClientComposites.stream()
+                .filter(newComposite -> actualClientComposites.stream()
+                        .noneMatch(actualComposite -> Objects.equals(actualComposite.getId(), newComposite.getId())))
+                .collect(Collectors.toList());
+
+        List<RoleRepresentation> toBeDeleted = actualClientComposites.stream()
+                .filter(newComposite -> updatedClientComposites.stream()
+                        .noneMatch(actualComposite -> Objects.equals(actualComposite.getId(), newComposite.getId())))
+                .collect(Collectors.toList());
+
+        resourceAdapter.deleteComposites(realm, roleName, toBeDeleted);
+        resourceAdapter.addComposites(realm, roleName, toBeAdded);
     }
 
     private void deleteRealmRoles(String realm, List<RoleConfig> roles) {

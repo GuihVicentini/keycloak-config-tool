@@ -50,13 +50,10 @@ public class GroupImportService {
         updateGroups(realm, toUpdated);
 
 
-        List<GroupConfig> actualSubGroups = actual.stream()
-                .flatMap(groups -> groups.getSubGroups().stream()).collect(Collectors.toList());
-        List<GroupConfig> targetSubGroups = target.stream()
-                .flatMap(groups -> groups.getSubGroups().stream()).collect(Collectors.toList());
-
         target.forEach(group -> updateRealmRoles(realm, group.getName(), group.getRealmRoles()));
-        target.forEach(group -> updateClientRoles(realm, group.getName(), group.getClientRoles()));
+        target.forEach(group -> {
+            updateClientRoles(realm, group.getName(), group.getClientRoles());
+        });
         target.forEach(group -> importSubGroups(realm, group));
     }
 

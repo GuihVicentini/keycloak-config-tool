@@ -136,6 +136,7 @@ public class GroupImportServiceTest extends AbstractIntegrationTest {
         groupConfig.setName(name);
         groupConfig.setRealmRoles(realmRoles);
         // Set other properties as needed
+        groupConfig.normalize();
         return groupConfig;
     }
 }

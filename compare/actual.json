@@ -97,9 +97,14 @@
                 "composite": true,
                 "composites": {
                     "realm": [
+                        "create-realm",
                         "test-realm-role"
                     ],
-                    "client": {}
+                    "client": {
+                        "test-client": [
+                            "test-client-composite-role"
+                        ]
+                    }
                 },
                 "clientRole": false,
                 "containerId": "test",
@@ -524,6 +529,9 @@
                         "client": {
                             "test-client": [
                                 "test-client-role"
+                            ],
+                            "account": [
+                                "manage-consent"
                             ]
                         }
                     },

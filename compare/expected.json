@@ -97,6 +97,7 @@
                 "composite": true,
                 "composites": {
                     "realm": [
+                        "create-realm",
                         "test-realm-role"
                     ],
                     "client": {

@@ -37,6 +37,11 @@ public class RolesConfig implements Config {
     private void normalizeRealm(String realm) {
         this.realm = this.realm == null ? new ArrayList<>() : this.realm;
         this.realm.forEach(roleConfig -> roleConfig.normalize(realm));
+        // remove admin role from master realm. This role is sensible and should not be changed.
+        if(realm.equals("master")) {
+            Optional<RoleConfig> adminRole = this.realm.stream().filter(role -> role.getName().equals("admin")).findFirst();
+            adminRole.ifPresent(role -> this.realm.remove(role));
+        }
         this.realm.sort(Comparator.comparing(RoleConfig::getName));
     }
 }

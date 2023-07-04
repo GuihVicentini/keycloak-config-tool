@@ -48,17 +48,15 @@ public class RoleResourceAdapter {
     /**
      * GET /roles/{role-name}/composites/realm
      */
-    public Set<RoleRepresentation> getRoleRealmCompositesRepresentation(String realm, String roleName) {
-        return getRoleResource(realm, roleName).getRealmRoleComposites();
+    public List<RoleRepresentation> getRoleRealmCompositesRepresentation(String realm, String roleName) {
+        return new ArrayList<>(getRoleResource(realm, roleName).getRealmRoleComposites());
     }
 
     /**
      * GET /roles/{role-name}/composites/client/{clientUuid}
      */
-    public List<String> getRoleClientComposites(String realm, String roleName, String clientUuid) {
-        return getRoleResource(realm, roleName).getClientRoleComposites(clientUuid)
-                .stream().map(RoleRepresentation::getName)
-                .collect(Collectors.toList());
+    public List<RoleRepresentation> getRoleClientComposites(String realm, String roleName, String clientUuid) {
+        return new ArrayList<>(getRoleResource(realm, roleName).getClientRoleComposites(clientUuid));
     }
 
     /**
@@ -113,9 +111,16 @@ public class RoleResourceAdapter {
     }
 
     /**
+     * POST /roles/{roleName}/composites
+     */
+    public void addComposites(String realm, String roleName, List<RoleRepresentation> composites) {
+        getRoleResource(realm, roleName).addComposites(composites);
+    }
+
+    /**
      * DELETE /roles/{roleName}/composites
      */
-    public void deleteComposite(String realm, String roleName, List<RoleRepresentation> composites) {
+    public void deleteComposites(String realm, String roleName, List<RoleRepresentation> composites) {
         getRoleResource(realm, roleName).deleteComposites(composites);
     }
 
@@ -140,35 +145,32 @@ public class RoleResourceAdapter {
     /**
      * GET /clients/{clientUuid}/roles
      */
-    public Map<String, List<RoleRepresentation>> getClientRoles(String realm) {
+    public Map<String, List<RoleRepresentation>> getAllClientRoles(String realm) {
         return clientResourceAdapter.getClients(realm).stream()
                 .collect(Collectors.toMap(ClientRepresentation::getClientId, client ->
                         realmResourceAdapter.getResource(realm).clients().get(client.getId()).roles().list()
                 ));
     }
 
+    public List<RoleRepresentation> getClientRoles(String realm, String clientUuid) {
+        return getClientRolesResource(realm, clientUuid).list();
+
+    }
 
     /**
      * GET clients/{clientUuid}/roles/{role-name}/composites/realm
      */
-    public Set<String> getClientRoleRealmComposites(String realm, String clientUuid ,String roleName) {
-        return getClientRoleResource(realm, clientUuid, roleName).getRealmRoleComposites()
-                .stream().map(RoleRepresentation::getName)
-                .collect(Collectors.toSet());
+    public List<RoleRepresentation> getClientRoleRealmComposites(String realm, String clientUuid , String roleName) {
+        return new ArrayList<>(getClientRoleResource(realm, clientUuid, roleName).getRealmRoleComposites());
     }
 
     /**
-     * GET /roles/{role-name}/composites/client/{clientUuid}
+     * GET clients/{clientUuid}/roles/{role-name}/composites/client/{clientId}
      */
-    public Map<String, List<String>> getClientRoleClientComposites(String realm, String clientUuid, String clientId, String roleName) {
-        var clientIdUuid = clientResourceAdapter.getClientByClientId(realm, clientId).getId();
-        List<String> compositeNames = getClientRoleResource(realm, clientUuid, roleName)
-                .getClientRoleComposites(clientIdUuid)
-                .stream()
-                .map(RoleRepresentation::getName)
-                .collect(Collectors.toList());
-
-        return Collections.singletonMap(clientId, compositeNames);
+    public List<RoleRepresentation> getClientRoleClientComposites(String realm, String clientUuid, String roleName, String clientId) {
+        String clientIdUuid = clientResourceAdapter.getClientByClientId(realm, clientId).getId();
+        return new ArrayList<>(getClientRoleResource(realm, clientUuid, roleName)
+                .getClientRoleComposites(clientIdUuid));
     }
 
     /**
@@ -176,6 +178,14 @@ public class RoleResourceAdapter {
      */
     public void createClientRole(String realm, String clientUuid, RoleRepresentation representation) {
         getClientRolesResource(realm, clientUuid).create(representation);
+    }
+
+
+    /**
+     * POST clients/{clientUuid}/roles/{roleName}/composites
+     */
+    public void addComposites(String realm, String clientUuid, String roleName, List<RoleRepresentation> representations) {
+        getClientRoleResource(realm, clientUuid, roleName).addComposites(representations);
     }
 
     /**
@@ -190,6 +200,13 @@ public class RoleResourceAdapter {
      */
     public void deleteClientRole(String realm, String clientUuid, String roleName) {
         getClientRoleResource(realm, clientUuid, roleName).remove();
+    }
+
+    /**
+     * DELETE clients/{clientUuid}/roles/{roleName}/composites
+     */
+    public void deleteComposites(String realm, String clientUuid, String roleName, List<RoleRepresentation> representations) {
+        getClientRoleResource(realm, clientUuid, roleName).deleteComposites(representations);
     }
 
     /**
