@@ -1,7 +1,9 @@
 package com.guihvicentini.keycloakconfigtool.services.export;
 
+import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.AuthenticationFlow;
+import com.guihvicentini.keycloakconfigtool.models.FlowElement;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -19,9 +21,9 @@ public class AuthenticationFlowExportServiceIT extends AbstractIntegrationTest {
     @Autowired
     AuthenticationFlowExportService exportService;
 
-//    @Autowired
-//    AuthenticationManagementResourceAdapter resourceAdapter;
-//
+    @Autowired
+    AuthenticationManagementResourceAdapter resourceAdapter;
+
 //    @Test
 //    public void getAllFlows() {
 //        List<AuthenticationFlowConfig> flows = exportService.getAll(TEST_REALM);
@@ -41,11 +43,11 @@ public class AuthenticationFlowExportServiceIT extends AbstractIntegrationTest {
 //
 //    @Test
 //    public void getFlowsRepresentation(){
-//        var flows = exportService.getAuthFlows(TEST_REALM);
+//        var flows = resourceAdapter.getFlows(TEST_REALM);
 //        log.info("Flows: {}", JsonMapperUtils.objectToJsonPrettyString(flows));
 //
 //        flows.forEach(flow -> {
-//            var exec = resourceAdapter.getAuthenticationExecutions(TEST_REALM, flow.getAlias());
+//            var exec = resourceAdapter.getAuthenticationExecutions(TEST_REALM, "test-sub-flow");
 //            log.info("Subflow: {}", JsonMapperUtils.objectToJsonPrettyString(exec));
 //        });
 //    }
@@ -68,6 +70,11 @@ public class AuthenticationFlowExportServiceIT extends AbstractIntegrationTest {
         AuthenticationFlow testFlow = maybeTestFlow.get();
 
         assertFalse(testFlow.getSubFlowsAndExecutions().isEmpty());
+        Optional<FlowElement> userNamePasswordForm = testFlow.getSubFlowsAndExecutions().stream()
+                .filter(exec -> exec.getAlias().equals("auth-username-password-form")).findFirst();
+
+        assertFalse(userNamePasswordForm.isPresent());
+
 
     }
 

@@ -69,7 +69,6 @@ public class ConfigCommandFacadeTest extends AbstractIntegrationTest {
         assertTrue(e.getMessage().contains(path));
     }
 
-    @Disabled("Investigating errors")
     @Test
     @Order(6)
     public void whenImport_and_RealmExists_thenUpdateRealm(){

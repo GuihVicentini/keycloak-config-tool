@@ -55,6 +55,8 @@ public class AuthenticationFlowExportService {
         List<AuthenticationExecutionInfoRepresentation> executions = resourceAdapter.getAuthenticationExecutions(realm, alias);
 
         return executions.stream()
+                // only map the top level executions as the other ones will be mapped with the subflows.
+                .filter(exec -> exec.getLevel() == 0)
                 .map(exec -> {
                     if (exec.getAuthenticationFlow() != null && exec.getAuthenticationFlow()) {
                         return createSubFlow(realm, exec);

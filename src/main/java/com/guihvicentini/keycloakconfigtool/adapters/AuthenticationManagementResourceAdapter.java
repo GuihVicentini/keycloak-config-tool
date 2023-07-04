@@ -186,7 +186,7 @@ public class AuthenticationManagementResourceAdapter {
     }
 
     /**
-     * GET /config/{id}
+     * DELETE /config/{id}
      */
     public void removeExecutionConfigById(String realm, String configId) {
         getResource(realm).removeAuthenticatorConfig(configId);
@@ -247,6 +247,13 @@ public class AuthenticationManagementResourceAdapter {
     public void removeExecution(String realm, String flowAlias, String executionAlias) {
         AuthenticationExecutionInfoRepresentation execution = getAuthenticationExecutionByName(realm, flowAlias, executionAlias);
         getResource(realm).removeExecution(execution.getId());
+    }
+
+    /**
+     * DELETE /executions/{executionId}
+     */
+    public void removeExecution(String realm, String executionId) {
+        getResource(realm).removeExecution(executionId);
     }
 
 
