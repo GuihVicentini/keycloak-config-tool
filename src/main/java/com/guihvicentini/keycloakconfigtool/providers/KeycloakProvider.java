@@ -1,6 +1,7 @@
 package com.guihvicentini.keycloakconfigtool.providers;
 
 import com.guihvicentini.keycloakconfigtool.properties.KeycloakConfigProperties;
+import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;

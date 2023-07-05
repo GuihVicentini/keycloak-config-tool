@@ -92,7 +92,7 @@ public class ComponentsResourceAdapter {
                     "Current internal user IDs will be lost!" +
                     "component name: %s", representation.getName());
         }
-        getResource(realm).removeComponent(representation.getId());
+        getComponentResource(realm, representation.getId()).remove();
     }
 
     /**
