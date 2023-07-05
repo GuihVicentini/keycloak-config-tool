@@ -99,8 +99,17 @@ public class ComponentImportService {
         representation.setParentId(parentId);
         log.debug("Adding Component: {} with parentId: {}", JsonMapperUtils.objectToJsonPrettyString(component), parentId);
         String createdComponentId = resourceAdapter.create(realm, representation);
+
+        // check if subcomponents were created automatically
+        List<Component> actualSubComponents = resourceAdapter.getAll(realm).stream()
+                .filter(subComponent -> createdComponentId.equals(subComponent.getParentId()))
+                .map(componentMapper::mapToConfig)
+                .collect(Collectors.toList());
+
+        List<Component> missingSubComponents = ListUtil.getMissingConfigElements(component.getSubComponents(), actualSubComponents);
+
         // create subComponents recursively
-        addComponents(realm, createdComponentId, component.getSubComponents());
+        addComponents(realm, createdComponentId, missingSubComponents);
     }
 
 }

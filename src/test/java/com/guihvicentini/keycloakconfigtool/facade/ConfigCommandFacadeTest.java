@@ -75,7 +75,6 @@ public class ConfigCommandFacadeTest extends AbstractIntegrationTest {
         commandFacade.applyConfig(INPUT_TEST_REALM_JSON, "");
     }
 
-    @Disabled("Investigating errors")
     @Test
     @Order(7)
     public void whenImport_and_RealmDoesntExist_thenCreateRealm(){

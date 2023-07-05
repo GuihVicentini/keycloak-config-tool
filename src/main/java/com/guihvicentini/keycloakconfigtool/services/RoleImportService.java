@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,15 +53,15 @@ public class RoleImportService {
         target.keySet().forEach(clientId -> {
             String clientUuid = clientExportService.getClientUuid(realm, clientId);
             if (!actual.containsKey(clientId)) {
-                throw new RuntimeException(String.format(
-                        "Client: %s doesn't exist. To import client roles the client must be first created", clientId));
+                addClientRoles(realm, clientUuid, target.get(clientId));
+                return;
             }
             List<RoleConfig> actualRoles = actual.get(clientId);
             List<RoleConfig> targetRoles = target.get(clientId);
 
-            var toBeAdded = ListUtil.getMissingConfigElements(targetRoles, actualRoles);
-            var toDeleted = ListUtil.getMissingConfigElements(actualRoles, targetRoles);
-            var toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(targetRoles, actualRoles);
+            List<RoleConfig> toBeAdded = ListUtil.getMissingConfigElements(targetRoles, actualRoles);
+            List<RoleConfig> toDeleted = ListUtil.getMissingConfigElements(actualRoles, targetRoles);
+            List<RoleConfig> toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(targetRoles, actualRoles);
 
             addClientRoles(realm, clientUuid, toBeAdded);
             deleteClientRoles(realm, clientUuid, toDeleted);
@@ -135,10 +132,20 @@ public class RoleImportService {
     }
 
     private void addClientRoles(String realm, String clientUuid, List<RoleConfig> roles) {
-        roles.forEach(role -> addClientRole(realm, clientUuid, role));
+        replaceContainerId(realm, roles, true);
+        List<RoleConfig> compositeRoles = roles.stream().filter(RoleConfig::isComposite).toList();
+        List<RoleConfig> nonCompositeRoles = new ArrayList<>(roles);
+        nonCompositeRoles.removeAll(compositeRoles);
+
+        // create basic roles first
+        nonCompositeRoles.forEach(role -> addClientRole(realm, clientUuid, role));
+
+        // create composite roles
+        compositeRoles.forEach(role -> addClientRole(realm, clientUuid, role));
     }
 
     private void addClientRole(String realm, String clientUuid, RoleConfig role) {
+        log.debug("Creating Client Role: {}/{}", clientUuid, role.getName());
         resourceAdapter.createClientRole(realm, clientUuid, configMapper.mapToRepresentation(role));
     }
 
@@ -215,10 +222,11 @@ public class RoleImportService {
     private void addRealmRoles(String realm, List<RoleConfig> roles) {
         replaceContainerId(realm, roles, false);
         List<RoleConfig> compositeRoles = roles.stream().filter(RoleConfig::isComposite).toList();
-        roles.removeAll(compositeRoles);
+        List<RoleConfig> nonCompositeRoles = new ArrayList<>(roles);
+        nonCompositeRoles.removeAll(compositeRoles);
 
         // create basic roles first
-        roles.forEach(role -> addRealmRole(realm, role));
+        nonCompositeRoles.forEach(role -> addRealmRole(realm, role));
 
         // create composite roles
         compositeRoles.forEach(role -> addRealmRole(realm, role));

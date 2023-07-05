@@ -78,7 +78,7 @@ public class GroupResourceAdapter {
     /**
      * POST /groups/{id}/children
      */
-    public String createSubGroup(String realm,String groupName ,GroupRepresentation representation) {
+    public String createSubGroup(String realm, String groupName ,GroupRepresentation representation) {
         try (Response response = getGroupResourceByName(realm, groupName).subGroup(representation)) {
             return CreatedResponseUtil.getCreatedId(response);
         } catch (WebApplicationException e) {

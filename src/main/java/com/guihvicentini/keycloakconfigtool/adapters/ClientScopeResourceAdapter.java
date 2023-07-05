@@ -110,6 +110,7 @@ public class ClientScopeResourceAdapter {
      */
     public void updateProtocolMapper(String realm, String clientScopeName, ProtocolMapperRepresentation representation) {
         String mapperId = getProtocolMapperByName(realm, clientScopeName, representation.getName()).getId();
+        representation.setId(mapperId);
         getProtocolMappersResource(realm, clientScopeName).update(mapperId, representation);
     }
 

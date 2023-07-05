@@ -66,13 +66,14 @@ public class GroupImportService {
         List<GroupConfig> toBeUpdated = ListUtil.getNonEqualConfigsWithSameIdentifier(group.getSubGroups(), actualSubGroups);
 
         // TODO this only supports one level of subGroups. This has to be extended to support multiple levels of nested subGroups
+        // TODO update subGroup realm and client roles
         toBeAdded.forEach(subGroup -> addSubGroup(realm, group.getName(), subGroup));
         toBeDeleted.forEach(subGroup -> deleteSubGroup(realm, getSubGroup(subGroup.getName(), subGroupRepresentation).getId()));
         toBeUpdated.forEach(subGroup -> updateSubGroup(realm, subGroup, getSubGroup(subGroup.getName(), subGroupRepresentation)));
     }
 
     private void addSubGroup(String realm, String parentGroupName, GroupConfig subGroup) {
-        resourceAdapter.createSubGroup(realm,parentGroupName, configMapper.mapToRepresentation(subGroup));
+        resourceAdapter.createSubGroup(realm, parentGroupName, configMapper.mapToRepresentation(subGroup));
     }
 
     private void updateSubGroup(String realm, GroupConfig subGroup, GroupRepresentation representation) {

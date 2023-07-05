@@ -103,6 +103,7 @@
           "client": {
             "account": [
               "manage-account",
+              "manage-account-links",
               "view-profile"
             ]
           }
@@ -584,9 +585,7 @@
           "path": "/test-2-group/test-2-group-child",
           "access": null,
           "attributes": {},
-          "realmRoles": [
-            "create-realm"
-          ],
+          "realmRoles": [],
           "clientRoles": {},
           "subGroups": []
         }
@@ -989,8 +988,8 @@
       "clientAuthenticatorType": "client-secret",
       "defaultRoles": [],
       "redirectUris": [
-        "/testing",
-        "/other-testing-path"
+        "/other-testing-path",
+        "/testing"
       ],
       "webOrigins": [],
       "notBefore": 0,
@@ -1910,10 +1909,10 @@
       "subFlowsAndExecutions": [
         {
           "authenticationFlow": false,
+          "alias": "auth-cookie",
           "providerId": "auth-cookie",
           "requirement": "ALTERNATIVE",
-          "config": null,
-          "alias": "auth-cookie"
+          "config": null
         },
         {
           "authenticationFlow": true,
@@ -1924,19 +1923,19 @@
           "subFlowsAndExecutions": [
             {
               "authenticationFlow": false,
+              "alias": "auth-username-password-form",
               "providerId": "auth-username-password-form",
               "requirement": "REQUIRED",
-              "config": null,
-              "alias": "auth-username-password-form"
+              "config": null
             }
           ]
         },
         {
           "authenticationFlow": false,
+          "alias": "auth-username-password-form",
           "providerId": "auth-username-password-form",
           "requirement": "REQUIRED",
-          "config": null,
-          "alias": "auth-username-password-form"
+          "config": null
         }
       ]
     }

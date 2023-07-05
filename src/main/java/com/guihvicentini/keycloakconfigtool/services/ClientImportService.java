@@ -2,7 +2,6 @@ package com.guihvicentini.keycloakconfigtool.services;
 
 import com.guihvicentini.keycloakconfigtool.adapters.ClientResourceAdapter;
 import com.guihvicentini.keycloakconfigtool.mappers.ClientConfigMapper;
-import com.guihvicentini.keycloakconfigtool.mappers.ProtocolMapperConfigMapper;
 import com.guihvicentini.keycloakconfigtool.models.ClientConfig;
 import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
 import com.guihvicentini.keycloakconfigtool.services.export.AuthenticationFlowExportService;
@@ -23,18 +22,15 @@ public class ClientImportService {
 
     private final ClientResourceAdapter resourceAdapter;
     private final ClientConfigMapper clientConfigMapper;
-    private final ProtocolMapperConfigMapper protocolMapperConfigMapper;
     private final AuthenticationFlowExportService authenticationFlowExportService;
 
 
     public ClientImportService(ClientResourceAdapter resourceAdapter,
                                ClientConfigMapper clientConfigMapper,
-                               ProtocolMapperConfigMapper protocolMapperConfigMapper,
                                AuthenticationFlowExportService authenticationFlowExportService) {
 
         this.resourceAdapter = resourceAdapter;
         this.clientConfigMapper = clientConfigMapper;
-        this.protocolMapperConfigMapper = protocolMapperConfigMapper;
         this.authenticationFlowExportService = authenticationFlowExportService;
     }
 
@@ -127,6 +123,7 @@ public class ClientImportService {
     }
 
     private void addDefaultClientScope(String realm, String clientId, String scope) {
+        log.debug("Adding Default Client Scope: {}", scope);
         resourceAdapter.addDefaultClientScope(realm, clientId, scope);
     }
 
@@ -134,6 +131,7 @@ public class ClientImportService {
         optionalClientScopes.forEach(scope -> addOptionalClientScope(realm, clientId, scope));
     }
     private void addOptionalClientScope(String realm, String clientId, String scope) {
+        log.debug("Adding Optional Client Scope: {}", scope);
         resourceAdapter.addOptionalClientScope(realm, clientId, scope);
     }
 
