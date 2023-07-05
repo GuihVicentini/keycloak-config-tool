@@ -15,13 +15,10 @@ public class ConfigCommandFacadeTest extends AbstractIntegrationTest {
 
     private static final String RESOURCES_OUTPUT = "src/test/resources/output/";
     private static final String RESOURCES_INPUT = "src/test/resources/input/";
-
     private static final String EXPORTED_REAM_JSON = "exported-ream.json";
     private static final String NEW_REALM = "new-realm.json";
-
     private static final String TEST_REALM_JSON = "updated-test-realm.json";
     private static final String NULL_REALM_JSON = "null-realm.json";
-
     public static final String REALM = "test";
     public static final String NOT_EXISTING_REALM = "not-existing-realm";
 

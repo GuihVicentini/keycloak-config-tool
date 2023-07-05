@@ -23,7 +23,6 @@ public abstract class AbstractIntegrationTest {
     public static final String UUID_MATCH = "^([0-9a-f]{8}-?[0-9a-f]{4}-?4[0-9a-f]{3}-?[89ab][0-9a-f]{3}-?[0-9a-f]{12}$).*";
     public static final GenericContainer<?> KEYCLOAK;
     public static final GenericContainer<?> LDAP;
-//    public static final GenericContainer MYSQL;
 
     private static final Network network = Network.newNetwork();
 
@@ -41,26 +40,6 @@ public abstract class AbstractIntegrationTest {
                 .withCommand("start-dev --import-realm")
                 .waitingFor(Wait.forHttp("/").forPort(8080));
         KEYCLOAK.start();
-
-//        KEYCLOAK = new GenericContainer<>(DockerImageName
-//                .parse("quay.io/keycloak/keycloak:15.0.2"))
-//                .withNetwork(network)
-//                .withNetworkAliases("keycloak-test")
-//                .withEnv("KEYCLOAK_ADMIN", "admin")
-//                .withEnv("KEYCLOAK_ADMIN_PASSWORD", "admin")
-////                .withEnv("KEYCLOAK_CONTEXT_PATH", "/")
-////                .withEnv("KEYCLOAK_HOME_DIR", "keycloak")
-////                .withEnv("KEYCLOAK_IMPORT", "/opt/keycloak/data/import/test-realm.json")
-////                .withEnv("KEYCLOAK_PROFILE_FEATURE_UPLOAD_SCRIPTS", "enabled")
-//                .withFileSystemBind("src/test/resources/realms/test-realm.json",
-//                        "/opt/keycloak/data/import/test-realm.json", BindMode.READ_ONLY)
-//                .withExposedPorts(8080, 8080)
-//                .withCommand("" +
-//                        "-Dkeycloak.import=/opt/keycloak/data/import/test-realm.json " +
-//                        "-Dkeycloak.profile.upload_script=enabled " +
-//                        "-Dkeycloak.home.dir=keycloak")
-//                .waitingFor(Wait.forHttp("/").forPort(8080));
-//        KEYCLOAK.start();
 
         LDAP = new GenericContainer<>(DockerImageName
                 .parse("bitnami/openldap:latest"))
