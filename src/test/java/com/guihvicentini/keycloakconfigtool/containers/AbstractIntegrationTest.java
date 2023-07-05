@@ -34,7 +34,7 @@ public abstract class AbstractIntegrationTest {
                 .withEnv("KEYCLOAK_ADMIN", "admin")
                 .withEnv("KEYCLOAK_ADMIN_PASSWORD", "admin")
                 .withEnv("KEYCLOAK_CONTEXT_PATH", "/")
-                .withFileSystemBind("src/test/resources/realms/test-realm.json",
+                .withFileSystemBind("src/test/resources/realms/20.0.0/test-realm.json",
                         "/opt/keycloak/data/import/test-realm.json", BindMode.READ_ONLY)
                 .withExposedPorts(8080, 8443)
                 .withCommand("start-dev --import-realm")

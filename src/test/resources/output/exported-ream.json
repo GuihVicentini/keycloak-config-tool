@@ -1230,17 +1230,6 @@
       }
     } ]
   }, {
-    "name" : "scope1",
-    "description" : null,
-    "protocol" : null,
-    "attributes" : { },
-    "protocolMappers" : [ {
-      "name" : "updatedMapper1",
-      "protocol" : "openid-connect",
-      "protocolMapper" : "oidc-hardcoded-role-mapper",
-      "config" : { }
-    } ]
-  }, {
     "name" : "test-client-scope",
     "description" : "test client scope",
     "protocol" : "openid-connect",

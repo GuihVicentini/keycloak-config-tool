@@ -2,7 +2,6 @@ package com.guihvicentini.keycloakconfigtool.containers;
 
 import com.guihvicentini.keycloakconfigtool.facade.ConfigCommandFacade;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,9 +27,9 @@ public class LegacyKeycloakIT {
 
     @Autowired
     ConfigCommandFacade commandFacade;
-    private static final String RESOURCES_INPUT = "src/test/resources/input/";
+    private static final String RESOURCES_INPUT = "src/test/resources/input/15.0.2/";
     private static final String NEW_REALM = "new-realm.json";
-    private static final String TEST_REALM_JSON = "test-realm-15.json";
+    private static final String TEST_REALM_JSON = "test-realm.json";
     private static final String INPUT_NEW_REALM_JSON = RESOURCES_INPUT + NEW_REALM;
     private static final String INPUT_TEST_REALM_JSON = RESOURCES_INPUT + TEST_REALM_JSON;
 
@@ -42,7 +41,7 @@ public class LegacyKeycloakIT {
                 .withNetworkAliases("keycloak-test")
                 .withEnv("KEYCLOAK_USER", "admin")
                 .withEnv("KEYCLOAK_PASSWORD", "admin")
-                .withFileSystemBind("src/test/resources/realms/test-realm-15.0.2.json",
+                .withFileSystemBind("src/test/resources/realms/15.0.2/test-realm.json",
                         "/opt/keycloak/data/import/test-realm.json", BindMode.READ_ONLY)
                 .withExposedPorts(8080, 8080)
                 .withCommand("" +
@@ -60,7 +59,6 @@ public class LegacyKeycloakIT {
         registry.add("keycloak.url", () -> String.format("http://localhost:%s/auth", KEYCLOAK_15.getMappedPort(8080)));
     }
 
-    @Disabled("Verifying issues")
     @Test
     public void whenExport_and_outputFileEmpty_thenLogRealm(){
         commandFacade.exportConfig(TEST_REALM, "");
@@ -72,6 +70,7 @@ public class LegacyKeycloakIT {
         commandFacade.applyConfig(INPUT_TEST_REALM_JSON, "");
     }
 
+    @Disabled("Verifying issues")
     @Test
     public void whenImport_and_RealmDoesntExist_thenCreateRealm(){
         commandFacade.applyConfig(INPUT_NEW_REALM_JSON, "");

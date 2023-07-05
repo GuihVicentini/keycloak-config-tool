@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ConfigCommandFacadeTest extends AbstractIntegrationTest {
 
     private static final String RESOURCES_OUTPUT = "src/test/resources/output/";
-    private static final String RESOURCES_INPUT = "src/test/resources/input/";
+    private static final String RESOURCES_INPUT = "src/test/resources/input/20.0.0/";
     private static final String EXPORTED_REAM_JSON = "exported-ream.json";
     private static final String NEW_REALM = "new-realm.json";
     private static final String TEST_REALM_JSON = "updated-test-realm.json";
