@@ -23,7 +23,6 @@ public abstract class AbstractIntegrationTest {
     public static final String UUID_MATCH = "^([0-9a-f]{8}-?[0-9a-f]{4}-?4[0-9a-f]{3}-?[89ab][0-9a-f]{3}-?[0-9a-f]{12}$).*";
     public static final GenericContainer<?> KEYCLOAK;
     public static final GenericContainer<?> LDAP;
-//    public static final GenericContainer MYSQL;
 
     private static final Network network = Network.newNetwork();
 
@@ -35,7 +34,7 @@ public abstract class AbstractIntegrationTest {
                 .withEnv("KEYCLOAK_ADMIN", "admin")
                 .withEnv("KEYCLOAK_ADMIN_PASSWORD", "admin")
                 .withEnv("KEYCLOAK_CONTEXT_PATH", "/")
-                .withFileSystemBind("src/test/resources/realms/test-realm.json",
+                .withFileSystemBind("src/test/resources/realms/20.0.0/test-realm.json",
                         "/opt/keycloak/data/import/test-realm.json", BindMode.READ_ONLY)
                 .withExposedPorts(8080, 8443)
                 .withCommand("start-dev --import-realm")

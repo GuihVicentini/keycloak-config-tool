@@ -1,7 +1,7 @@
 package com.guihvicentini.keycloakconfigtool.utils;
 
 import com.guihvicentini.keycloakconfigtool.filehandlers.ReadFileHandler;
-import com.guihvicentini.keycloakconfigtool.models.ComponentExportConfig;
+import com.guihvicentini.keycloakconfigtool.models.Component;
 import com.guihvicentini.keycloakconfigtool.models.IdentityProviderConfig;
 import com.guihvicentini.keycloakconfigtool.models.RealmConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,8 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,8 +23,7 @@ public class ListUtilTest {
     private static final String NEW_REALM = INPUT_FOLDER + "new-realm.json";
     @Autowired
     private ReadFileHandler readFileHandler;
-    private Map<String, List<ComponentExportConfig>> testRealmComponents;
-    private Map<String, List<ComponentExportConfig>> newRealmComponents;
+    private List<Component> testRealmComponents;
     private RealmConfig testRealm;
     private RealmConfig newRealm;
 
@@ -33,23 +33,20 @@ public class ListUtilTest {
         testRealm = readFileHandler.readRealmConfig(TEST_REALM, "");
         newRealm = readFileHandler.readRealmConfig(NEW_REALM, "");
 
-        testRealmComponents = testRealm.getComponents();
-        newRealmComponents = newRealm.getComponents();
+        testRealmComponents = testRealm.getLdapProviders();
 
     }
 
     @Test
     public void whenListsEqual_thenReturnEmptyList(){
-        assertEquals(Collections.emptyList(), ListUtil.getMissingElements(testRealmComponents.values(),
-                testRealmComponents.values()));
+        assertEquals(Collections.emptyList(), ListUtil.getMissingConfigElements(testRealmComponents, testRealmComponents));
     }
 
 
     @Test
     public void whenListsNotEqual_thenReturnMissingElements(){
-        var expectedList = testRealmComponents.values().stream()
-                .flatMap(Collection::stream).collect(Collectors.toList());
-        assertEquals(expectedList, ListUtil.getMissingElements(testRealmComponents.values(),
+        var expectedList = testRealmComponents;
+        assertEquals(expectedList, ListUtil.getMissingConfigElements(testRealmComponents,
                 Collections.emptyList()));
     }
 

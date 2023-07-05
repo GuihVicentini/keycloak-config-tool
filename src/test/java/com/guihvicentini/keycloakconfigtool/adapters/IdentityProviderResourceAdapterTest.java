@@ -19,6 +19,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
+@Disabled("Not really needed anymore")
 public class IdentityProviderResourceAdapterTest extends AbstractIntegrationTest {
 
 

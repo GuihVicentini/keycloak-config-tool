@@ -48,6 +48,14 @@ public class GroupResourceAdapter {
     }
 
     /**
+     * Adaptation to get all subgroups of a group given the groupName
+     * GET /groups/{id}
+     */
+    public List<GroupRepresentation> getSubGroups(String realm, String groupName) {
+        return getGroupById(realm, getGroupByName(realm, groupName).getId()).getSubGroups();
+    }
+
+    /**
      * GET /groups/{id}
      */
     public GroupRepresentation getGroupById(String realm, String groupId) {
@@ -68,17 +76,44 @@ public class GroupResourceAdapter {
     }
 
     /**
+     * POST /groups/{id}/children
+     */
+    public String createSubGroup(String realm, String groupName ,GroupRepresentation representation) {
+        try (Response response = getGroupResourceByName(realm, groupName).subGroup(representation)) {
+            return CreatedResponseUtil.getCreatedId(response);
+        } catch (WebApplicationException e) {
+            String errorMessage = ResponseUtil.getErrorMessage(e);
+            throw new KeycloakAdapterException("Failed to create subGroup: %s\n error message: %s",
+                    e, representation.getName(), errorMessage);
+        }
+    }
+
+    /**
      * PUT /groups/{id}
      */
-    public void update(String realm, GroupRepresentation representation) {
+    public void updateByName(String realm, GroupRepresentation representation) {
         getGroupResourceByName(realm, representation.getName()).update(representation);
+    }
+
+    /**
+     * PUT /groups/{id}
+     */
+    public void updateById(String realm, GroupRepresentation representation) {
+        getGroupResource(realm, representation.getId()).update(representation);
     }
 
     /**
      * DELETE /groups/{id}
      */
-    public void delete(String realm, String groupName) {
+    public void deleteByName(String realm, String groupName) {
         getGroupResourceByName(realm, groupName).remove();
+    }
+
+    /**
+     * DELETE /groups/{id}
+     */
+    public void deleteById(String realm, String groupUuid) {
+        getGroupResource(realm, groupUuid).remove();
     }
 
     /**

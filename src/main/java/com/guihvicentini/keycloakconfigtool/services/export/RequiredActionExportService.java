@@ -1,30 +1,31 @@
 package com.guihvicentini.keycloakconfigtool.services.export;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
+import com.guihvicentini.keycloakconfigtool.mappers.RequiredActionProviderConfigMapper;
+import com.guihvicentini.keycloakconfigtool.models.RequiredActionProviderConfig;
 import org.springframework.stereotype.Service;
 
-import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
-import com.guihvicentini.keycloakconfigtool.mappers.RequiredActionsConfigMapper;
-import com.guihvicentini.keycloakconfigtool.models.RequiredActionConfig;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RequiredActionExportService {
-    private final RequiredActionsConfigMapper mapper;
+    private final RequiredActionProviderConfigMapper mapper;
     private final AuthenticationManagementResourceAdapter adapter;
 
-    public RequiredActionExportService(RequiredActionsConfigMapper mapper, AuthenticationManagementResourceAdapter adapter) {
+    public RequiredActionExportService(RequiredActionProviderConfigMapper mapper,
+                                       AuthenticationManagementResourceAdapter adapter) {
         this.mapper = mapper;
         this.adapter = adapter;
     }
 
-    public List<RequiredActionConfig> getAll(String realm){
-        var resources = adapter.getRequiredActions(realm);
-        if (resources == null){
-            return new ArrayList<>();
-        }
-        return resources.stream().map(r -> mapper.mapToConfig(r)).collect(Collectors.toList());
+    public List<RequiredActionProviderConfig> getAll(String realm){
+        return Optional.ofNullable(adapter.getRequiredActions(realm))
+                .orElse(new ArrayList<>())
+                .stream()
+                .map(mapper::mapToConfig)
+                .collect(Collectors.toList());
     }
 }

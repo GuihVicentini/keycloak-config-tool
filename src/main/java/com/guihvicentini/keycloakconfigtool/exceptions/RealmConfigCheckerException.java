@@ -6,8 +6,8 @@ public class RealmConfigCheckerException extends RuntimeException {
 
     private static final String message = "Actual realm config is not equal to expected realm config\n" +
             "Expected: '%s'\n" +
-            "=".repeat(100)+
-            "Actual: '%s'";
+            "=".repeat(1000)+
+            "\nActual: '%s'";
     public RealmConfigCheckerException(JsonNode expected, JsonNode actual) {
         super(String.format(message, expected.toPrettyString(), actual.toPrettyString()));
     }

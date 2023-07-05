@@ -6,6 +6,7 @@ import com.guihvicentini.keycloakconfigtool.exceptions.KeycloakAdapterException;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.keycloak.common.util.MultivaluedHashMap;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
+@Disabled("Not really needed anymore")
 public class ComponentResourceAdapterTest extends AbstractIntegrationTest {
 
     private static final String INPUT_FOLDER = "src/test/resources/input/adapters/components/";

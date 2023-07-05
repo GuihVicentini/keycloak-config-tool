@@ -13,11 +13,8 @@ import java.util.Map;
         nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         uses = {
-            AuthenticationExecutionExportConfigMapper.class,
-                AuthenticationFlowConfigMapper.class,
                 ClientConfigMapper.class,
                 ClientScopeConfigMapper.class,
-                ComponentExportConfigMapper.class,
                 GroupConfigMapper.class,
                 IdentityProviderConfigMapper.class,
                 IdentityProviderMapperConfigMapper.class,

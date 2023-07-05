@@ -42,4 +42,8 @@ public class ClientExportService {
         String flowAlias = authenticationFlowExportService.getFlowAliasById(realm, flowUuid);
         authenticationFlowBindingOverrides.put(key, flowAlias);
     }
+
+    public String getClientUuid(String realm, String clientId) {
+        return resourceAdapter.getClientByClientId(realm, clientId).getId();
+    }
 }

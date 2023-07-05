@@ -2,7 +2,6 @@ package com.guihvicentini.keycloakconfigtool.models;
 
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import com.guihvicentini.keycloakconfigtool.utils.MapUtil;
-import com.guihvicentini.keycloakconfigtool.utils.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -131,15 +130,14 @@ public class RealmConfig implements Config {
     private Boolean adminEventsDetailsEnabled;
 
     private List<IdentityProviderConfig> identityProviders;
-    private List<IdentityProviderMapperConfig> identityProviderMappers;
-    private Map<String, List<ComponentExportConfig>> components;
+    private List<Component> ldapProviders;
+    private List<Component> keyProviders;
 
     private Boolean internationalizationEnabled;
     private Set<String> supportedLocales;
     private String defaultLocale;
 
-    private List<AuthenticationFlowConfig> authenticationFlows;
-    private List<AuthenticatorConfigConfig> authenticatorConfig;
+    private List<AuthenticationFlow> authenticationFlows;
 
     private List<RequiredActionProviderConfig> requiredActions;
 
@@ -179,10 +177,9 @@ public class RealmConfig implements Config {
         normalizeEnabledEventTypes();
 
         normalizeIdentityProviders();
-        normalizeIdentityProviderMappers();
         normalizeComponents();
         normalizeAuthenticationFlows();
-        normalizeAuthenticatorConfig();
+//        normalizeAuthenticatorConfig();x
         normalizeRequiredActions();
         normalizeAttributes();
     }
@@ -253,18 +250,6 @@ public class RealmConfig implements Config {
         Collections.sort(defaultGroups);
     }
 
-
-    public void denormalize(){
-        denormalizeComponents();
-    }
-
-    private void denormalizeComponents() {
-        components = components == null ? Collections.emptyMap() : components;
-        MapUtil.renameKeys(components, ConfigConstants.KEYCLOAK_PROVIDERS_NAME);
-        components.values().forEach(componentExportConfigList ->
-                componentExportConfigList.forEach(ComponentExportConfig::denormalize));
-    }
-
     private void normalizeAttributes() {
         attributes = attributes == null ? Collections.emptyMap() : attributes;
         attributes.keySet().removeAll(ConfigConstants.VALUES_TO_OMIT_FROM_CONFIG);
@@ -279,33 +264,20 @@ public class RealmConfig implements Config {
         MapUtil.sortMapByKey(browserSecurityHeaders);
     }
 
-    private void normalizeAuthenticatorConfig() {
-        authenticatorConfig = authenticatorConfig == null ? Collections.emptyList() : authenticatorConfig;
-        authenticatorConfig.forEach(AuthenticatorConfigConfig::normalize);
-        authenticatorConfig.sort(Comparator.comparing(AuthenticatorConfigConfig::identifier));
-    }
-
     private void normalizeAuthenticationFlows() {
         authenticationFlows = authenticationFlows == null ? Collections.emptyList() : authenticationFlows;
-        authenticationFlows.forEach(AuthenticationFlowConfig::normalize);
-        authenticationFlows.sort(Comparator.comparing(AuthenticationFlowConfig::identifier));
+        authenticationFlows.forEach(AuthenticationFlow::normalize);
+        authenticationFlows.sort(Comparator.comparing(AuthenticationFlow::identifier));
     }
 
     private void normalizeComponents() {
-        components = components == null ? Collections.emptyMap() : components;
-        components.keySet().removeAll(ConfigConstants.VALUES_TO_OMIT_FROM_CONFIG);
-        MapUtil.renameKeys(components, StringUtil.lastWordSplitByDotsToLower);
-        components.values().forEach(list -> {
-            list.forEach(ComponentExportConfig::normalize);
-            list.sort(Comparator.comparing(ComponentExportConfig::identifier));
-        });
-        MapUtil.sortMapByKey(components);
-    }
+        ldapProviders = ldapProviders == null ? new ArrayList<>() : ldapProviders;
+        ldapProviders.forEach(Component::normalize);
+        ldapProviders.sort(Comparator.comparing(Component::getName));
 
-    private void normalizeIdentityProviderMappers() {
-        identityProviderMappers = identityProviderMappers == null ? Collections.emptyList() : identityProviderMappers;
-        identityProviderMappers.forEach(IdentityProviderMapperConfig::normalize);
-        identityProviderMappers.sort(Comparator.comparing(IdentityProviderMapperConfig::identifier));
+        keyProviders = keyProviders == null ? new ArrayList<>() : keyProviders;
+        keyProviders.forEach(Component::normalize);
+        keyProviders.sort(Comparator.comparing(Component::getName));
     }
 
     private void normalizeIdentityProviders() {

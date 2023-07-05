@@ -8,11 +8,9 @@ import com.guihvicentini.keycloakconfigtool.models.ConfigConstants;
 import com.guihvicentini.keycloakconfigtool.models.ProtocolMapperConfig;
 import com.guihvicentini.keycloakconfigtool.utils.ListUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.representations.idm.ProtocolMapperRepresentation;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -124,17 +122,5 @@ public class ClientScopeImportService {
     private void deleteProtocolMapper(String realm, String clientScopeName, ProtocolMapperConfig mapper) {
         log.debug("Deleting protocolMapper: {}", mapper.getName());
         resourceAdapter.deleteProtocolMapper(realm, clientScopeName, mapper.getName());
-    }
-
-    // TODO migrate to clientExportService
-    public List<ClientScopeConfig> getAllClientScopes(String realm) {
-        return resourceAdapter.getAllClientScopes(realm)
-                .stream()
-                .peek(clientScope -> {
-                    List<ProtocolMapperRepresentation> mappers = resourceAdapter.getAllProtocolMappers(realm, clientScope.getName());
-                    clientScope.setProtocolMappers(mappers);
-                })
-                .map(clientScopeConfigMapper::mapToConfig)
-                .collect(Collectors.toList());
     }
 }

@@ -2,7 +2,7 @@ package com.guihvicentini.keycloakconfigtool.services;
 
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.IdentityProviderConfig;
-import com.guihvicentini.keycloakconfigtool.models.IdentityProviderMapperConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.IdentityProviderExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
@@ -18,21 +18,15 @@ public class IdentityProviderImportServiceTest extends AbstractIntegrationTest {
 
     @Autowired
     IdentityProviderImportService importService;
+    @Autowired
+    IdentityProviderExportService exportService;
 
     @Test
     @Order(1)
     public void getAllIdp() {
-        List<IdentityProviderConfig> idps =  importService.getAllIdp(TEST_REALM);
+        List<IdentityProviderConfig> idps =  exportService.getAll(TEST_REALM);
         log.debug("Idps: {}", JsonMapperUtils.objectToJsonString(idps));
         assertEquals(1, idps.size());
     }
 
-    @Test
-    @Order(2)
-    public void getAllMappers() {
-        List<String> idpAliases = importService.getAllIdp(TEST_REALM).stream().map(IdentityProviderConfig::getAlias).toList();
-        List<IdentityProviderMapperConfig> idps =  importService.getAllMappers(TEST_REALM, idpAliases);
-        log.debug("Idp Mappers: {}", JsonMapperUtils.objectToJsonString(idps));
-        assertEquals(1, idps.size());
-    }
 }

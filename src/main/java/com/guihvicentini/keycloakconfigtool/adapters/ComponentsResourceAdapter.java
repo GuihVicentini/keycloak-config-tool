@@ -68,7 +68,7 @@ public class ComponentsResourceAdapter {
     public String create(String realm, ComponentRepresentation representation) {
         try(Response response = getResource(realm).add(representation)){
             return CreatedResponseUtil.getCreatedId(response);
-        }catch (WebApplicationException e) {
+        } catch (WebApplicationException e) {
             String errorMessage = ResponseUtil.getErrorMessage(e);
             throw new KeycloakAdapterException("Failed to create component: %s\n error message: %s",
                     e, representation.getName(), errorMessage);
@@ -92,7 +92,7 @@ public class ComponentsResourceAdapter {
                     "Current internal user IDs will be lost!" +
                     "component name: %s", representation.getName());
         }
-        getResource(realm).removeComponent(representation.getId());
+        getComponentResource(realm, representation.getId()).remove();
     }
 
     /**

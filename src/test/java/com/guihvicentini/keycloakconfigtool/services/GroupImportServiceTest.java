@@ -108,32 +108,26 @@ public class GroupImportServiceTest extends AbstractIntegrationTest {
         );
 
         // Target groups to import/update
-        List<GroupConfig> targetGroups = Arrays.asList(
-                createGroupConfig("group1", Arrays.asList("uma_authorization", "default-roles-test")) // Existing group
-        );
+        List<GroupConfig> targetGroups = List.of();
 
         groupImportService.doImport(TEST_REALM, actualGroups, targetGroups);
 
         // Assert that the group was deleted
         List<GroupConfig> importedGroups = groupExportService.getGroupConfigs(TEST_REALM);
 
-        assertEquals(2, importedGroups.size());
+        assertEquals(1, importedGroups.size());
 
-        Optional<GroupConfig> deletedGroup = importedGroups.stream()
+        Optional<GroupConfig> deletedGroup1 = importedGroups.stream()
+                .filter(group -> group.getName().equals("group1"))
+                .findFirst();
+
+        assertTrue(deletedGroup1.isEmpty());
+
+        Optional<GroupConfig> deletedGroup2 = importedGroups.stream()
                 .filter(group -> group.getName().equals("group2"))
                 .findFirst();
 
-        assertTrue(deletedGroup.isEmpty());
-
-        GroupConfig remainingGroup = importedGroups.stream()
-                .filter(group -> group.getName().equals("group1"))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Updated group not found"));
-
-        assertEquals("group1", remainingGroup.getName());
-
-        // list must be sorted
-        assertEquals(Arrays.asList("default-roles-test", "uma_authorization"), remainingGroup.getRealmRoles());
+        assertTrue(deletedGroup2.isEmpty());
     }
 
     // Helper method to create a GroupConfig
@@ -142,6 +136,7 @@ public class GroupImportServiceTest extends AbstractIntegrationTest {
         groupConfig.setName(name);
         groupConfig.setRealmRoles(realmRoles);
         // Set other properties as needed
+        groupConfig.normalize();
         return groupConfig;
     }
 }

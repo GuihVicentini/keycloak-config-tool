@@ -33,4 +33,10 @@ public class ConfigConstants {
 
     public static final String REALM_AS_CLIENT_SUFFIX = "-realm";
 
+    public static final String USER_STORAGE_PROVIDER_TYPE = "org.keycloak.storage.UserStorageProvider";
+
+    public static final String KEY_PROVIDER_TYPE = "org.keycloak.keys.KeyProvider";
+
+    public static final String LDAP_MAPPER_TYPE = "org.keycloak.storage.ldap.mappers.LDAPStorageMapper";
+
 }

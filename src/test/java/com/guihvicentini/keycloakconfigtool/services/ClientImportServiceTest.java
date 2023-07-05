@@ -3,6 +3,7 @@ package com.guihvicentini.keycloakconfigtool.services;
 import com.guihvicentini.keycloakconfigtool.containers.AbstractIntegrationTest;
 import com.guihvicentini.keycloakconfigtool.models.ClientConfig;
 import com.guihvicentini.keycloakconfigtool.models.ProtocolMapperConfig;
+import com.guihvicentini.keycloakconfigtool.services.export.ClientExportService;
 import com.guihvicentini.keycloakconfigtool.utils.JsonMapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
@@ -23,10 +24,13 @@ public class ClientImportServiceTest extends AbstractIntegrationTest {
     @Autowired
     ClientImportService importService;
 
+    @Autowired
+    ClientExportService exportService;
+
     @Test
     @Order(1)
     public void getAllClients() {
-        List<ClientConfig> clients = importService.getAllClients(TEST_REALM);
+        List<ClientConfig> clients = exportService.getAllClients(TEST_REALM);
         log.debug("Clients: {}", JsonMapperUtils.objectToJsonPrettyString(clients));
         var maybeTestClient = clients.stream()
                 .filter(c -> c.getClientId().equals("test-client")).findFirst();
@@ -52,7 +56,7 @@ public class ClientImportServiceTest extends AbstractIntegrationTest {
 
         importService.doImport(TEST_REALM, actual, target);
 
-        List<ClientConfig> importedClients = importService.getAllClients(TEST_REALM);
+        List<ClientConfig> importedClients = exportService.getAllClients(TEST_REALM);
         ClientConfig client1 = getClientConfigByClientId(importedClients, "client1");
 
         assertNotNull(client1);
@@ -76,7 +80,7 @@ public class ClientImportServiceTest extends AbstractIntegrationTest {
 
         importService.doImport(TEST_REALM, actual, target);
 
-        List<ClientConfig> importedClients = importService.getAllClients(TEST_REALM);
+        List<ClientConfig> importedClients = exportService.getAllClients(TEST_REALM);
 
         ClientConfig updatedClient1 = getClientConfigByClientId(importedClients, "client1");
 
@@ -103,7 +107,7 @@ public class ClientImportServiceTest extends AbstractIntegrationTest {
         importService.doImport(TEST_REALM, actual, target);
 
         // Assert
-        List<ClientConfig> importedClients = importService.getAllClients(TEST_REALM);
+        List<ClientConfig> importedClients = exportService.getAllClients(TEST_REALM);
 
         assertNull(getClientConfigByClientId(importedClients, "client1"));
     }

@@ -1,6 +1,7 @@
 package com.guihvicentini.keycloakconfigtool.services.export;
 
 import com.guihvicentini.keycloakconfigtool.adapters.AuthenticationManagementResourceAdapter;
+import com.guihvicentini.keycloakconfigtool.mappers.RequiredActionProviderConfigMapperImpl;
 import com.guihvicentini.keycloakconfigtool.mappers.RequiredActionsConfigMapperImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 public class RequiredActionExportServiceTest {
 
-    private final RequiredActionsConfigMapperImpl mapper = new RequiredActionsConfigMapperImpl();
+    private final RequiredActionProviderConfigMapperImpl mapper = new RequiredActionProviderConfigMapperImpl();
 
     private RequiredActionExportService target;
 

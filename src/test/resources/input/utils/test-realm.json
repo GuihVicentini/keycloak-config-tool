@@ -48,25 +48,11 @@
   "roles": {
     "realm": [
       {
-        "name": "test-realm-role",
-        "description": "test realm role",
+        "name": "create-realm",
+        "description": null,
         "composite": false,
         "composites": {
           "realm": [],
-          "client": {}
-        },
-        "clientRole": false,
-        "containerId": "test",
-        "attributes": {}
-      },
-      {
-        "name": "test-realm-composite-role",
-        "description": "test realm composite role",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "test-realm-role"
-          ],
           "client": {}
         },
         "clientRole": false,
@@ -94,8 +80,8 @@
         "attributes": {}
       },
       {
-        "name": "uma_authorization",
-        "description": "${role_uma_authorization}",
+        "name": "offline_access",
+        "description": "${role_offline-access}",
         "composite": false,
         "composites": {
           "realm": [],
@@ -106,8 +92,34 @@
         "attributes": {}
       },
       {
-        "name": "offline_access",
-        "description": "${role_offline-access}",
+        "name": "test-realm-composite-role",
+        "description": "test realm composite role",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "test-realm-role"
+          ],
+          "client": {}
+        },
+        "clientRole": false,
+        "containerId": "test",
+        "attributes": {}
+      },
+      {
+        "name": "test-realm-role",
+        "description": "test realm role",
+        "composite": false,
+        "composites": {
+          "realm": [],
+          "client": {}
+        },
+        "clientRole": false,
+        "containerId": "test",
+        "attributes": {}
+      },
+      {
+        "name": "uma_authorization",
+        "description": "${role_uma_authorization}",
         "composite": false,
         "composites": {
           "realm": [],
@@ -119,314 +131,35 @@
       }
     ],
     "client": {
-      "realm-management": [
-        {
-          "name": "manage-users",
-          "description": "${role_manage-users}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "impersonation",
-          "description": "${role_impersonation}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "query-groups",
-          "description": "${role_query-groups}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "manage-realm",
-          "description": "${role_manage-realm}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "manage-events",
-          "description": "${role_manage-events}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "view-users",
-          "description": "${role_view-users}",
-          "composite": true,
-          "composites": {
-            "realm": [],
-            "client": {
-              "realm-management": [
-                "query-groups",
-                "query-users"
-              ]
-            }
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "manage-authorization",
-          "description": "${role_manage-authorization}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "create-client",
-          "description": "${role_create-client}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "query-users",
-          "description": "${role_query-users}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "view-events",
-          "description": "${role_view-events}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "view-authorization",
-          "description": "${role_view-authorization}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "realm-admin",
-          "description": "${role_realm-admin}",
-          "composite": true,
-          "composites": {
-            "realm": [],
-            "client": {
-              "realm-management": [
-                "manage-users",
-                "impersonation",
-                "query-groups",
-                "manage-realm",
-                "manage-events",
-                "view-users",
-                "manage-authorization",
-                "create-client",
-                "query-users",
-                "view-events",
-                "view-authorization",
-                "view-realm",
-                "query-realms",
-                "view-identity-providers",
-                "view-clients",
-                "manage-clients",
-                "query-clients",
-                "manage-identity-providers"
-              ]
-            }
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "query-realms",
-          "description": "${role_query-realms}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "view-realm",
-          "description": "${role_view-realm}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "view-identity-providers",
-          "description": "${role_view-identity-providers}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "view-clients",
-          "description": "${role_view-clients}",
-          "composite": true,
-          "composites": {
-            "realm": [],
-            "client": {
-              "realm-management": [
-                "query-clients"
-              ]
-            }
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "manage-clients",
-          "description": "${role_manage-clients}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "query-clients",
-          "description": "${role_query-clients}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        },
-        {
-          "name": "manage-identity-providers",
-          "description": "${role_manage-identity-providers}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "realm-management",
-          "attributes": {}
-        }
-      ],
-      "security-admin-console": [],
-      "admin-cli": [],
-      "test-client": [
-        {
-          "name": "test-client-role",
-          "description": "test client role",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "test-client",
-          "attributes": {}
-        },
-        {
-          "name": "test-client-composite-role",
-          "description": "test client composite role",
-          "composite": true,
-          "composites": {
-            "realm": [],
-            "client": {
-              "test-client": [
-                "test-client-role"
-              ]
-            }
-          },
-          "clientRole": true,
-          "containerId": "test-client",
-          "attributes": {}
-        }
-      ],
-      "account-console": [],
-      "broker": [
-        {
-          "name": "read-token",
-          "description": "${role_read-token}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "broker",
-          "attributes": {}
-        }
-      ],
       "account": [
+        {
+          "name": "delete-account",
+          "description": "${role_delete-account}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "account",
+          "attributes": {}
+        },
+        {
+          "name": "manage-account",
+          "description": "${role_manage-account}",
+          "composite": true,
+          "composites": {
+            "realm": [],
+            "client": {
+              "account": [
+                "manage-account-links"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "account",
+          "attributes": {}
+        },
         {
           "name": "manage-account-links",
           "description": "${role_manage-account-links}",
@@ -456,22 +189,6 @@
           "attributes": {}
         },
         {
-          "name": "manage-account",
-          "description": "${role_manage-account}",
-          "composite": true,
-          "composites": {
-            "realm": [],
-            "client": {
-              "account": [
-                "manage-account-links"
-              ]
-            }
-          },
-          "clientRole": true,
-          "containerId": "account",
-          "attributes": {}
-        },
-        {
           "name": "view-applications",
           "description": "${role_view-applications}",
           "composite": false,
@@ -484,20 +201,8 @@
           "attributes": {}
         },
         {
-          "name": "delete-account",
-          "description": "${role_delete-account}",
-          "composite": false,
-          "composites": {
-            "realm": [],
-            "client": {}
-          },
-          "clientRole": true,
-          "containerId": "account",
-          "attributes": {}
-        },
-        {
-          "name": "view-profile",
-          "description": "${role_view-profile}",
+          "name": "view-consent",
+          "description": "${role_view-consent}",
           "composite": false,
           "composites": {
             "realm": [],
@@ -520,8 +225,8 @@
           "attributes": {}
         },
         {
-          "name": "view-consent",
-          "description": "${role_view-consent}",
+          "name": "view-profile",
+          "description": "${role_view-profile}",
           "composite": false,
           "composites": {
             "realm": [],
@@ -531,6 +236,313 @@
           "containerId": "account",
           "attributes": {}
         }
+      ],
+      "account-console": [],
+      "admin-cli": [],
+      "broker": [
+        {
+          "name": "read-token",
+          "description": "${role_read-token}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "broker",
+          "attributes": {}
+        }
+      ],
+      "realm-management": [
+        {
+          "name": "create-client",
+          "description": "${role_create-client}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "impersonation",
+          "description": "${role_impersonation}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "manage-authorization",
+          "description": "${role_manage-authorization}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "manage-clients",
+          "description": "${role_manage-clients}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "manage-events",
+          "description": "${role_manage-events}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "manage-identity-providers",
+          "description": "${role_manage-identity-providers}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "manage-realm",
+          "description": "${role_manage-realm}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "manage-users",
+          "description": "${role_manage-users}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "query-clients",
+          "description": "${role_query-clients}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "query-groups",
+          "description": "${role_query-groups}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "query-realms",
+          "description": "${role_query-realms}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "query-users",
+          "description": "${role_query-users}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "realm-admin",
+          "description": "${role_realm-admin}",
+          "composite": true,
+          "composites": {
+            "realm": [],
+            "client": {
+              "realm-management": [
+                "create-client",
+                "impersonation",
+                "manage-authorization",
+                "manage-clients",
+                "manage-events",
+                "manage-identity-providers",
+                "manage-realm",
+                "manage-users",
+                "query-clients",
+                "query-groups",
+                "query-realms",
+                "query-users",
+                "view-authorization",
+                "view-clients",
+                "view-events",
+                "view-identity-providers",
+                "view-realm",
+                "view-users"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "view-authorization",
+          "description": "${role_view-authorization}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "view-clients",
+          "description": "${role_view-clients}",
+          "composite": true,
+          "composites": {
+            "realm": [],
+            "client": {
+              "realm-management": [
+                "query-clients"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "view-events",
+          "description": "${role_view-events}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "view-identity-providers",
+          "description": "${role_view-identity-providers}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "view-realm",
+          "description": "${role_view-realm}",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        },
+        {
+          "name": "view-users",
+          "description": "${role_view-users}",
+          "composite": true,
+          "composites": {
+            "realm": [],
+            "client": {
+              "realm-management": [
+                "query-groups",
+                "query-users"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "realm-management",
+          "attributes": {}
+        }
+      ],
+      "security-admin-console": [],
+      "test-client": [
+        {
+          "name": "test-client-composite-role",
+          "description": "test client composite role",
+          "composite": true,
+          "composites": {
+            "realm": [],
+            "client": {
+              "test-client": [
+                "test-client-role"
+              ]
+            }
+          },
+          "clientRole": true,
+          "containerId": "test-client",
+          "attributes": {}
+        },
+        {
+          "name": "test-client-role",
+          "description": "test client role",
+          "composite": false,
+          "composites": {
+            "realm": [],
+            "client": {}
+          },
+          "clientRole": true,
+          "containerId": "test-client",
+          "attributes": {}
+        }
       ]
     }
   },
@@ -538,13 +550,40 @@
     {
       "name": "test-group",
       "path": "/test-group",
-      "access": {},
-      "attributes": {},
+      "access": {
+        "manage": true,
+        "manageMembership": true,
+        "view": true
+      },
+      "attributes": {
+        "test": [
+          "test"
+        ],
+        "toto": [
+          "toto"
+        ]
+      },
       "realmRoles": [
-        "test-realm-role"
+        "create-realm"
       ],
-      "clientRoles": {},
-      "subGroups": []
+      "clientRoles": {
+        "account": [
+          "delete-account",
+          "manage-account",
+          "manage-account-links"
+        ]
+      },
+      "subGroups": [
+        {
+          "name": "test-group-child",
+          "path": "/test-group/test-group-child",
+          "access": null,
+          "attributes": {},
+          "realmRoles": [],
+          "clientRoles": {},
+          "subGroups": []
+        }
+      ]
     }
   ],
   "defaultRole": {
@@ -559,7 +598,7 @@
     "containerId": "test",
     "attributes": {}
   },
-  "defaultGroups": null,
+  "defaultGroups": [],
   "passwordPolicy": null,
   "otpPolicyType": "totp",
   "otpPolicyAlgorithm": "HmacSHA1",
@@ -596,27 +635,8 @@
   "webAuthnPolicyPasswordlessCreateTimeout": 0,
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
-  "scopeMappings": [
-    {
-      "client": null,
-      "clientScope": "offline_access",
-      "roles": [
-        "offline_access"
-      ]
-    }
-  ],
-  "clientScopeMappings": {
-    "account": [
-      {
-        "client": "account-console",
-        "clientScope": null,
-        "roles": [
-          "manage-account",
-          "view-groups"
-        ]
-      }
-    ]
-  },
+  "scopeMappings": [],
+  "clientScopeMappings": {},
   "clients": [
     {
       "clientId": "account",
@@ -629,7 +649,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "defaultRoles": null,
+      "defaultRoles": [],
       "redirectUris": [
         "/realms/test/account/*"
       ],
@@ -652,19 +672,23 @@
       "nodeReRegistrationTimeout": 0,
       "protocolMappers": [],
       "defaultClientScopes": [
-        "web-origins",
         "acr",
+        "email",
         "profile",
         "roles",
-        "email"
+        "web-origins"
       ],
       "optionalClientScopes": [
         "address",
-        "phone",
+        "microprofile-jwt",
         "offline_access",
-        "microprofile-jwt"
+        "phone"
       ],
-      "access": {}
+      "access": {
+        "configure": true,
+        "manage": true,
+        "view": true
+      }
     },
     {
       "clientId": "account-console",
@@ -677,7 +701,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "defaultRoles": null,
+      "defaultRoles": [],
       "redirectUris": [
         "/realms/test/account/*"
       ],
@@ -708,19 +732,23 @@
         }
       ],
       "defaultClientScopes": [
-        "web-origins",
         "acr",
+        "email",
         "profile",
         "roles",
-        "email"
+        "web-origins"
       ],
       "optionalClientScopes": [
         "address",
-        "phone",
+        "microprofile-jwt",
         "offline_access",
-        "microprofile-jwt"
+        "phone"
       ],
-      "access": {}
+      "access": {
+        "configure": true,
+        "manage": true,
+        "view": true
+      }
     },
     {
       "clientId": "admin-cli",
@@ -733,7 +761,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "defaultRoles": null,
+      "defaultRoles": [],
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -754,19 +782,23 @@
       "nodeReRegistrationTimeout": 0,
       "protocolMappers": [],
       "defaultClientScopes": [
-        "web-origins",
         "acr",
+        "email",
         "profile",
         "roles",
-        "email"
+        "web-origins"
       ],
       "optionalClientScopes": [
         "address",
-        "phone",
+        "microprofile-jwt",
         "offline_access",
-        "microprofile-jwt"
+        "phone"
       ],
-      "access": {}
+      "access": {
+        "configure": true,
+        "manage": true,
+        "view": true
+      }
     },
     {
       "clientId": "broker",
@@ -779,7 +811,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "defaultRoles": null,
+      "defaultRoles": [],
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -800,19 +832,23 @@
       "nodeReRegistrationTimeout": 0,
       "protocolMappers": [],
       "defaultClientScopes": [
-        "web-origins",
         "acr",
+        "email",
         "profile",
         "roles",
-        "email"
+        "web-origins"
       ],
       "optionalClientScopes": [
         "address",
-        "phone",
+        "microprofile-jwt",
         "offline_access",
-        "microprofile-jwt"
+        "phone"
       ],
-      "access": {}
+      "access": {
+        "configure": true,
+        "manage": true,
+        "view": true
+      }
     },
     {
       "clientId": "realm-management",
@@ -825,7 +861,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "defaultRoles": null,
+      "defaultRoles": [],
       "redirectUris": [],
       "webOrigins": [],
       "notBefore": 0,
@@ -846,19 +882,23 @@
       "nodeReRegistrationTimeout": 0,
       "protocolMappers": [],
       "defaultClientScopes": [
-        "web-origins",
         "acr",
+        "email",
         "profile",
         "roles",
-        "email"
+        "web-origins"
       ],
       "optionalClientScopes": [
         "address",
-        "phone",
+        "microprofile-jwt",
         "offline_access",
-        "microprofile-jwt"
+        "phone"
       ],
-      "access": {}
+      "access": {
+        "configure": true,
+        "manage": true,
+        "view": true
+      }
     },
     {
       "clientId": "security-admin-console",
@@ -871,7 +911,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "defaultRoles": null,
+      "defaultRoles": [],
       "redirectUris": [
         "/admin/test/console/*"
       ],
@@ -911,19 +951,23 @@
         }
       ],
       "defaultClientScopes": [
-        "web-origins",
         "acr",
+        "email",
         "profile",
         "roles",
-        "email"
+        "web-origins"
       ],
       "optionalClientScopes": [
         "address",
-        "phone",
+        "microprofile-jwt",
         "offline_access",
-        "microprofile-jwt"
+        "phone"
       ],
-      "access": {}
+      "access": {
+        "configure": true,
+        "manage": true,
+        "view": true
+      }
     },
     {
       "clientId": "test-client",
@@ -936,7 +980,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "defaultRoles": null,
+      "defaultRoles": [],
       "redirectUris": [
         "",
         "/testing"
@@ -986,493 +1030,29 @@
         }
       ],
       "defaultClientScopes": [
-        "web-origins",
         "acr",
-        "test-client-scope",
+        "email",
         "profile",
         "roles",
-        "email"
+        "test-client-scope",
+        "web-origins"
       ],
       "optionalClientScopes": [
         "address",
-        "phone",
+        "microprofile-jwt",
         "offline_access",
-        "microprofile-jwt"
+        "phone"
       ],
-      "access": {}
+      "access": {
+        "configure": true,
+        "manage": true,
+        "view": true
+      }
     }
   ],
-  "clientScopes": [
-    {
-      "name": "web-origins",
-      "description": "OpenID Connect scope for add allowed web origins to the access token",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "",
-        "include.in.token.scope": "false"
-      },
-      "protocolMappers": [
-        {
-          "name": "allowed web origins",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-allowed-origins-mapper",
-          "config": {}
-        }
-      ]
-    },
-    {
-      "name": "address",
-      "description": "OpenID Connect built-in scope: address",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "${addressScopeConsentText}",
-        "display.on.consent.screen": "true",
-        "include.in.token.scope": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "address",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-address-mapper",
-          "config": {
-            "user.attribute.formatted": "formatted",
-            "user.attribute.country": "country",
-            "user.attribute.postal_code": "postal_code",
-            "userinfo.token.claim": "true",
-            "user.attribute.street": "street",
-            "id.token.claim": "true",
-            "user.attribute.region": "region",
-            "access.token.claim": "true",
-            "user.attribute.locality": "locality"
-          }
-        }
-      ]
-    },
-    {
-      "name": "offline_access",
-      "description": "OpenID Connect built-in scope: offline_access",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "${offlineAccessScopeConsentText}",
-        "display.on.consent.screen": "true"
-      },
-      "protocolMappers": []
-    },
-    {
-      "name": "email",
-      "description": "OpenID Connect built-in scope: email",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "${emailScopeConsentText}",
-        "display.on.consent.screen": "true",
-        "include.in.token.scope": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "email verified",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "emailVerified",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "email_verified",
-            "jsonType.label": "boolean"
-          }
-        },
-        {
-          "name": "email",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "email",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "email",
-            "jsonType.label": "String"
-          }
-        }
-      ]
-    },
-    {
-      "name": "acr",
-      "description": "OpenID Connect scope for add acr (authentication context class reference) to the token",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "false"
-      },
-      "protocolMappers": [
-        {
-          "name": "acr loa level",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-acr-mapper",
-          "config": {
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "userinfo.token.claim": "true"
-          }
-        }
-      ]
-    },
-    {
-      "name": "microprofile-jwt",
-      "description": "Microprofile - JWT built-in scope",
-      "protocol": "openid-connect",
-      "attributes": {
-        "include.in.token.scope": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "groups",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-realm-role-mapper",
-          "config": {
-            "multivalued": "true",
-            "userinfo.token.claim": "true",
-            "user.attribute": "foo",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "groups",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "upn",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "username",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "upn",
-            "jsonType.label": "String"
-          }
-        }
-      ]
-    },
-    {
-      "name": "role_list",
-      "description": "SAML role list",
-      "protocol": "saml",
-      "attributes": {
-        "consent.screen.text": "${samlRoleListScopeConsentText}",
-        "display.on.consent.screen": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "role list",
-          "protocol": "saml",
-          "protocolMapper": "saml-role-list-mapper",
-          "config": {
-            "single": "false",
-            "attribute.nameformat": "Basic",
-            "attribute.name": "Role"
-          }
-        }
-      ]
-    },
-    {
-      "name": "profile",
-      "description": "OpenID Connect built-in scope: profile",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "${profileScopeConsentText}",
-        "display.on.consent.screen": "true",
-        "include.in.token.scope": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "full name",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-full-name-mapper",
-          "config": {
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "userinfo.token.claim": "true"
-          }
-        },
-        {
-          "name": "website",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "website",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "website",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "zoneinfo",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "zoneinfo",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "zoneinfo",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "gender",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "gender",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "gender",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "middle name",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "middleName",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "middle_name",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "birthdate",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "birthdate",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "birthdate",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "nickname",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "nickname",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "nickname",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "updated at",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "updatedAt",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "updated_at",
-            "jsonType.label": "long"
-          }
-        },
-        {
-          "name": "profile",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "profile",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "profile",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "given name",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "firstName",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "given_name",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "username",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "username",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "preferred_username",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "picture",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "picture",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "picture",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "family name",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-property-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "lastName",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "family_name",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "locale",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "locale",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "locale",
-            "jsonType.label": "String"
-          }
-        }
-      ]
-    },
-    {
-      "name": "phone",
-      "description": "OpenID Connect built-in scope: phone",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "${phoneScopeConsentText}",
-        "display.on.consent.screen": "true",
-        "include.in.token.scope": "true"
-      },
-      "protocolMappers": [
-        {
-          "name": "phone number",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "phoneNumber",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "phone_number",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "name": "phone number verified",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-attribute-mapper",
-          "config": {
-            "userinfo.token.claim": "true",
-            "user.attribute": "phoneNumberVerified",
-            "id.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "phone_number_verified",
-            "jsonType.label": "boolean"
-          }
-        }
-      ]
-    },
-    {
-      "name": "roles",
-      "description": "OpenID Connect scope for add user roles to the access token",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "${rolesScopeConsentText}",
-        "display.on.consent.screen": "true",
-        "include.in.token.scope": "false"
-      },
-      "protocolMappers": [
-        {
-          "name": "client roles",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-client-role-mapper",
-          "config": {
-            "user.attribute": "foo",
-            "access.token.claim": "true",
-            "claim.name": "resource_access.${client_id}.roles",
-            "jsonType.label": "String",
-            "multivalued": "true"
-          }
-        },
-        {
-          "name": "realm roles",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-realm-role-mapper",
-          "config": {
-            "user.attribute": "foo",
-            "access.token.claim": "true",
-            "claim.name": "realm_access.roles",
-            "jsonType.label": "String",
-            "multivalued": "true"
-          }
-        },
-        {
-          "name": "audience resolve",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-audience-resolve-mapper",
-          "config": {}
-        }
-      ]
-    },
-    {
-      "name": "test-client-scope",
-      "description": "test client scope",
-      "protocol": "openid-connect",
-      "attributes": {
-        "consent.screen.text": "",
-        "display.on.consent.screen": "true",
-        "gui.order": "",
-        "include.in.token.scope": "true"
-      },
-      "protocolMappers": []
-    }
-  ],
-  "defaultClientScopes": [
-    "role_list",
-    "profile",
-    "email",
-    "roles",
-    "web-origins",
-    "acr"
-  ],
-  "optionalClientScopes": [
-    "offline_access",
-    "address",
-    "phone",
-    "microprofile-jwt",
-    "test-client-scope"
-  ],
+  "clientScopes": [],
+  "defaultClientScopes": [],
+  "optionalClientScopes": [],
   "browserSecurityHeaders": {
     "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
     "contentSecurityPolicyReportOnly": "",
@@ -1538,7 +1118,21 @@
         "uiLocales": "false",
         "useJwksUrl": "true",
         "validateSignature": "true"
-      }
+      },
+      "mappers": [
+        {
+          "name": "test-idp-mapper",
+          "identityProviderAlias": "test-oidc",
+          "identityProviderMapper": "oidc-advanced-role-idp-mapper",
+          "config": {
+            "claims": "[{\"key\":\"acr\",\"value\":\"strong\"},{\"key\":\"roles\",\"value\":\"someclaimvalue\"}]",
+            "syncMode": "INHERIT",
+            "are.claim.values.regex": "false",
+            "attributes": "[]",
+            "role": "test-realm-composite-role"
+          }
+        }
+      ]
     }
   ],
   "identityProviderMappers": [
@@ -1555,683 +1149,421 @@
       }
     }
   ],
-  "components": {
-    "clientRegistrationPolicy": [
-      {
-        "name": "Allowed Client Scopes",
-        "providerId": "allowed-client-templates",
-        "subType": "authenticated",
-        "subComponents": {},
-        "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
-        }
-      },
-      {
-        "name": "Trusted Hosts",
-        "providerId": "trusted-hosts",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {
-          "client-uris-must-match": [
-            "true"
-          ],
-          "host-sending-registration-request-must-match": [
-            "true"
-          ]
-        }
-      },
-      {
-        "name": "Max Clients Limit",
-        "providerId": "max-clients",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {
-          "max-clients": [
-            "200"
-          ]
-        }
-      },
-      {
-        "name": "Allowed Protocol Mapper Types",
-        "providerId": "allowed-protocol-mappers",
-        "subType": "authenticated",
-        "subComponents": {},
-        "config": {
-          "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "oidc-full-name-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper",
-            "saml-user-attribute-mapper",
-            "saml-user-property-mapper"
-          ]
-        }
-      },
-      {
-        "name": "Consent Required",
-        "providerId": "consent-required",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {}
-      },
-      {
-        "name": "Allowed Client Scopes",
-        "providerId": "allowed-client-templates",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
-        }
-      },
-      {
-        "name": "Allowed Protocol Mapper Types",
-        "providerId": "allowed-protocol-mappers",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {
-          "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "oidc-full-name-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "oidc-usermodel-property-mapper",
-            "saml-role-list-mapper",
-            "saml-user-attribute-mapper",
-            "saml-user-property-mapper"
-          ]
-        }
-      },
-      {
-        "name": "Full Scope Disabled",
-        "providerId": "scope",
-        "subType": "anonymous",
-        "subComponents": {},
-        "config": {}
-      }
-    ],
-    "userStorageProvider": [
-      {
-        "name": "test-ldap",
-        "providerId": "ldap",
-        "subType": null,
-        "subComponents": {
-          "lDAPStorageMapper": [
-            {
-              "name": "last name",
-              "providerId": "user-attribute-ldap-mapper",
-              "subType": null,
-              "subComponents": {},
-              "config": {
-                "always.read.value.from.ldap": [
-                  "true"
-                ],
-                "is.mandatory.in.ldap": [
-                  "true"
-                ],
-                "ldap.attribute": [
-                  "sn"
-                ],
-                "read.only": [
-                  "false"
-                ],
-                "user.model.attribute": [
-                  "lastName"
-                ]
-              }
-            },
-            {
-              "name": "first name",
-              "providerId": "user-attribute-ldap-mapper",
-              "subType": null,
-              "subComponents": {},
-              "config": {
-                "always.read.value.from.ldap": [
-                  "true"
-                ],
-                "is.mandatory.in.ldap": [
-                  "true"
-                ],
-                "ldap.attribute": [
-                  "cn"
-                ],
-                "read.only": [
-                  "false"
-                ],
-                "user.model.attribute": [
-                  "firstName"
-                ]
-              }
-            },
-            {
-              "name": "creation date",
-              "providerId": "user-attribute-ldap-mapper",
-              "subType": null,
-              "subComponents": {},
-              "config": {
-                "always.read.value.from.ldap": [
-                  "true"
-                ],
-                "is.mandatory.in.ldap": [
-                  "false"
-                ],
-                "ldap.attribute": [
-                  "createTimestamp"
-                ],
-                "read.only": [
-                  "true"
-                ],
-                "user.model.attribute": [
-                  "createTimestamp"
-                ]
-              }
-            },
-            {
-              "name": "username",
-              "providerId": "user-attribute-ldap-mapper",
-              "subType": null,
-              "subComponents": {},
-              "config": {
-                "always.read.value.from.ldap": [
-                  "false"
-                ],
-                "is.mandatory.in.ldap": [
-                  "true"
-                ],
-                "ldap.attribute": [
-                  "uid"
-                ],
-                "read.only": [
-                  "false"
-                ],
-                "user.model.attribute": [
-                  "username"
-                ]
-              }
-            },
-            {
-              "name": "email",
-              "providerId": "user-attribute-ldap-mapper",
-              "subType": null,
-              "subComponents": {},
-              "config": {
-                "always.read.value.from.ldap": [
-                  "false"
-                ],
-                "is.mandatory.in.ldap": [
-                  "false"
-                ],
-                "ldap.attribute": [
-                  "mail"
-                ],
-                "read.only": [
-                  "false"
-                ],
-                "user.model.attribute": [
-                  "email"
-                ]
-              }
-            },
-            {
-              "name": "modify date",
-              "providerId": "user-attribute-ldap-mapper",
-              "subType": null,
-              "subComponents": {},
-              "config": {
-                "always.read.value.from.ldap": [
-                  "true"
-                ],
-                "is.mandatory.in.ldap": [
-                  "false"
-                ],
-                "ldap.attribute": [
-                  "modifyTimestamp"
-                ],
-                "read.only": [
-                  "true"
-                ],
-                "user.model.attribute": [
-                  "modifyTimestamp"
-                ]
-              }
-            }
-          ]
+  "ldapProviders": [
+    {
+      "name": "test-ldap",
+      "providerId": "ldap",
+      "providerType": "org.keycloak.storage.UserStorageProvider",
+      "subType": null,
+      "subComponents": [
+        {
+          "name": "creation date",
+          "providerId": "user-attribute-ldap-mapper",
+          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+          "subType": null,
+          "subComponents": [],
+          "config": {
+            "always.read.value.from.ldap": [
+              "true"
+            ],
+            "is.mandatory.in.ldap": [
+              "false"
+            ],
+            "ldap.attribute": [
+              "createTimestamp"
+            ],
+            "read.only": [
+              "true"
+            ],
+            "user.model.attribute": [
+              "createTimestamp"
+            ]
+          }
         },
-        "config": {
-          "allowKerberosAuthentication": [
-            "false"
-          ],
-          "authType": [
-            "simple"
-          ],
-          "bindDn": [
-            "uid=ServiceUser,ou=ServiceGroup,dc=somedc,dc=com"
-          ],
-          "cachePolicy": [
-            "DEFAULT"
-          ],
-          "changedSyncPeriod": [
-            "-1"
-          ],
-          "connectionPooling": [
-            "false"
-          ],
-          "connectionUrl": [
-            "ldap://openldap:1389/"
-          ],
-          "editMode": [
-            "WRITABLE"
-          ],
-          "enabled": [
-            "true"
-          ],
-          "fullSyncPeriod": [
-            "-1"
-          ],
-          "importEnabled": [
-            "true"
-          ],
-          "pagination": [
-            "false"
-          ],
-          "rdnLDAPAttribute": [
-            "uid"
-          ],
-          "startTls": [
-            "false"
-          ],
-          "syncRegistrations": [
-            "true"
-          ],
-          "trustEmail": [
-            "false"
-          ],
-          "useKerberosForPasswordAuthentication": [
-            "false"
-          ],
-          "usePasswordModifyExtendedOp": [
-            "false"
-          ],
-          "useTruststoreSpi": [
-            "ldapsOnly"
-          ],
-          "userObjectClasses": [
-            "inetOrgPerson, organizationalPerson"
-          ],
-          "usernameLDAPAttribute": [
-            "uid"
-          ],
-          "usersDn": [
-            "ou=Users,ou=Tenant,dc=domain,dc=com"
-          ],
-          "uuidLDAPAttribute": [
-            "entryUUID"
-          ],
-          "validatePasswordPolicy": [
-            "false"
-          ],
-          "vendor": [
-            "other"
-          ]
+        {
+          "name": "email",
+          "providerId": "user-attribute-ldap-mapper",
+          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+          "subType": null,
+          "subComponents": [],
+          "config": {
+            "always.read.value.from.ldap": [
+              "false"
+            ],
+            "is.mandatory.in.ldap": [
+              "false"
+            ],
+            "ldap.attribute": [
+              "mail"
+            ],
+            "read.only": [
+              "false"
+            ],
+            "user.model.attribute": [
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "first name",
+          "providerId": "user-attribute-ldap-mapper",
+          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+          "subType": null,
+          "subComponents": [],
+          "config": {
+            "always.read.value.from.ldap": [
+              "true"
+            ],
+            "is.mandatory.in.ldap": [
+              "true"
+            ],
+            "ldap.attribute": [
+              "cn"
+            ],
+            "read.only": [
+              "false"
+            ],
+            "user.model.attribute": [
+              "firstName"
+            ]
+          }
+        },
+        {
+          "name": "last name",
+          "providerId": "user-attribute-ldap-mapper",
+          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+          "subType": null,
+          "subComponents": [],
+          "config": {
+            "always.read.value.from.ldap": [
+              "true"
+            ],
+            "is.mandatory.in.ldap": [
+              "true"
+            ],
+            "ldap.attribute": [
+              "sn"
+            ],
+            "read.only": [
+              "false"
+            ],
+            "user.model.attribute": [
+              "lastName"
+            ]
+          }
+        },
+        {
+          "name": "modify date",
+          "providerId": "user-attribute-ldap-mapper",
+          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+          "subType": null,
+          "subComponents": [],
+          "config": {
+            "always.read.value.from.ldap": [
+              "true"
+            ],
+            "is.mandatory.in.ldap": [
+              "false"
+            ],
+            "ldap.attribute": [
+              "modifyTimestamp"
+            ],
+            "read.only": [
+              "true"
+            ],
+            "user.model.attribute": [
+              "modifyTimestamp"
+            ]
+          }
+        },
+        {
+          "name": "username",
+          "providerId": "user-attribute-ldap-mapper",
+          "providerType": "org.keycloak.storage.ldap.mappers.LDAPStorageMapper",
+          "subType": null,
+          "subComponents": [],
+          "config": {
+            "always.read.value.from.ldap": [
+              "false"
+            ],
+            "is.mandatory.in.ldap": [
+              "true"
+            ],
+            "ldap.attribute": [
+              "uid"
+            ],
+            "read.only": [
+              "false"
+            ],
+            "user.model.attribute": [
+              "username"
+            ]
+          }
         }
+      ],
+      "config": {
+        "allowKerberosAuthentication": [
+          "false"
+        ],
+        "authType": [
+          "simple"
+        ],
+        "bindDn": [
+          "uid=ServiceUser,ou=ServiceGroup,dc=somedc,dc=com"
+        ],
+        "cachePolicy": [
+          "DEFAULT"
+        ],
+        "changedSyncPeriod": [
+          "-1"
+        ],
+        "connectionPooling": [
+          "false"
+        ],
+        "connectionUrl": [
+          "ldaps://somedirectory.com"
+        ],
+        "editMode": [
+          "WRITABLE"
+        ],
+        "enabled": [
+          "true"
+        ],
+        "fullSyncPeriod": [
+          "-1"
+        ],
+        "importEnabled": [
+          "true"
+        ],
+        "pagination": [
+          "false"
+        ],
+        "rdnLDAPAttribute": [
+          "uid"
+        ],
+        "startTls": [
+          "false"
+        ],
+        "syncRegistrations": [
+          "true"
+        ],
+        "trustEmail": [
+          "false"
+        ],
+        "useKerberosForPasswordAuthentication": [
+          "false"
+        ],
+        "usePasswordModifyExtendedOp": [
+          "false"
+        ],
+        "useTruststoreSpi": [
+          "ldapsOnly"
+        ],
+        "userObjectClasses": [
+          "inetOrgPerson, organizationalPerson"
+        ],
+        "usernameLDAPAttribute": [
+          "uid"
+        ],
+        "usersDn": [
+          "ou=Users,ou=Tenant,dc=domain,dc=com"
+        ],
+        "uuidLDAPAttribute": [
+          "entryUUID"
+        ],
+        "validatePasswordPolicy": [
+          "false"
+        ],
+        "vendor": [
+          "other"
+        ]
       }
-    ],
-    "keyProvider": [
-      {
-        "name": "hmac-generated",
-        "providerId": "hmac-generated",
-        "subType": null,
-        "subComponents": {},
-        "config": {
-          "algorithm": [
-            "HS256"
-          ],
-          "priority": [
-            "100"
-          ]
-        }
-      },
-      {
-        "name": "rsa-generated",
-        "providerId": "rsa-generated",
-        "subType": null,
-        "subComponents": {},
-        "config": {
-          "priority": [
-            "100"
-          ]
-        }
-      },
-      {
-        "name": "rsa-enc-generated",
-        "providerId": "rsa-enc-generated",
-        "subType": null,
-        "subComponents": {},
-        "config": {
-          "algorithm": [
-            "RSA-OAEP"
-          ],
-          "priority": [
-            "100"
-          ]
-        }
-      },
-      {
-        "name": "aes-generated",
-        "providerId": "aes-generated",
-        "subType": null,
-        "subComponents": {},
-        "config": {
-          "priority": [
-            "100"
-          ]
-        }
+    }
+  ],
+  "keyProviders": [
+    {
+      "name": "aes-generated",
+      "providerId": "aes-generated",
+      "providerType": "org.keycloak.keys.KeyProvider",
+      "subType": null,
+      "subComponents": [],
+      "config": {
+        "priority": [
+          "100"
+        ]
       }
-    ]
-  },
+    },
+    {
+      "name": "hmac-generated",
+      "providerId": "hmac-generated",
+      "providerType": "org.keycloak.keys.KeyProvider",
+      "subType": null,
+      "subComponents": [],
+      "config": {
+        "algorithm": [
+          "HS256"
+        ],
+        "priority": [
+          "100"
+        ]
+      }
+    },
+    {
+      "name": "rsa-enc-generated",
+      "providerId": "rsa-enc-generated",
+      "providerType": "org.keycloak.keys.KeyProvider",
+      "subType": null,
+      "subComponents": [],
+      "config": {
+        "algorithm": [
+          "RSA-OAEP"
+        ],
+        "priority": [
+          "100"
+        ]
+      }
+    },
+    {
+      "name": "rsa-generated",
+      "providerId": "rsa-generated",
+      "providerType": "org.keycloak.keys.KeyProvider",
+      "subType": null,
+      "subComponents": [],
+      "config": {
+        "priority": [
+          "100"
+        ]
+      }
+    }
+  ],
   "internationalizationEnabled": false,
   "supportedLocales": [],
   "defaultLocale": null,
   "authenticationFlows": [
     {
-      "alias": "Account verification options",
-      "description": "Method with which to verity the existing account",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "idp-email-verification",
-          "authenticatorFlow": false,
-          "requirement": "ALTERNATIVE",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
-          "requirement": "ALTERNATIVE",
-          "priority": 20,
-          "flowAlias": "Verify Existing Account by Re-authentication",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "Authentication Options",
-      "description": "Authentication options.",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "basic-auth",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": "basic-auth-otp",
-          "authenticatorFlow": false,
-          "requirement": "DISABLED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": "auth-spnego",
-          "authenticatorFlow": false,
-          "requirement": "DISABLED",
-          "priority": 30,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "Browser - Conditional OTP",
-      "description": "Flow to determine if the OTP is required for the authentication",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "conditional-user-configured",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": "auth-otp-form",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "Direct Grant - Conditional OTP",
-      "description": "Flow to determine if the OTP is required for the authentication",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "conditional-user-configured",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": "direct-grant-validate-otp",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "First broker login - Conditional OTP",
-      "description": "Flow to determine if the OTP is required for the authentication",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "conditional-user-configured",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": "auth-otp-form",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "Handle Existing Account",
-      "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "idp-confirm-link",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": "Account verification options",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "Reset - Conditional OTP",
-      "description": "Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "conditional-user-configured",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": "reset-otp",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "User creation or linking",
-      "description": "Flow for the existing/non-existing user alternatives",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": "create unique user config",
-          "authenticator": "idp-create-user-if-unique",
-          "authenticatorFlow": false,
-          "requirement": "ALTERNATIVE",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
-          "requirement": "ALTERNATIVE",
-          "priority": 20,
-          "flowAlias": "Handle Existing Account",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "Verify Existing Account by Re-authentication",
-      "description": "Reauthentication of existing account",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "idp-username-password-form",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
-        },
-        {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
-          "requirement": "CONDITIONAL",
-          "priority": 20,
-          "flowAlias": "First broker login - Conditional OTP",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
       "alias": "browser",
       "description": "browser based authentication",
       "providerId": "basic-flow",
-      "topLevel": true,
       "builtIn": true,
-      "authenticationExecutions": [
+      "topLevel": true,
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "auth-cookie",
-          "authenticatorFlow": false,
+          "providerId": "auth-cookie",
           "requirement": "ALTERNATIVE",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-cookie"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "auth-spnego",
-          "authenticatorFlow": false,
+          "providerId": "auth-spnego",
           "requirement": "DISABLED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-spnego"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "identity-provider-redirector",
-          "authenticatorFlow": false,
+          "providerId": "identity-provider-redirector",
           "requirement": "ALTERNATIVE",
-          "priority": 25,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "identity-provider-redirector"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
+          "alias": "forms",
+          "description": "Username, password, otp and other auth forms.",
           "requirement": "ALTERNATIVE",
-          "priority": 30,
-          "flowAlias": "forms",
-          "userSetupAllowed": false
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "auth-username-password-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-username-password-form"
+            },
+            {
+              "alias": "Browser - Conditional OTP",
+              "description": "Flow to determine if the OTP is required for the authentication",
+              "requirement": "CONDITIONAL",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "auth-otp-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-otp-form"
+            }
+          ]
+        },
+        {
+          "providerId": "auth-username-password-form",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-username-password-form"
+        },
+        {
+          "alias": "Browser - Conditional OTP",
+          "description": "Flow to determine if the OTP is required for the authentication",
+          "requirement": "CONDITIONAL",
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "auth-otp-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-otp-form"
+            }
+          ]
+        },
+        {
+          "providerId": "conditional-user-configured",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "conditional-user-configured"
+        },
+        {
+          "providerId": "auth-otp-form",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-otp-form"
         }
       ]
     },
@@ -2239,44 +1571,36 @@
       "alias": "clients",
       "description": "Base authentication for clients",
       "providerId": "client-flow",
-      "topLevel": true,
       "builtIn": true,
-      "authenticationExecutions": [
+      "topLevel": true,
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "client-secret",
-          "authenticatorFlow": false,
+          "providerId": "client-secret",
           "requirement": "ALTERNATIVE",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "client-secret"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "client-jwt",
-          "authenticatorFlow": false,
+          "providerId": "client-jwt",
           "requirement": "ALTERNATIVE",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "client-jwt"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "client-secret-jwt",
-          "authenticatorFlow": false,
+          "providerId": "client-secret-jwt",
           "requirement": "ALTERNATIVE",
-          "priority": 30,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "client-secret-jwt"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "client-x509",
-          "authenticatorFlow": false,
+          "providerId": "client-x509",
           "requirement": "ALTERNATIVE",
-          "priority": 40,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "client-x509"
         }
       ]
     },
@@ -2284,35 +1608,59 @@
       "alias": "direct grant",
       "description": "OpenID Connect Resource Owner Grant",
       "providerId": "basic-flow",
-      "topLevel": true,
       "builtIn": true,
-      "authenticationExecutions": [
+      "topLevel": true,
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "direct-grant-validate-username",
-          "authenticatorFlow": false,
+          "providerId": "direct-grant-validate-username",
           "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "direct-grant-validate-username"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "direct-grant-validate-password",
-          "authenticatorFlow": false,
+          "providerId": "direct-grant-validate-password",
           "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "direct-grant-validate-password"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
+          "alias": "Direct Grant - Conditional OTP",
+          "description": "Flow to determine if the OTP is required for the authentication",
           "requirement": "CONDITIONAL",
-          "priority": 30,
-          "flowAlias": "Direct Grant - Conditional OTP",
-          "userSetupAllowed": false
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "direct-grant-validate-otp",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "direct-grant-validate-otp"
+            }
+          ]
+        },
+        {
+          "providerId": "conditional-user-configured",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "conditional-user-configured"
+        },
+        {
+          "providerId": "direct-grant-validate-otp",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "direct-grant-validate-otp"
         }
       ]
     },
@@ -2320,17 +1668,15 @@
       "alias": "docker auth",
       "description": "Used by Docker clients to authenticate against the IDP",
       "providerId": "basic-flow",
-      "topLevel": true,
       "builtIn": true,
-      "authenticationExecutions": [
+      "topLevel": true,
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "docker-http-basic-authenticator",
-          "authenticatorFlow": false,
+          "providerId": "docker-http-basic-authenticator",
           "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "docker-http-basic-authenticator"
         }
       ]
     },
@@ -2338,53 +1684,967 @@
       "alias": "first broker login",
       "description": "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
       "providerId": "basic-flow",
+      "builtIn": true,
       "topLevel": true,
-      "builtIn": true,
-      "authenticationExecutions": [
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": "review profile config",
-          "authenticator": "idp-review-profile",
-          "authenticatorFlow": false,
+          "providerId": "idp-review-profile",
           "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": {
+            "alias": "review profile config",
+            "config": {
+              "update.profile.on.first.login": "missing"
+            }
+          },
+          "alias": "idp-review-profile"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
+          "alias": "User creation or linking",
+          "description": "Flow for the existing/non-existing user alternatives",
           "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": "User creation or linking",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "forms",
-      "description": "Username, password, otp and other auth forms.",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "auth-username-password-form",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "idp-create-user-if-unique",
+              "requirement": "ALTERNATIVE",
+              "authenticationFlow": false,
+              "config": {
+                "alias": "create unique user config",
+                "config": {
+                  "require.password.update.after.registration": "false"
+                }
+              },
+              "alias": "idp-create-user-if-unique"
+            },
+            {
+              "alias": "Handle Existing Account",
+              "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
+              "requirement": "ALTERNATIVE",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "idp-confirm-link",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-confirm-link"
+                },
+                {
+                  "alias": "Account verification options",
+                  "description": "Method with which to verity the existing account",
+                  "requirement": "REQUIRED",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "idp-email-verification",
+                      "requirement": "ALTERNATIVE",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "idp-email-verification"
+                    },
+                    {
+                      "alias": "Verify Existing Account by Re-authentication",
+                      "description": "Reauthentication of existing account",
+                      "requirement": "ALTERNATIVE",
+                      "providerId": "basic-flow",
+                      "authenticationFlow": true,
+                      "subFlowsAndExecutions": [
+                        {
+                          "providerId": "idp-username-password-form",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "idp-username-password-form"
+                        },
+                        {
+                          "alias": "First broker login - Conditional OTP",
+                          "description": "Flow to determine if the OTP is required for the authentication",
+                          "requirement": "CONDITIONAL",
+                          "providerId": "basic-flow",
+                          "authenticationFlow": true,
+                          "subFlowsAndExecutions": [
+                            {
+                              "providerId": "conditional-user-configured",
+                              "requirement": "REQUIRED",
+                              "authenticationFlow": false,
+                              "config": null,
+                              "alias": "conditional-user-configured"
+                            },
+                            {
+                              "providerId": "auth-otp-form",
+                              "requirement": "REQUIRED",
+                              "authenticationFlow": false,
+                              "config": null,
+                              "alias": "auth-otp-form"
+                            }
+                          ]
+                        },
+                        {
+                          "providerId": "conditional-user-configured",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "conditional-user-configured"
+                        },
+                        {
+                          "providerId": "auth-otp-form",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "auth-otp-form"
+                        }
+                      ]
+                    },
+                    {
+                      "providerId": "idp-username-password-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "idp-username-password-form"
+                    },
+                    {
+                      "alias": "First broker login - Conditional OTP",
+                      "description": "Flow to determine if the OTP is required for the authentication",
+                      "requirement": "CONDITIONAL",
+                      "providerId": "basic-flow",
+                      "authenticationFlow": true,
+                      "subFlowsAndExecutions": [
+                        {
+                          "providerId": "conditional-user-configured",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "conditional-user-configured"
+                        },
+                        {
+                          "providerId": "auth-otp-form",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "auth-otp-form"
+                        }
+                      ]
+                    },
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "idp-email-verification",
+                  "requirement": "ALTERNATIVE",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-email-verification"
+                },
+                {
+                  "alias": "Verify Existing Account by Re-authentication",
+                  "description": "Reauthentication of existing account",
+                  "requirement": "ALTERNATIVE",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "idp-username-password-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "idp-username-password-form"
+                    },
+                    {
+                      "alias": "First broker login - Conditional OTP",
+                      "description": "Flow to determine if the OTP is required for the authentication",
+                      "requirement": "CONDITIONAL",
+                      "providerId": "basic-flow",
+                      "authenticationFlow": true,
+                      "subFlowsAndExecutions": [
+                        {
+                          "providerId": "conditional-user-configured",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "conditional-user-configured"
+                        },
+                        {
+                          "providerId": "auth-otp-form",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "auth-otp-form"
+                        }
+                      ]
+                    },
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "idp-username-password-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-username-password-form"
+                },
+                {
+                  "alias": "First broker login - Conditional OTP",
+                  "description": "Flow to determine if the OTP is required for the authentication",
+                  "requirement": "CONDITIONAL",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "idp-confirm-link",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-confirm-link"
+            },
+            {
+              "alias": "Account verification options",
+              "description": "Method with which to verity the existing account",
+              "requirement": "REQUIRED",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "idp-email-verification",
+                  "requirement": "ALTERNATIVE",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-email-verification"
+                },
+                {
+                  "alias": "Verify Existing Account by Re-authentication",
+                  "description": "Reauthentication of existing account",
+                  "requirement": "ALTERNATIVE",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "idp-username-password-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "idp-username-password-form"
+                    },
+                    {
+                      "alias": "First broker login - Conditional OTP",
+                      "description": "Flow to determine if the OTP is required for the authentication",
+                      "requirement": "CONDITIONAL",
+                      "providerId": "basic-flow",
+                      "authenticationFlow": true,
+                      "subFlowsAndExecutions": [
+                        {
+                          "providerId": "conditional-user-configured",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "conditional-user-configured"
+                        },
+                        {
+                          "providerId": "auth-otp-form",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "auth-otp-form"
+                        }
+                      ]
+                    },
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "idp-username-password-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-username-password-form"
+                },
+                {
+                  "alias": "First broker login - Conditional OTP",
+                  "description": "Flow to determine if the OTP is required for the authentication",
+                  "requirement": "CONDITIONAL",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "idp-email-verification",
+              "requirement": "ALTERNATIVE",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-email-verification"
+            },
+            {
+              "alias": "Verify Existing Account by Re-authentication",
+              "description": "Reauthentication of existing account",
+              "requirement": "ALTERNATIVE",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "idp-username-password-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-username-password-form"
+                },
+                {
+                  "alias": "First broker login - Conditional OTP",
+                  "description": "Flow to determine if the OTP is required for the authentication",
+                  "requirement": "CONDITIONAL",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "idp-username-password-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-username-password-form"
+            },
+            {
+              "alias": "First broker login - Conditional OTP",
+              "description": "Flow to determine if the OTP is required for the authentication",
+              "requirement": "CONDITIONAL",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "auth-otp-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-otp-form"
+            }
+          ]
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
+          "providerId": "idp-create-user-if-unique",
+          "requirement": "ALTERNATIVE",
+          "authenticationFlow": false,
+          "config": {
+            "alias": "create unique user config",
+            "config": {
+              "require.password.update.after.registration": "false"
+            }
+          },
+          "alias": "idp-create-user-if-unique"
+        },
+        {
+          "alias": "Handle Existing Account",
+          "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
+          "requirement": "ALTERNATIVE",
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "idp-confirm-link",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-confirm-link"
+            },
+            {
+              "alias": "Account verification options",
+              "description": "Method with which to verity the existing account",
+              "requirement": "REQUIRED",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "idp-email-verification",
+                  "requirement": "ALTERNATIVE",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-email-verification"
+                },
+                {
+                  "alias": "Verify Existing Account by Re-authentication",
+                  "description": "Reauthentication of existing account",
+                  "requirement": "ALTERNATIVE",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "idp-username-password-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "idp-username-password-form"
+                    },
+                    {
+                      "alias": "First broker login - Conditional OTP",
+                      "description": "Flow to determine if the OTP is required for the authentication",
+                      "requirement": "CONDITIONAL",
+                      "providerId": "basic-flow",
+                      "authenticationFlow": true,
+                      "subFlowsAndExecutions": [
+                        {
+                          "providerId": "conditional-user-configured",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "conditional-user-configured"
+                        },
+                        {
+                          "providerId": "auth-otp-form",
+                          "requirement": "REQUIRED",
+                          "authenticationFlow": false,
+                          "config": null,
+                          "alias": "auth-otp-form"
+                        }
+                      ]
+                    },
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "idp-username-password-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-username-password-form"
+                },
+                {
+                  "alias": "First broker login - Conditional OTP",
+                  "description": "Flow to determine if the OTP is required for the authentication",
+                  "requirement": "CONDITIONAL",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "idp-email-verification",
+              "requirement": "ALTERNATIVE",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-email-verification"
+            },
+            {
+              "alias": "Verify Existing Account by Re-authentication",
+              "description": "Reauthentication of existing account",
+              "requirement": "ALTERNATIVE",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "idp-username-password-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-username-password-form"
+                },
+                {
+                  "alias": "First broker login - Conditional OTP",
+                  "description": "Flow to determine if the OTP is required for the authentication",
+                  "requirement": "CONDITIONAL",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "idp-username-password-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-username-password-form"
+            },
+            {
+              "alias": "First broker login - Conditional OTP",
+              "description": "Flow to determine if the OTP is required for the authentication",
+              "requirement": "CONDITIONAL",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "auth-otp-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-otp-form"
+            }
+          ]
+        },
+        {
+          "providerId": "idp-confirm-link",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "idp-confirm-link"
+        },
+        {
+          "alias": "Account verification options",
+          "description": "Method with which to verity the existing account",
+          "requirement": "REQUIRED",
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "idp-email-verification",
+              "requirement": "ALTERNATIVE",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-email-verification"
+            },
+            {
+              "alias": "Verify Existing Account by Re-authentication",
+              "description": "Reauthentication of existing account",
+              "requirement": "ALTERNATIVE",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "idp-username-password-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "idp-username-password-form"
+                },
+                {
+                  "alias": "First broker login - Conditional OTP",
+                  "description": "Flow to determine if the OTP is required for the authentication",
+                  "requirement": "CONDITIONAL",
+                  "providerId": "basic-flow",
+                  "authenticationFlow": true,
+                  "subFlowsAndExecutions": [
+                    {
+                      "providerId": "conditional-user-configured",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "conditional-user-configured"
+                    },
+                    {
+                      "providerId": "auth-otp-form",
+                      "requirement": "REQUIRED",
+                      "authenticationFlow": false,
+                      "config": null,
+                      "alias": "auth-otp-form"
+                    }
+                  ]
+                },
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "idp-username-password-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-username-password-form"
+            },
+            {
+              "alias": "First broker login - Conditional OTP",
+              "description": "Flow to determine if the OTP is required for the authentication",
+              "requirement": "CONDITIONAL",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "auth-otp-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-otp-form"
+            }
+          ]
+        },
+        {
+          "providerId": "idp-email-verification",
+          "requirement": "ALTERNATIVE",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "idp-email-verification"
+        },
+        {
+          "alias": "Verify Existing Account by Re-authentication",
+          "description": "Reauthentication of existing account",
+          "requirement": "ALTERNATIVE",
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "idp-username-password-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "idp-username-password-form"
+            },
+            {
+              "alias": "First broker login - Conditional OTP",
+              "description": "Flow to determine if the OTP is required for the authentication",
+              "requirement": "CONDITIONAL",
+              "providerId": "basic-flow",
+              "authenticationFlow": true,
+              "subFlowsAndExecutions": [
+                {
+                  "providerId": "conditional-user-configured",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "conditional-user-configured"
+                },
+                {
+                  "providerId": "auth-otp-form",
+                  "requirement": "REQUIRED",
+                  "authenticationFlow": false,
+                  "config": null,
+                  "alias": "auth-otp-form"
+                }
+              ]
+            },
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "auth-otp-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-otp-form"
+            }
+          ]
+        },
+        {
+          "providerId": "idp-username-password-form",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "idp-username-password-form"
+        },
+        {
+          "alias": "First broker login - Conditional OTP",
+          "description": "Flow to determine if the OTP is required for the authentication",
           "requirement": "CONDITIONAL",
-          "priority": 20,
-          "flowAlias": "Browser - Conditional OTP",
-          "userSetupAllowed": false
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "auth-otp-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-otp-form"
+            }
+          ]
+        },
+        {
+          "providerId": "conditional-user-configured",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "conditional-user-configured"
+        },
+        {
+          "providerId": "auth-otp-form",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-otp-form"
         }
       ]
     },
@@ -2392,26 +2652,66 @@
       "alias": "http challenge",
       "description": "An authentication flow based on challenge-response HTTP Authentication Schemes",
       "providerId": "basic-flow",
-      "topLevel": true,
       "builtIn": true,
-      "authenticationExecutions": [
+      "topLevel": true,
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "no-cookie-redirect",
-          "authenticatorFlow": false,
+          "providerId": "no-cookie-redirect",
           "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "no-cookie-redirect"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
+          "alias": "Authentication Options",
+          "description": "Authentication options.",
           "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": "Authentication Options",
-          "userSetupAllowed": false
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "basic-auth",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "basic-auth"
+            },
+            {
+              "providerId": "basic-auth-otp",
+              "requirement": "DISABLED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "basic-auth-otp"
+            },
+            {
+              "providerId": "auth-spnego",
+              "requirement": "DISABLED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-spnego"
+            }
+          ]
+        },
+        {
+          "providerId": "basic-auth",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "basic-auth"
+        },
+        {
+          "providerId": "basic-auth-otp",
+          "requirement": "DISABLED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "basic-auth-otp"
+        },
+        {
+          "providerId": "auth-spnego",
+          "requirement": "DISABLED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-spnego"
         }
       ]
     },
@@ -2419,62 +2719,73 @@
       "alias": "registration",
       "description": "registration flow",
       "providerId": "basic-flow",
+      "builtIn": true,
       "topLevel": true,
-      "builtIn": true,
-      "authenticationExecutions": [
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "registration-page-form",
-          "authenticatorFlow": true,
+          "alias": "registration form",
+          "description": "registration form",
           "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": "registration form",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "registration form",
-      "description": "registration form",
-      "providerId": "form-flow",
-      "topLevel": false,
-      "builtIn": true,
-      "authenticationExecutions": [
-        {
-          "authenticatorConfig": null,
-          "authenticator": "registration-user-creation",
-          "authenticatorFlow": false,
-          "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "providerId": "form-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "registration-user-creation",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "registration-user-creation"
+            },
+            {
+              "providerId": "registration-profile-action",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "registration-profile-action"
+            },
+            {
+              "providerId": "registration-password-action",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "registration-password-action"
+            },
+            {
+              "providerId": "registration-recaptcha-action",
+              "requirement": "DISABLED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "registration-recaptcha-action"
+            }
+          ]
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "registration-profile-action",
-          "authenticatorFlow": false,
+          "providerId": "registration-user-creation",
           "requirement": "REQUIRED",
-          "priority": 40,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "registration-user-creation"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "registration-password-action",
-          "authenticatorFlow": false,
+          "providerId": "registration-profile-action",
           "requirement": "REQUIRED",
-          "priority": 50,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "registration-profile-action"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "registration-recaptcha-action",
-          "authenticatorFlow": false,
+          "providerId": "registration-password-action",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "registration-password-action"
+        },
+        {
+          "providerId": "registration-recaptcha-action",
           "requirement": "DISABLED",
-          "priority": 60,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "registration-recaptcha-action"
         }
       ]
     },
@@ -2482,62 +2793,66 @@
       "alias": "reset credentials",
       "description": "Reset credentials for a user if they forgot their password or something",
       "providerId": "basic-flow",
-      "topLevel": true,
       "builtIn": true,
-      "authenticationExecutions": [
+      "topLevel": true,
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "reset-credentials-choose-user",
-          "authenticatorFlow": false,
+          "providerId": "reset-credentials-choose-user",
           "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "reset-credentials-choose-user"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "reset-credential-email",
-          "authenticatorFlow": false,
+          "providerId": "reset-credential-email",
           "requirement": "REQUIRED",
-          "priority": 20,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "reset-credential-email"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": "reset-password",
-          "authenticatorFlow": false,
+          "providerId": "reset-password",
           "requirement": "REQUIRED",
-          "priority": 30,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "reset-password"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
+          "alias": "Reset - Conditional OTP",
+          "description": "Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.",
           "requirement": "CONDITIONAL",
-          "priority": 40,
-          "flowAlias": "Reset - Conditional OTP",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "saml ecp",
-      "description": "SAML ECP Profile Authentication Flow",
-      "providerId": "basic-flow",
-      "topLevel": true,
-      "builtIn": true,
-      "authenticationExecutions": [
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "conditional-user-configured",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "conditional-user-configured"
+            },
+            {
+              "providerId": "reset-otp",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "reset-otp"
+            }
+          ]
+        },
         {
-          "authenticatorConfig": null,
-          "authenticator": "http-basic-authenticator",
-          "authenticatorFlow": false,
+          "providerId": "conditional-user-configured",
           "requirement": "REQUIRED",
-          "priority": 10,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "conditional-user-configured"
+        },
+        {
+          "providerId": "reset-otp",
+          "requirement": "REQUIRED",
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "reset-otp"
         }
       ]
     },
@@ -2545,62 +2860,43 @@
       "alias": "test-flow",
       "description": "test flow",
       "providerId": "basic-flow",
-      "topLevel": true,
       "builtIn": false,
-      "authenticationExecutions": [
+      "topLevel": true,
+      "subFlowsAndExecutions": [
         {
-          "authenticatorConfig": null,
-          "authenticator": "auth-cookie",
-          "authenticatorFlow": false,
+          "providerId": "auth-cookie",
           "requirement": "ALTERNATIVE",
-          "priority": 0,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-cookie"
         },
         {
-          "authenticatorConfig": null,
-          "authenticator": null,
-          "authenticatorFlow": true,
+          "alias": "test-sub-flow",
+          "description": "test subflow",
           "requirement": "ALTERNATIVE",
-          "priority": 1,
-          "flowAlias": "test-sub-flow",
-          "userSetupAllowed": false
-        }
-      ]
-    },
-    {
-      "alias": "test-sub-flow",
-      "description": "test subflow",
-      "providerId": "basic-flow",
-      "topLevel": false,
-      "builtIn": false,
-      "authenticationExecutions": [
+          "providerId": "basic-flow",
+          "authenticationFlow": true,
+          "subFlowsAndExecutions": [
+            {
+              "providerId": "auth-username-password-form",
+              "requirement": "REQUIRED",
+              "authenticationFlow": false,
+              "config": null,
+              "alias": "auth-username-password-form"
+            }
+          ]
+        },
         {
-          "authenticatorConfig": null,
-          "authenticator": "auth-username-password-form",
-          "authenticatorFlow": false,
+          "providerId": "auth-username-password-form",
           "requirement": "REQUIRED",
-          "priority": 0,
-          "flowAlias": null,
-          "userSetupAllowed": false
+          "authenticationFlow": false,
+          "config": null,
+          "alias": "auth-username-password-form"
         }
       ]
     }
   ],
-  "authenticatorConfig": [
-    {
-      "alias": "create unique user config",
-      "config": {
-        "require.password.update.after.registration": "false"
-      }
-    },
-    {
-      "alias": "review profile config",
-      "config": {
-        "update.profile.on.first.login": "missing"
-      }
-    }
-  ],
+  "authenticatorConfig": [],
   "requiredActions": [
     {
       "alias": "CONFIGURE_TOTP",
@@ -2609,15 +2905,6 @@
       "enabled": true,
       "defaultAction": false,
       "priority": 10,
-      "config": {}
-    },
-    {
-      "alias": "terms_and_conditions",
-      "name": "Terms and Conditions",
-      "providerId": "terms_and_conditions",
-      "enabled": false,
-      "defaultAction": false,
-      "priority": 20,
       "config": {}
     },
     {
@@ -2657,6 +2944,24 @@
       "config": {}
     },
     {
+      "alias": "terms_and_conditions",
+      "name": "Terms and Conditions",
+      "providerId": "terms_and_conditions",
+      "enabled": false,
+      "defaultAction": false,
+      "priority": 20,
+      "config": {}
+    },
+    {
+      "alias": "update_user_locale",
+      "name": "Update User Locale",
+      "providerId": "update_user_locale",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 1000,
+      "config": {}
+    },
+    {
       "alias": "webauthn-register",
       "name": "Webauthn Register",
       "providerId": "webauthn-register",
@@ -2672,15 +2977,6 @@
       "enabled": true,
       "defaultAction": false,
       "priority": 80,
-      "config": {}
-    },
-    {
-      "alias": "update_user_locale",
-      "name": "Update User Locale",
-      "providerId": "update_user_locale",
-      "enabled": true,
-      "defaultAction": false,
-      "priority": 1000,
       "config": {}
     }
   ],
